@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Commentaire" table="commentaire">
+    <indexes>
+      <index name="FK_Commentaire_Situation" columns="refSituation"/>
+      <index name="loginProfesseur" columns="loginProfesseur"/>
+    </indexes>
+    <id name="numero" type="integer" column="numero">
+      <generator strategy="IDENTITY"/>
+    </id>
+    <field name="commentaire" type="string" column="commentaire" length="200" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="datecommentaire" type="datetime" column="datecommentaire" nullable="true"/>
+    <many-to-one field="refsituation" target-entity="Situation" fetch="LAZY">
+      <join-columns>
+        <join-column name="refSituation" referenced-column-name="reference"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="loginprofesseur" target-entity="Utilisateur" fetch="LAZY">
+      <join-columns>
+        <join-column name="loginProfesseur" referenced-column-name="login"/>
+      </join-columns>
+    </many-to-one>
+  </entity>
+</doctrine-mapping>

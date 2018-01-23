@@ -1,0 +1,10 @@
+{# app/Resources/TwigBundle/views/Exception/error404.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>La ressource que vous demandez n'existe pas</h1>
+
+    <p>
+        La ressource que vous demandez n'existe pas ou vous n'avez pas la permission de l'afficher. <a href="{{ path('homepage') }}">Allez à la page d'accueil</a>.
+    </p>
+{% endblock %}

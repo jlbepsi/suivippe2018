@@ -1,0 +1,463 @@
+
+class Activite
+
+    /**
+     * Get situation referenced
+     *
+     * @return bool
+     */
+    public function isSituationReferenced($situationId)
+    {
+        $exists =  $this->refsituation->exists(function($key, $element) use ($situationId){
+                return $element->getReference() == $situationId;
+            }
+        );
+        return $exists;
+    }
+
+    /**
+     * Get stage referenced
+     *
+     * @return bool
+     */
+    public function isStageReferenced($stageId, $idintitule)
+    {
+        $exists =  $this->idstage->exists(function($key, $element) use ($stageId, $idintitule){
+                return $element->getIdstage()->getId() == $stageId && $element->getIdintitule() == $idintitule;
+            }
+        );
+        return $exists;
+    }
+
+
+*********************************************************
+
+
+class CompetenceRepository extends EntityRepository
+{
+    public function findAllByIdAsArray($activiteId)
+    {
+        $query = $this->createQueryBuilder('c')
+            ->where('c.idactivite = :idactivite')
+            ->setParameter('idactivite', $activiteId)
+            ->getQuery();
+
+        return $query->getArrayResult();
+    }
+}
+
+
+
+*********************************************************
+
+
+class StageintituleRepository extends EntityRepository
+{
+    public function loadStageIntitules($id)
+    {
+        $query = $this->createQueryBuilder('si')
+            ->where('si.idintitule = :id')
+            ->setParameter('id', $id)
+            ->getQuery();
+
+        return $query->getResult();
+    }
+}
+
+*********************************************************
+
+class Situation
+
+
+    /**
+     * Get activite count
+     *
+     * @return integer
+     */
+    public function getActiviteCount()
+    {
+        return count($this->idactivite);
+    }
+
+    /**
+     *
+     * Supprime tous les codes
+     *
+     */
+    public function removeAllCodes()
+    {
+        $this->code->clear();
+    }
+
+    /**
+     * Test if code is present
+     *
+     * @return bool
+     */
+    public function isCodePresent($code)
+    {
+        $exists =  $this->code->exists(function($key, $element) use ($code){
+            return $element->getCode() == $code;
+        }
+        );
+        return $exists;
+    }
+
+
+*********************************************************
+
+
+class StageRepository extends EntityRepository
+{
+
+    public function countStages($login)
+    {
+        $qb = $this->createQueryBuilder('s');
+        $qb->select('COUNT(s)');
+        $qb->where('s.login=:userLogin');
+
+        return $qb
+            ->getQuery()
+            ->setParameter(":userLogin", $login)
+            ->getSingleScalarResult();
+    }
+}
+
+*********************************************************
+
+
+<?php
+
+namespace AppBundle\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+
+/**
+ * Utilisateur
+ *
+ * @ORM\Table(name="utilisateur", indexes={@ORM\Index(name="FK_Utilisateur_Groupe", columns={"numParcours"})})
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\UtilisateurRepository")
+ */
+class Utilisateur implements UserInterface
+{
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="login", type="string", length=50, nullable=false)
+     * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
+     */
+    private $login;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="password", type="string", length=250, nullable=false)
+     */
+    private $password;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="type", type="integer", nullable=false)
+     */
+    private $type;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="classe", type="string", length=10, nullable=false)
+     */
+    private $classe;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="nom", type="string", length=50, nullable=true)
+     */
+    private $nom;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="prenom", type="string", length=50, nullable=true)
+     */
+    private $prenom;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="mail", type="string", length=80, nullable=true)
+     */
+    private $mail;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="salt", type="string", length=50, nullable=false)
+     */
+    private $salt;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="roles", type="string", length=100, nullable=false)
+     */
+    private $roles;
+
+    /**
+     * @var \Parcours
+     *
+     * @ORM\ManyToOne(targetEntity="Parcours")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="numParcours", referencedColumnName="id")
+     * })
+     */
+    private $numparcours;
+
+
+
+    public function __construct()
+    {
+        $this->roles = array();
+    }
+
+    /**
+     * Get login
+     *
+     * @return string
+     */
+    public function getLogin()
+    {
+        return $this->login;
+    }
+
+    /**
+     * Set password
+     *
+     * @param string $password
+     * @return Utilisateur
+     */
+    public function setPassword($password)
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * Get password
+     *
+     * @return string
+     */
+    public function getPassword()
+    {
+        return $this->password;
+    }
+
+    /**
+     * Set type
+     *
+     * @param integer $type
+     * @return Utilisateur
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
+    /**
+     * Get type
+     *
+     * @return integer
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * Set classe
+     *
+     * @param string $classe
+     * @return Utilisateur
+     */
+    public function setClasse($classe)
+    {
+        $this->classe = $classe;
+
+        return $this;
+    }
+
+    /**
+     * Get classe
+     *
+     * @return string
+     */
+    public function getClasse()
+    {
+        return $this->classe;
+    }
+
+    /**
+     * Set nom
+     *
+     * @param string $nom
+     * @return Utilisateur
+     */
+    public function setNom($nom)
+    {
+        $this->nom = $nom;
+
+        return $this;
+    }
+
+    /**
+     * Get nom
+     *
+     * @return string
+     */
+    public function getNom()
+    {
+        return $this->nom;
+    }
+
+    /**
+     * Set prenom
+     *
+     * @param string $prenom
+     * @return Utilisateur
+     */
+    public function setPrenom($prenom)
+    {
+        $this->prenom = $prenom;
+
+        return $this;
+    }
+
+    /**
+     * Get prenom
+     *
+     * @return string
+     */
+    public function getPrenom()
+    {
+        return $this->prenom;
+    }
+
+    /**
+     * Set mail
+     *
+     * @param string $mail
+     * @return Utilisateur
+     */
+    public function setMail($mail)
+    {
+        $this->mail = $mail;
+
+        return $this;
+    }
+
+    /**
+     * Get mail
+     *
+     * @return string
+     */
+    public function getMail()
+    {
+        return $this->mail;
+    }
+
+    /**
+     * Set salt
+     *
+     * @param string $salt
+     * @return Utilisateur
+     */
+    public function setSalt($salt)
+    {
+        $this->salt = $salt;
+
+        return $this;
+    }
+
+    /**
+     * Get salt
+     *
+     * @return string
+     */
+    public function getSalt()
+    {
+        return $this->salt;
+    }
+
+    /**
+     * Set roles
+     *
+     * @param string $roles
+     * @return Utilisateur
+     */
+    public function setRoles($roles)
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * Get roles
+     *
+     * @return string
+     */
+    public function getRoles()
+    {
+        return explode(',', $this->roles);
+    }
+
+    /**
+     * Set numparcours
+     *
+     * @param \AppBundle\Entity\Parcours $numparcours
+     * @return Utilisateur
+     */
+    public function setNumparcours(\AppBundle\Entity\Parcours $numparcours = null)
+    {
+        $this->numparcours = $numparcours;
+
+        return $this;
+    }
+
+    /**
+     * Get numparcours
+     *
+     * @return \AppBundle\Entity\Parcours
+     */
+    public function getNumparcours()
+    {
+        return $this->numparcours;
+    }
+
+    /**
+     * Returns the username used to authenticate the user.
+     * @return string The username
+     */
+    public function getUsername()
+    {
+        return $this->getLogin();
+    }
+
+    /**
+     * Removes sensitive data from the user.
+     *
+     * This is important if, at any given point, sensitive information like
+     * the plain-text password is stored on this object.
+     */
+    public function eraseCredentials()
+    {
+    }
+}
+
+

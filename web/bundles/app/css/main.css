@@ -1,0 +1,145 @@
+/***************************************************************************************/
+
+table
+{
+    margin:0;padding:0;font-weight:inherit;font-style:inherit;font-size:100%;font-family:inherit;vertical-align:baseline;
+    border-collapse:separate;border-spacing:0;
+    margin-bottom:1.4em; /*width:100%;*/
+}
+table, th, td {vertical-align:middle;}
+thead, tfoot
+{
+    border:1px solid #6495ed;
+    font-weight: bold;
+}
+thead th {background:#c3d9ff; /*background:#ACABAB; font-style:italic;*/}
+th, td, caption {padding:4px 10px 4px 5px;}
+tbody tr:nth-child(even) td, tbody tr.even td {background:#e5ecf9;}
+tbody tr:nth-child(even) td, tbody tr.even td {background:inherit;}
+tfoot {font-style:italic;}
+caption {background:#eee;}
+
+
+table.table.table-striped tr.tr_caption
+{
+    color: #495057;
+    background-color: #e9ecef;
+    border-color: #e9ecef;
+    font-weight: bold;
+}
+/*
+	Suppression des lignes : film, ...
+*/
+table.table.table-striped tr.tr_removed > td
+{
+    background-color:grey;
+}
+
+
+/* Styles for validation helpers
+-----------------------------------------------------------*/
+.field-validation-error
+{
+    color: #ff0000;
+}
+
+.field-validation-valid
+{
+    display: none;
+}
+
+.input-validation-error
+{
+    border: 1px solid #ff0000;
+    background-color: #ffeeee;
+}
+
+.validation-summary-errors
+{
+    padding:0.8em;margin-bottom:1em;border:2px solid #ddd;
+    background:#fbe3e4;color:#8a1f11;border-color:#fbc2c4;
+
+    font-weight: bold;
+    /*color: #ff0000;*/
+}
+
+.validation-summary-valid
+{
+    display: none;
+}
+
+/* Styles for editor and display helpers
+----------------------------------------------------------*/
+.display-label,
+.editor-label
+{
+    margin: 1em 0 0 0;
+}
+
+.display-field,
+.editor-field
+{
+    margin:0.5em 0 0 0;
+}
+
+.text-box
+{
+    width: 30em;
+}
+
+.text-box.multi-line
+{
+    height: 6.5em;
+}
+
+.tri-state
+{
+    width: 6em;
+}
+#update-message
+{
+    color: #F6855E;
+    font-weight: bold;
+}
+
+.pageTitle
+{
+    text-align: center;
+    font-size: 1.5em;
+    font-weight: bold;
+
+    color: #FFFFFF;
+    /*background-color: #4E91CA;*/
+    background-image: -moz-linear-gradient(#4E91CA, #286294);
+}
+
+td.titlegrey
+{
+    text-align: center;
+    font-size: 1.2em;
+    font-weight:bold;
+    color:white;
+    background:#ababab;
+}
+
+fieldset.withborder
+{
+    min-width: -webkit-min-content;
+    border-width: 2px;
+    border-style: groove;
+    border-color: threedface;
+
+    margin: 10px;
+    border: 1px;
+}
+
+.ouinote
+{
+    color: rgb(65,200,0);
+    font-weight: bold;
+}
+
+.nonnote
+{
+    color: rgb(255,0,0);
+}

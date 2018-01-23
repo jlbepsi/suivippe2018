@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Synthèse des compétences
+{% endblock %}
+
+
+{% block body %}
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            Synthèse des compétences
+        </h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+<div class="tab-content">
+    <table id="listeCompetences" class="table table-bordered table-striped table-condensed">
+        <thead>
+        <tr>
+            <th>Activités</th>
+            <th>Citées</th>
+            <th>Compétences</th>
+        </tr>
+        </thead>
+        <tbody>
+        {%  set idDomaine = 0 %}
+        {%  set idActivite = 0 %}
+        {% for activiteCompetences in activites %}
+
+            {#
+            {% if (activiteCompetences.activite.iddomaine.idprocessus.id == 4 and idParcours == 1)
+                    or (activiteCompetences.activite.iddomaine.idprocessus.id == 3 and idParcours == 2) %}
+                <!-- Activite omise du au parcours -->
+            {% else %}#}
+            {% if (activiteCompetences.activite.iddomaine.idprocessus.parcourspresent(idParcours)) %}
+                {% if activiteCompetences.activite.iddomaine.id != idDomaine %}
+                <tr class="tr_caption"><td colspan="3">{{ activiteCompetences.activite.iddomaine.nomenclature }} - {{ activiteCompetences.activite.iddomaine.libelle }}</td></tr>
+                    {%  set idDomaine = activiteCompetences.activite.iddomaine.id %}
+                {% endif %}
+
+                {%  set nbCount = activiteCompetences.referenced %}
+                <tr>
+                    <td>{{ activiteCompetences.activite.nomenclature }} - {{ activiteCompetences.activite.libelle }}</td>
+                    {%  if nbCount==0 %}
+                    <td class="nonnote">Non</td>
+                    {% else %}
+                        <td class="ouinote"><i id="spanok" class="fa fa-check" aria-hidden="true">&nbsp;({{ nbCount }})</i></td>
+                    {% endif %}
+
+                    <td>
+                {% for competence in activiteCompetences.competences %}
+                    {{ competence.nomenclature }} - {{ competence.libelle }}<br />
+                {% endfor %}
+                    </td>
+                </tr>
+            {% endif %}
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

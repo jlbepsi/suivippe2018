@@ -1,0 +1,216 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Modification de la situation
+{% endblock %}
+
+
+{% block body %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h2 class="page-header">
+                    Modification de la situation '{{ situation.libelle }}'
+            </h2>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+
+    <p>
+        <a class="btn btn-outline-primary" href="{{  path('situation_index') }}">Retourner à la liste</a>
+    </p>
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" id="description-tab" href="#description" data-toggle="tab" role="tab" aria-controls="description" >Description</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="activite-tab" href="#activite" aria-controls="activite" role="tab" data-toggle="tab">Activités</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" id="messages-tab" href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a>
+        </li>
+    </ul>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <div role="tabpanel" class="tab-pane active" id="description">
+            <form action="{{ path('situation_edit', {'id':situation.reference}) }}" method="post">
+                {{ form_errors(form) }}
+                {{ form_row(form._token) }}
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="situation_libelle">Libellé: </label>
+                        {{ form_widget(form.libelle, {'attr': {'placeholder': 'Libellé de la situation'}}) }}
+                    </div>
+                    <div class="form-group col-md-8">
+                        <label for="situation_descriptif">Descriptif: </label>
+                        {{ form_widget(form.descriptif) }}
+                    </div>
+                </div>
+
+                {% if idParcours == 1 %}  <!-- SISR -->
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="situation_codelangage">Système d'exploitation: </label>
+                            {{ form_widget(form.codeos) }}
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label for="situation_codeframework">Service: </label>
+                            {{ form_widget(form.codeservice) }}
+                        </div>
+                    </div>
+                {% elseif idParcours == 2 %}  <!-- SLAM -->
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="situation_codelangage">Langage: </label>
+                        {{ form_widget(form.codelangage) }}
+                    </div>
+                    <div class="form-group col-md-8">
+                        <label for="situation_codeframework">Framework: </label>
+                        {{ form_widget(form.codeframework) }}
+                    </div>
+                </div>
+                {% else %}  <!-- Parcours non défini -->
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="radioParcours" id="radioParcoursSLAM" value="2"  disabled
+                            {% if situation.typeSituation == 2 %} checked {% endif %}
+                            > Développeur
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="radioParcours" id="radioParcoursSISR" value="1" disabled
+                                    {% if situation.typeSituation == 1 %} checked {% endif %}
+                            > Réseau
+                        </label>
+                    </div>
+
+                    <div id="divParcoursSISR"
+                            {% if situation.typeSituation == 2 %} style="display: none;" {% endif %}
+                         >
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label for="situation_codelangage">Système d'exploitation: </label>
+                                {{ form_widget(form.codeos) }}
+                            </div>
+                            <div class="form-group col-md-8">
+                                <label for="situation_codeframework">Service: </label>
+                                {{ form_widget(form.codeservice) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="divParcoursSLAM"
+                            {% if situation.typeSituation == 1 %} style="display: none;" {% endif %}
+                    >
+                        <div class="form-row">
+                            <div class="form-group col-md-4">
+                                <label class="control-label required" for="situation_codelangage">Langage: </label>
+                                {{ form_widget(form.codelangage) }}
+                            </div>
+                            <div class="form-group col-md-8">
+                                <label class="control-label required" for="situation_codeframework">Framework: </label>
+                                {{ form_widget(form.codeframework) }}
+                            </div>
+                        </div>
+                    </div>
+                {%  endif %}
+
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        <label for="DateDebut">Date de</label>
+                        <input type="text" id="situation_datedebut" name="situation[datedebut]" required="required" class="form-control" value="{{  situation.datedebut | date("d/m/Y") }}" />
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="DateFin">à</label>
+                        <input type="text" id="situation_datefin" name="situation[datefin]" required="required" class="form-control" value="{{  situation.datefin | date("d/m/Y") }}" />
+                    </div>
+                    <div class="form-group col-md-4">
+                        <label for="Duree">Durée</label>
+                        <input id="duree" name="duree" class="form-control" disabled="disabled" type="text" value="0 semaines">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <fieldset class="withborder">
+                            <legend>Est-ce une situation obligatoire ?</legend>
+                            {% for typology in typologies %}
+                                <div class="form-check">
+                                    <label class="form-check-label">
+                                        <input name="mandatory[]"
+                                                {% if situation.codePresent(typology.code) %} checked {% endif %}
+                                               class="form-check-input" type="checkbox" value="{{ typology.code }}">
+                                        {{ typology.libelle }}
+                                    </label>
+                                </div>
+                            {% endfor %}
+                        </fieldset>
+                    </div>
+                </div>
+
+                <input type="submit" id="submit" name="submit" class="btn btn-success" value="Valider" />
+            </form>
+        </div>
+
+        <div role="tabpanel" class="tab-pane" id="activite">
+            <div class="checkbox">
+                <label>
+                    <input id="showSituationActivitiesOnly" type="checkbox"> Afficher uniquement les activités présentes dans la situation
+                </label>
+            </div>
+            <table id="listeActivites" class="table table-bordered table-striped table-condensed">
+                <thead>
+                <tr>
+                    <th width="20"></th>
+                    <th>Nomenclature</th>
+                    <th>Libellé</th>
+                    <th width="240"></th>
+                </tr>
+                </thead>
+                <tbody>
+                {%  set idDomaine = 0 %}
+                {% for activite in activites %}
+
+                    {% if (activite.iddomaine.idprocessus.parcourspresent(idParcours)) %}
+                        {% if activite.iddomaine.id != idDomaine %}
+                            <tr class="tr_caption"><td colspan="4">{{ activite.iddomaine.nomenclature }} - {{ activite.iddomaine.libelle }}</td></tr>
+                            {%  set idDomaine = activite.iddomaine.id %}
+                        {% endif %}
+
+                        {%  set isPresent = activite.situationReferenced(situation.reference) %}
+                        <tr id="activite{{ activite.id }}" activiteId="{{ activite.id }}" class="{%  if not isPresent %}tr_nonactif{% else%}tr_actif{%  endif %}">
+                            <td><i id="spanok" style="display: {%  if isPresent %}block{% else%}none{% endif %}" class="fa fa-check" aria-hidden="true"></i></td>
+                            <td>{{ activite.nomenclature }}</td>
+                            <td>{{ activite.libelle }}</td>
+                            <td>
+                                <a class="btn btn-danger btn-sm" style="display: {%  if isPresent %}inline{% else%}none{% endif %}" href="#" name="deleteSituationActivite" id="deleteSituationActivite" title="Retirer l'activité"><i class="fa fa-minus" aria-hidden="true"></i>&nbsp;Retirer</a>
+                                <a class="btn btn-primary btn-sm" style="display: {%  if isPresent %}none{% else%}inline{% endif %}" href="#" name="addSituationActivite" id="addSituationActivite" title="Ajouter l'activité"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Ajouter</a>
+                            </td>
+                        </tr>
+                    {% endif %}
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div role="tabpanel" class="tab-pane" id="messages">Aucun message</div>
+    </div>
+
+    <input type="hidden" id="situationReference" value="{{ situation.reference }}" />
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {% javascripts
+    'bundles/app/bootstrap/js/bootstrap-datepicker.js'
+    'bundles/app/bootstrap/js/bootstrap-datepicker.fr.js'
+    'bundles/app/js/situation.edit.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

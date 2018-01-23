@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Evalue" table="evalue">
+    <indexes>
+      <index name="idEpreuve" columns="idEpreuve"/>
+      <index name="idActivite" columns="idActivite"/>
+      <index name="IDX_32AE9063CA12F4B8" columns="idParcours"/>
+    </indexes>
+    <id name="idparcours" association-key="true"/>
+    <id name="idepreuve" association-key="true"/>
+    <id name="idactivite" association-key="true"/>
+    <one-to-one field="idparcours" target-entity="Parcours" fetch="LAZY">
+      <join-columns>
+        <join-column name="idParcours" referenced-column-name="id"/>
+      </join-columns>
+    </one-to-one>
+    <one-to-one field="idepreuve" target-entity="Epreuve" fetch="LAZY">
+      <join-columns>
+        <join-column name="idEpreuve" referenced-column-name="id"/>
+      </join-columns>
+    </one-to-one>
+    <one-to-one field="idactivite" target-entity="Activite" fetch="LAZY">
+      <join-columns>
+        <join-column name="idActivite" referenced-column-name="id"/>
+      </join-columns>
+    </one-to-one>
+  </entity>
+</doctrine-mapping>

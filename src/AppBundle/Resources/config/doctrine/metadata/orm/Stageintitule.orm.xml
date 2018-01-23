@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Stageintitule" table="stageintitule">
+    <indexes>
+      <index name="IDX_C9D88496D5B8D074" columns="idStage"/>
+    </indexes>
+    <id name="idintitule" type="integer" column="idIntitule"/>
+    <id name="idstage" association-key="true"/>
+    <field name="intitule" type="string" column="intitule" length="150" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <one-to-one field="idstage" target-entity="Stage" fetch="LAZY">
+      <join-columns>
+        <join-column name="idStage" referenced-column-name="id"/>
+      </join-columns>
+    </one-to-one>
+    <many-to-many field="idactivite" target-entity="Activite" inversed-by="idstage" fetch="LAZY">
+      <join-table name="stageintituleactivite">
+        <join-columns>
+          <join-column name="idStage" referenced-column-name="idStage"/>
+          <join-column name="idIntitule" referenced-column-name="idIntitule"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="idActivite" referenced-column-name="id"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
+  </entity>
+</doctrine-mapping>

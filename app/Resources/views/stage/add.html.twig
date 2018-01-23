@@ -1,0 +1,102 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Ajout d'un stage
+{% endblock %}
+
+
+{% block body %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Ajout d'un stage</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <form action="{{ path('stage_add') }} " method="post">
+            {{ form_errors(form) }}
+            {{ form_row(form._token) }}
+
+
+            <div class="form-row">
+                <div class="form-group col-md-2">
+                    <label for="stage_annee">Stage: </label>
+                    <select id="stage_annee" name="stage[annee]" class="form-control">
+                        <option value="1">Stage 1ère année</option>
+                        <option value="2">Stage 2ème année</option>
+                    </select>
+                </div>
+                <div class="form-group col-md-10">
+                    <label for="stage_libelleCourt">Libellé court: </label>
+                    {{ form_widget(form.libelleCourt) }}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label for="DateDebut">Date de</label>
+                    <input type="text" id="stage_datedebut" name="stage[datedebut]" required="required" class="form-control" value="" />
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="DateFin">à</label>
+                    <input type="text" id="stage_datefin" name="stage[datefin]" required="required" class="form-control" value="" />
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="Duree">Durée</label>
+                    <input id="duree" name="duree" class="form-control" disabled="disabled" type="text" value="">
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="stage_montant">Rémunération: </label>
+                    {{ form_widget(form.montant) }}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-3">
+                    <label for="stage_entrepriseNom">Entreprise</label>
+                    {{ form_widget(form.entrepriseNom, {'attr': {'placeholder': 'Nom de l\'entreprise'}}) }}
+                </div>
+                <div class="form-group col-md-6">
+                    <label for="stage_entrepriseAdresse">Adresse de l&#039;entreprise: </label>
+                    {{ form_widget(form.entrepriseAdresse) }}
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="stage_entrepriseContact">Contact de l&#039;entreprise: </label>
+                    {{ form_widget(form.entrepriseContact, {'attr': {'placeholder': 'Téléphone, email, ...'}}) }}
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="entrepriseLogoPreview">Logo</label>
+                    <img id="entrepriseLogoPreview" alt="Aucune image" title="Logo entreprise" height="100" src="" />
+                </div>
+                <div class="form-group col-md-8">
+                    <label for="stage_entrepriseLogo">Logo de l&#039;entreprise: </label>
+                    <input type="file" id="stage_entrepriseLogo" name="stage[entrepriseLogo]" class="form-control" />
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label for="stage_descriptif">Descriptif: </label>
+                    {{ form_widget(form.descriptif) }}
+                </div>
+            </div>
+
+            <input type="submit" id="submit" name="submit" class="btn btn-success" value="Valider" />
+        </form>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {% javascripts
+    'bundles/app/bootstrap/js/bootstrap-datepicker.js'
+    'bundles/app/bootstrap/js/bootstrap-datepicker.fr.js'
+    'bundles/app/js/stage.edit.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

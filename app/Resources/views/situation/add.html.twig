@@ -1,0 +1,144 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Ajout d'une situation
+{% endblock %}
+
+
+{% block body %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">
+                    Ajout d'une situation
+            </h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+
+    <p>
+        <button type="button" class="btn btn-outline-secondary"><a href="{{  path('situation_index') }}">Retourner à la liste</a></button>
+    </p>
+
+    <!-- Tab panes -->
+    <div class="tab-content">
+        <form action="{{ path('situation_add') }}" method="post">
+            {{ form_errors(form) }}
+            {{ form_row(form._token) }}
+
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label class="control-label required" for="situation_libelle">Libellé: </label>
+                    {{ form_widget(form.libelle, {'attr': {'placeholder': 'Libellé de la situation'}}) }}
+                </div>
+                <div class="form-group col-md-4">
+                    <label class="control-label required" for="situation_descriptif">Descriptif: </label>
+                    {{ form_widget(form.descriptif) }}
+                </div>
+            </div>
+
+
+            {% if idParcours == 1 %}  <!-- SISR -->
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="situation_codelangage">Système d'exploitation: </label>
+                    {{ form_widget(form.codeos) }}
+                </div>
+                <div class="form-group col-md-8">
+                    <label for="situation_codeframework">Service: </label>
+                    {{ form_widget(form.codeservice) }}
+                </div>
+            </div>
+            {% elseif idParcours == 2 %}  <!-- SLAM -->
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label class="control-label required" for="situation_codelangage">Langage: </label>
+                    {{ form_widget(form.codelangage) }}
+                </div>
+                <div class="form-group col-md-8">
+                    <label class="control-label required" for="situation_codeframework">Framework: </label>
+                    {{ form_widget(form.codeframework) }}
+                </div>
+            </div>
+            {% else %}  <!-- Parcours non défini -->
+                <div class="form-check form-check-inline">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="radio" name="radioParcours" id="radioParcoursSLAM" value="2" checked> Développeur
+                    </label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="radio" name="radioParcours" id="radioParcoursSISR" value="1"> Réseau
+                    </label>
+                </div>
+
+                <div id="divParcoursSISR" style="display: none;">
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label for="situation_codelangage">Système d'exploitation: </label>
+                            {{ form_widget(form.codeos) }}
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label for="situation_codeframework">Service: </label>
+                            {{ form_widget(form.codeservice) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div id="divParcoursSLAM">
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label class="control-label required" for="situation_codelangage">Langage: </label>
+                            {{ form_widget(form.codelangage) }}
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label class="control-label required" for="situation_codeframework">Framework: </label>
+                            {{ form_widget(form.codeframework) }}
+                        </div>
+                    </div>
+                </div>
+            {%  endif %}
+
+            <div class="form-row">
+                <div class="form-group col-md-4">
+                    <label for="DateDebut">Date de</label>
+                    <input type="text" id="situation_datedebut" name="situation[datedebut]" required="required" class="form-control" value="{{  situation.datedebut | date("d/m/Y") }}" />
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="DateFin">à</label>
+                    <input type="text" id="situation_datefin" name="situation[datefin]" required="required" class="form-control" value="{{  situation.datefin | date("d/m/Y") }}" />
+                </div>
+                <div class="form-group col-md-4">
+                    <label for="Duree">Durée</label>
+                    <input id="duree" name="duree" class="form-control" disabled="disabled" type="text" value="0 semaines">
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label>Est-ce une situation obligatoire ?</label>
+                    {% for typology in typologies %}
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input name="mandatory[]"
+                                       class="form-check-input" type="checkbox" value="{{ typology.code }}">
+                                {{ typology.libelle }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <input type="submit" id="submit" name="submit" class="btn btn-success" value="Valider" />
+        </form>
+    </div>
+{% endblock %}
+
+{% block javascripts %}
+    {% javascripts
+    'bundles/app/bootstrap/js/bootstrap-datepicker.js'
+    'bundles/app/bootstrap/js/bootstrap-datepicker.fr.js'
+    'bundles/app/js/situation.edit.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

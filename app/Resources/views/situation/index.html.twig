@@ -1,0 +1,117 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Liste des situations
+{% endblock %}
+
+{% block stylesheets %}
+    {% stylesheets
+    'bundles/app/bootstrap/css/bootstrap-datepicker.css'
+    filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Liste des situations</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+
+    <form action="" method="post" id="formRecherche">
+        <div class="form-inline">
+            {{ form_row(form.libelle) }}
+            {{ form_row(form.descriptif) }}
+            {{ form_row(form.date) }}
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Recherche" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    </form>
+    <br />
+
+    <p>
+        <a class="btn btn-primary btn-sm" href="{{  path('situation_add') }}">Nouvelle situation</a>
+    </p>
+
+
+    <div class="row">
+        <div id="update-message" style="display: none" class="col-md-8"></div>
+        <div class="col-md-4"></div>
+    </div>
+
+    <span class="label label-info">{{ count }} situations trouvées</span>
+    <table class="table table-condensed table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Libellé</th>
+            <th>Descriptif</th>
+            <th width="160">Activités citées</th>
+            {% if idParcours == 1 %}  <!-- SISR -->
+                <th width="80">OS</th>
+                <th width="120">Service</th>
+            {% elseif idParcours == 2  %}<!-- SLAM -->
+                <th width="80">Langage</th>
+                <th width="120">Framework</th>
+            {%  else %} <!-- Pas de parcours -->
+                <th width="80">Type</th>
+                <th width="80">OS ou Langage</th>
+                <th width="120">Service ou Framework</th>
+            {%  endif %}
+            <th width="120">Date début</th>
+            <th width="120">Date fin</th>
+            <th width="240"></th>
+        </tr>
+
+        </thead>
+        <tbody>
+        {% for situation in arraySituations %}
+        <tr id="{{  situation.reference }}" >
+            <td id="libelle">{{  situation.libelle }}</td>
+            <td>{{  situation.descriptif }}</td>
+            {%  set activiteCount = situation.activiteCount %}
+            <td {% if activiteCount==0 %} class="nonnote" {% endif %}>{{ activiteCount }}</td>
+            {% if idParcours == 1 %}  <!-- SISR -->
+                <td>{{  situation.codeos.libelle }}</td>
+                <td>{{  situation.codeservice.libelle }}</td>
+            {% elseif idParcours == 2 %}<!-- SLAM -->
+                <td>{{  situation.codelangage.libelle }}</td>
+                <td>{{  situation.codeframework.libelle }}</td>
+            {%  else %} <!-- Pas de parcours -->
+                <td>{%  if situation.codeos %}SISR{% else %}SLAM{% endif %}</td>
+                {%  if situation.codeos %}<td>{{  situation.codeos.libelle }}</td>{% endif %}
+                {%  if situation.codeservice %}<td>{{  situation.codeservice.libelle }}</td>{% endif %}
+                {%  if situation.codelangage %}<td>{{  situation.codelangage.libelle }}</td>{% endif %}
+                {%  if situation.codeframework %}<td>{{  situation.codeframework.libelle }}</td>{% endif %}
+            {%  endif %}
+            <td style="width:150px">{{  situation.datedebut | date("d/m/Y") }}</td>
+            <td style="width:150px">{{  situation.datefin | date("d/m/Y") }}</td>
+            <td>
+                <a class="btn btn-primary btn-sm" href="{{  path('situation_edit', {'id': situation.reference}) }}">
+                    <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;Modifier</a>
+
+                <button id="btnDeleteSituation" type="button" class="btn btn-sm btn-danger" aria-label="Supprimer la situation">
+                    <i class="fa fa-trash" aria-hidden="true"></i>&nbsp;Supprimer
+                </button>
+             </td>
+        </tr>
+        {% else %}
+            <tr><td colspan="8">Aucune situation n'a été trouvé.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
+
+{% block javascripts %}
+    {% javascripts
+        'bundles/app/js/situation.index.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

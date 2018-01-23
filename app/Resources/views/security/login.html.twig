@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8" />
+    <title>Connexion</title>
+
+    {% stylesheets
+    'bundles/app/bootstrap/css/bootstrap.css'
+    'bundles/app/font-awesome/css/font-awesome.css'
+    'bundles/app/css/sb-admin-4.css'
+    filter='cssrewrite' %}
+    <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+
+    <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+</head>
+<body>
+
+<div class="container">
+
+    <div class="card card-login mx-auto mt-5">
+        <div class="card-header">Suivi PPE</div>
+        <div class="card-body">
+            {% if error %}
+                <div>{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+            {% endif %}
+
+            <form action="{{ path('login') }}" method="post">
+                <fieldset>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-fw fa-user"></i></span>
+                            <input class="form-control" type="text" id="username" name="_username" value="{{ last_username }}" placeholder="Entrez votre identifant" />
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group">
+                            <span class="input-group-addon"><i class="fa fa-fw fa-key"></i></span>
+                            <input class="form-control" type="password" id="password" name="_password" placeholder="Entrez votre mot de passe ECampus" />
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="submit" value="Connexion" class="btn btn-lg btn-primary btn-block" />
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+
+</div>
+
+{% javascripts
+'bundles/app/js/jquery-3.2.1.js'
+'bundles/app/bootstrap/js/bootstrap.min.js'
+%}
+<script type="text/javascript" src="{{ asset_url }}"></script>
+{% endjavascripts %}
+
+</body>
+</html>
+

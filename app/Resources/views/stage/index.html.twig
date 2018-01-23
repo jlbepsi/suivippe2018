@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Liste des stages
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Liste des stages</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+
+    <p>
+        <a class="btn btn-primary btn-sm" href="{{  path("stage_add") }}">Nouveau stage</a>
+    </p>
+
+
+    <table id="listeStages" class="table table-bordered table-striped table-condensed">
+    <thead>
+    <tr>
+        <th width="80">Année</th>
+        <th>Libelle</th>
+        <th>Entreprise</th>
+        <th width="260"></th>
+    </tr>
+    </thead>
+    <tbody>
+{% for stage in arrayStages %}
+        <tr id="stage{{  stage.id }}">
+            <td>{{ stage.annee }}</td>
+            <td>{{ stage.libellecourt }}</td>
+            <td>{{ stage.entreprisenom }}</td>
+            <td>
+                <a class="btn btn-primary btn-sm" href="{{ path('stage_edit', {'id':stage.id}) }}" title="Modifier le stage"><i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;Modifier</a>
+                <a class="btn btn-danger btn-sm" href="#" id="deleteStage" name="deleteStage" title="Supprimer le stage"><i class="fa fa-trash" aria-hidden="true"></i>&nbsp;Supprimer</a>
+            </td>
+        </tr>
+{% else %}
+    <tr><td colspan="4">Aucun stage</td> </tr>
+{% endfor %}
+    </tbody>
+    </table>
+</div>
+
+{% endblock %}
+
+{% block javascripts %}
+    {% javascripts
+    'bundles/app/js/stage.index.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Tableau de synthèse
+{% endblock %}
+
+
+{% block body %}
+<div class="row">
+    <div class="col-lg-12">
+        <h1 class="page-header">
+            BTS SERVICES INFORMATIQUES AUX ORGANISATIONS – TABLEAU DE SYNTHÈSE
+        </h1>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+    <div class="tab-content">
+
+        <p>Nom et prénom du candidat : {{ user.nom }} {{ user.prenom }}</p>
+        <p>Parcours : {{ user.numparcours.nomenclature }}</p>
+
+        <ul>
+            {% for typologie in syntheseBuilder.typologies %}
+                <li>{{ typologie.code }} - {{ typologie.libelle }}</li>
+            {% endfor %}
+        </ul>
+
+        <ul>
+            {% for processus in syntheseBuilder.processus %}
+                <li>{{ processus["id"] }} - {{ processus["libelle"] }} - {{ processus["count"] }}</li>
+            {% endfor %}
+        </ul>
+
+        <ul>
+        {% for evalue in syntheseBuilder.activitesDomaine %}
+            <li>{%  if evalue.idepreuve.id == 3 %}*** {% endif %}
+
+                {{ evalue.idactivite.nomenclature }} - {{ evalue.idactivite.libelle }}, {{ evalue.idepreuve.id}},
+                {{ evalue.idactivite.iddomaine.id}} ({{ evalue.idactivite.iddomaine.idprocessus.libelle}}) </li>
+        {% endfor %}
+        </ul>
+
+        {% for situation in syntheseBuilder.situations %}
+            <p>{{ situation.libelle }}</p>
+
+            <ul>
+                {% for typologie in syntheseBuilder.typologies %}
+                    {% if situation.codePresent(typologie.code) %}
+                    <li>{{ typologie.code }} - {{ typologie.libelle }}</li>
+                    {%  else %}
+                        <li>{{ typologie.code }} - NON PRESENT</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+
+            {% for situationActiviteCites in situation.arraySituationActiviteCites %}
+                {{ situationActiviteCites["present"] }}&nbsp;
+            {% endfor %}
+        {% endfor %}
+    </div>
+{% endblock %}
