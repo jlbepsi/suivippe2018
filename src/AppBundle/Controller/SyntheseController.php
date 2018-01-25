@@ -2,8 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Manager\SituationManager;
-use AppBundle\Manager\SyntheseBuilder;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -14,6 +12,9 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use AppBundle\Manager\CompetenceManager;
 use AppBundle\Manager\ActiviteCompetences;
 use AppBundle\Manager\SyntheseManager;
+use AppBundle\Manager\SituationManager;
+use AppBundle\Manager\SyntheseBuilder;
+use AppBundle\Manager\SynthesePDF;
 
 
 class SyntheseController extends Controller
@@ -65,8 +66,17 @@ class SyntheseController extends Controller
      */
     public function tableauAction()
     {
-        // Obtention de l'utilisateur connecté
-        $user = $this->getUser();
+        //return $this->render('synthese/tableau.html.twig', array('user' => $user, 'syntheseBuilder' => $syntheseBuilder));
+
+        return $this->generatePDF($this->getUser());
+
+    }
+
+    private function generatePDF($user)
+    {
+        /*
+         * LES DONNEES
+         */
         // Obtention du parcours
         $idParcours = $user->getNumparcours()->getId();
         // Obtention de toutes les activités
@@ -74,6 +84,8 @@ class SyntheseController extends Controller
 
         // L'objet qui conteindra toutes les informations pré-formatées
         $syntheseBuilder = new SyntheseBuilder();
+        // L'utilisateur
+        $syntheseBuilder->setUtilisateur($user);
         // Obtention des activités et domaines
         $syntheseBuilder->addActivitesDomaine($activitesDomaine);
         // Obtention des typologies
@@ -84,6 +96,12 @@ class SyntheseController extends Controller
         $syntheseBuilder->addSituations($situations);
         $syntheseBuilder->buildSituationActiviteCites();
 
-        return $this->render('synthese/tableau.html.twig', array('user' => $user, 'syntheseBuilder' => $syntheseBuilder));
+
+        /*
+         * LA GENERATION DU PDF
+         */
+        $synthesePdf = new SynthesePdf($syntheseBuilder);
+
+        return new Response($synthesePdf->generateSynthese(), 200, array('Content-Type' => 'application/pdf'));
     }
 }
