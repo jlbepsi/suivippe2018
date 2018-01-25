@@ -13,6 +13,8 @@
         <!-- /.col-lg-12 -->
     </div>
 
+    <br />
+
     <!-- Tab panes -->
     <div class="tab-content">
         <form action="{{ path('stage_add') }} " method="post">
@@ -23,7 +25,7 @@
             <div class="form-row">
                 <div class="form-group col-md-2">
                     <label for="stage_annee">Stage: </label>
-                    <select id="stage_annee" name="stage[annee]" class="form-control">
+                    <select id="stage_annee" name="appbundle_stage[annee]" class="form-control">
                         <option value="1">Stage 1ère année</option>
                         <option value="2">Stage 2ème année</option>
                     </select>
@@ -37,11 +39,11 @@
             <div class="form-row">
                 <div class="form-group col-md-3">
                     <label for="DateDebut">Date de</label>
-                    <input type="text" id="stage_datedebut" name="stage[datedebut]" required="required" class="form-control" value="" />
+                    <input type="text" id="stage_datedebut" name="appbundle_stage[datedebut]" required="required" class="form-control" value="" />
                 </div>
                 <div class="form-group col-md-3">
                     <label for="DateFin">à</label>
-                    <input type="text" id="stage_datefin" name="stage[datefin]" required="required" class="form-control" value="" />
+                    <input type="text" id="stage_datefin" name="appbundle_stage[datefin]" required="required" class="form-control" value="" />
                 </div>
                 <div class="form-group col-md-3">
                     <label for="Duree">Durée</label>
@@ -75,7 +77,7 @@
                 </div>
                 <div class="form-group col-md-8">
                     <label for="stage_entrepriseLogo">Logo de l&#039;entreprise: </label>
-                    <input type="file" id="stage_entrepriseLogo" name="stage[entrepriseLogo]" class="form-control" />
+                    <input type="file" id="stage_entrepriseLogo" name="appbundle_stage[entrepriseLogo]" class="form-control" />
                 </div>
             </div>
 

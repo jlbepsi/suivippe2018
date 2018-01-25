@@ -72,8 +72,9 @@ class SyntheseController extends Controller
         // Obtention de toutes les activités
         $activitesDomaine = $this->getSyntheseManager()->loadActivitesDomaine($idParcours);
 
-        // Obtention des activités et domaines
+        // L'objet qui conteindra toutes les informations pré-formatées
         $syntheseBuilder = new SyntheseBuilder();
+        // Obtention des activités et domaines
         $syntheseBuilder->addActivitesDomaine($activitesDomaine);
         // Obtention des typologies
         $typologies = $this->getSyntheseManager()->loadTypologies();

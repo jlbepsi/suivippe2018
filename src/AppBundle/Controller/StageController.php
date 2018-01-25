@@ -84,7 +84,7 @@ class StageController extends Controller
                 // Validation de l'entité
                 $manager->saveStage($stage);
 
-                return $this->redirectToRoute('stage_edit', array('$id' => $stage->getId()));
+                return $this->redirectToRoute('stage_edit', array('id' => $stage->getId()));
             }
         }
 
