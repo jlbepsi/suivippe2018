@@ -76,7 +76,8 @@ class SyntheseBuilder
         {
             $arraySituationActiviteCites[$evalue->getIdactivite()->getid()] = array(
                 'id' => $evalue->getIdactivite()->getid(),
-                'present' => '0'
+                'e6' => ($evalue->getIdepreuve()->getid()==3 ? true : false),
+                'present' => ' '
             );
         }
 
@@ -85,7 +86,7 @@ class SyntheseBuilder
             $newArraySituationActiviteCites = $arraySituationActiviteCites;
             foreach ($situation->getIdactivite() as $activite)
             {
-                $newArraySituationActiviteCites[$activite->getId()]["present"] = '1';
+                $newArraySituationActiviteCites[$activite->getId()]["present"] = 'X';
             }
             $situation->setArraySituationActiviteCites($newArraySituationActiviteCites);
         }
