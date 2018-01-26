@@ -125,7 +125,10 @@ class SynthesePDF extends \FPDF
         $y0=$this->getY();
         $y1=$y0+$hv;
 
+        $nombreActivites = 0;
         foreach ($this->syntheseBuilder->getActivitesDomaine() as $activitesDomaine) {
+            $nombreActivites++;
+
             $this->SetXY($x,$y0);
             //epreuve E6=3 (E4=1 ; E5=2)
             if ($activitesDomaine->getIdepreuve()->getId() == 3) {
@@ -143,9 +146,60 @@ class SynthesePDF extends \FPDF
 
         $this->Ln($hv);
 
+        $typeSituation = array ("SITUATIONS VÉCUES EN FORMATION", "SITUATIONS VÉCUES EN STAGE DE PREMIÈRE ANNÉE", "SITUATIONS VÉCUES EN STAGE DE DEUXIÈME ANNÉE");
+        $countTypeSituation = 3;
+        
+        // Affichage d'une ligne vide
+
+        //affichage cellules en filigranne
+        $this->SetDrawColor($grisclairtrait);
+        for ($i=0; $i<4;$i++)
+            $this->Cell($lgoblig,$hvs,"","LR",0); //4 cellules claires à gauche
+        $this->Cell($mgs+$margeinterne,$hvs,"",0,0);
+        $ysrc = $this->getY();
+        $xsrc = $this->getX();
+
+        for ($i=0; $i<$nombreActivites ; $i++)
+            $this->Cell($lg,$hvs,"","LR",0);//que gauche et droite en clair
+        $this->SetXY($xsrc,$ysrc);
+        $this->SetFont($police,'B',$potexte);
+        $this->Cell(0, $hvs, $typeSituation[0],0,1,"C");
+        $this->SetDrawColor(0); //noir
+
+        // LES SITUATIONS
+        foreach ($this->syntheseBuilder->getSituations() as $situation)
+        {
+            $this->SetFont($police,'B',$pocroix);
+            foreach ($this->syntheseBuilder->getTypologies() as $typology) {
+                if ($situation->isCodePresent($typology->getCode()))
+                    $caractere = "X";
+                else
+                    $caractere = " ";
+                $this->Cell($lgoblig,$hvs,$caractere,1,0);
+            }
+            $this->Cell($margeinterne,$hvs,"",0,0);
+            $this->SetFont($police,'B',$polibelle);
+            $x0=$this->getX();
+            $y0=$this->getY();
+
+
+            $dates = $situation->getDatedebut()->format("d/m/Y") . ' - '.$situation->getDatedebut()->format("d/m/Y");
+            $this->MultiCell($mgs,5,$situation->getLibelle() ."\n". $dates,0);
+            $this->setXY($x0,$y0);
+            $this->Cell($mgs,$hvs,"",1,0);
+            //affichage des X pour les activites citées
+            $this->SetFont($police,'B',$pocroix);
+
+            foreach ($situation->getArraySituationActiviteCites() as $situationActiviteCites)
+            {
+                $this->Cell($lg,$hvs," ".$situationActiviteCites["present"],1,0,"C", $situationActiviteCites["e6"]);
+            }
+            $this->Ln($hvs);
+        }
+
+
         return $this->output();
     }
-    
 
     function CellRadio($wt,$wr,$h,$txt,$typ,$border,$valide,$por)
     {

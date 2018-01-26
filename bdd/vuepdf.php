@@ -117,7 +117,7 @@ $x=$x0+$lg/2;;
 $y0=$pdf->getY();
 $y1=$y0+$hv;
 
-$eprE6=array();//r�cupere � la vol�e le type d'epreuve pour les autres lignes
+$eprE6=array();//récupere à la volée le type d'epreuve pour les autres lignes
 for ($i=0;$i<$nbp;$i++){
   $lesact=$entete[$i]["act"];
   for ($j=0;$j<count($lesact);$j++){
