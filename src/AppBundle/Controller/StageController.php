@@ -198,6 +198,52 @@ class StageController extends Controller
     }
 
     /**
+     * @Route("/stage/addIntitule", name="stage_intitule_add")
+     */
+    public function addIntituleAction(Request $request) {
+        // Récupération des infos
+        $idStage = $request->request->get('intitule');
+
+        $idIntitule = -1;
+        // Si l'utilisateur appelle bien la suppresion en AJAX - POST
+        if ($request->getMethod() == 'POST') {
+
+            // Obtention du manager
+            $manager = $this->getManager();
+
+
+            $message = "TEST OK";
+            $status = 0;
+            $idIntitule = 99;
+
+            // Recherche de l'intitulé
+            /*if ($stageIntitule = $manager->loadStageIntitule($idStage, $idIntitule)) {
+                $message = "L'intitulé a ete supprimé";
+                $status = 0;
+                // Suppression du film
+                try {
+                    $manager->removeStageIntitule($stageIntitule);
+                } catch (\Exception $e) {
+                    $message = sprintf("L'erreur suivante est survenue lors de la suppression de l'intitulé: %s",
+                        $e->getMessage());
+                    $status = -1;
+                }
+            } else {
+                $message = "L'intitulé n'existe pas";
+                $status = -1;
+            }*/
+        }
+        else
+        {
+            $message = "L'appel de la méthode de suppression est incorrecte";
+            $status = $id = -1;
+        }
+
+        // Retour du résultat en Json
+        return new JsonResponse(array('status' => $status, 'message' => $message, 'idStage' => $idStage, 'idIntitule' => $idIntitule));
+    }
+
+    /**
      * @Route("/stage/editIntitule/{id}/{idintitule}", name="stage_edit_intitule")
      */
     public function editIntituleAction(Request $request, $id, $idintitule)
@@ -232,7 +278,7 @@ class StageController extends Controller
     /**
      * @Route("/stage/deleteIntitule", name="stage_intitule_delete")
      */
-    public function deleteIntitule(Request $request) {
+    public function deleteIntituleAction(Request $request) {
         // Récupération des infos
         $idStage = $request->request->get('idStage');
         $idIntitule = $request->request->get('idIntitule');
