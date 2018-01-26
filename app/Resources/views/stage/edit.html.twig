@@ -15,6 +15,7 @@
         <!-- /.col-lg-12 -->
     </div>
 
+    <br />
     <p>
         <a href="{{  path("stage_index") }}" class="btn btn-outline-primary">Retourner à la liste</a>
     </p>
@@ -68,7 +69,7 @@
                 <div class="form-row">
                     <div class="form-group col-md-2">
                         <label for="stage_codeSource">Stage: </label>
-                        <select id="stage_codeSource" name="stage[codeSource]" class="form-control">
+                        <select id="stage_codeSource" name="appbundle_stage[codeSource]" class="form-control">
                             <option value="1" {{ stage.annee==1 ? 'selected="selected"' : '' }} >Stage 1ère année</option>
                             <option value="2" {{ stage.annee==2 ? 'selected="selected"' : '' }} >Stage 2ème année</option>
                         </select>
@@ -82,11 +83,11 @@
                 <div class="form-row">
                     <div class="form-group col-md-3">
                         <label for="DateDebut">Date de</label>
-                        <input type="text" id="stage_datedebut" name="stage[datedebut]" required="required" class="form-control" value="{{  stage.datedebut | date("d/m/Y") }}" />
+                        <input type="text" id="stage_datedebut" name="appbundle_stage[datedebut]" required="required" class="form-control" value="{{  stage.datedebut | date("d/m/Y") }}" />
                     </div>
                     <div class="form-group col-md-3">
                         <label for="DateFin">à</label>
-                        <input type="text" id="stage_datefin" name="stage[datefin]" required="required" class="form-control" value="{{  stage.datefin | date("d/m/Y") }}" />
+                        <input type="text" id="stage_datefin" name="appbundle_stage[datefin]" required="required" class="form-control" value="{{  stage.datefin | date("d/m/Y") }}" />
                     </div>
                     <div class="form-group col-md-3">
                         <label for="Duree">Durée</label>
@@ -126,7 +127,7 @@
                     </div>
                     <div class="form-group col-md-8">
                         <label for="stage_entrepriseLogo">Logo de l&#039;entreprise: </label>
-                        <input type="file" class="form-control-file" id="stage_entrepriseLogo" name="stage[entrepriseLogo]"/>
+                        <input type="file" class="form-control-file" id="stage_entrepriseLogo" name="appbundle_stage[entrepriseLogo]"/>
                     </div>
                 </div>
 

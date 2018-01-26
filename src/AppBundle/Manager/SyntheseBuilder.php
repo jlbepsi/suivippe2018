@@ -10,6 +10,7 @@ namespace AppBundle\Manager;
 
 class SyntheseBuilder
 {
+    private $utilisateur;
     private $activitesDomaine;
     private $arrayProcessus;
     private $typologies;
@@ -88,5 +89,14 @@ class SyntheseBuilder
             }
             $situation->setArraySituationActiviteCites($newArraySituationActiviteCites);
         }
+    }
+
+    public function getUtilisateur()
+    {
+        return $this->utilisateur;
+    }
+    public function setUtilisateur($user)
+    {
+        $this->utilisateur = $user;
     }
 }
