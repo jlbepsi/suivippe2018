@@ -61,19 +61,41 @@ $(function () {
         var oTR = $(this).parent().parent();
         var idIntitule = oTR.attr("idintitule");
 
-        // Perform the ajax post
-        $.post("/stage/deleteIntitule", { "idStage": idStage, "idIntitule": idIntitule },
-            function (data) {
+        $.ajax({
+            url: "/situation/deleteIntitule",
+            type: "post",
+            data: {"idStage": idStage, "idIntitule": idIntitule},
+            success: function (data) {
                 // Successful requests get here
                 // Update the page elements
                 if (data.status == 1) {
                     var oTR = $('#intitule' + data.id);
+                    var divMessage = $('#update-message');
+                    oTR.fadeOut('slow');
+                    divMessage.attr("class", 'label label-success');
                 }
                 else {
-                    alert("L'activité n'a pas pu être retirée !")
+                    divMessage.attr("class", 'label label-danger');
+                    // On remet les valeurs de départ
+                    // CSS pour suppression
+                    oTR.attr('class', '');
+                    // Le bouton n'est pas grisé ...
+                    var btnDelete = oTR.find("#deleteIntituleActivite");
+                    btnDelete.attr("disabled", false);
                 }
+                divMessage
+                    .text(data.message)
+                    .show('slow', null).delay(6000).hide('slow');
+            },
+            error: function () {
+                alert("Erreur d'accès à la méthode de suppression");
+                var oTR = $('#intitule' + idIntitule);
+                var btnDelete = oTR.find("#deleteIntituleActivite");
+                oTR.attr('class', '');
+                // Le bouton n'est pas grisé ...
+                btnDelete.attr("disabled", false);
             }
-        );
+        });
     }
 
     $('#stage_datedebut').bind('change', dateChange);
@@ -100,5 +122,54 @@ $(function () {
 
     $("#stage_entrepriseLogo").change(function () {
         readURL(this);
+    });
+
+
+    $('#btnAjouterIntituleModal').click( function () {
+        var intitule = $('#modalIntitule').val();
+
+        $('#newIntituleModal').modal('hide');
+        // Bouton grisé
+        $('btnNewIntituleModal').attr("disabled", true);
+
+        // Traitement
+        $.ajax({
+            url: "/stage/addIntitule",
+            type: "post",
+            data: { "intitule": intitule },
+            success: function(data){
+                var divMessage = $('#update-message');
+                if (data.status === 0) {
+                    divMessage.attr("class", 'label label-success');
+
+                }
+                else {
+                    divMessage.attr("class", 'label label-danger');
+                    $('btnNewIntituleModal').attr("disabled", false);
+
+                    var newRow = "<tr id='intitule" + data.idIntitule + "' idintitule='" + data.id + "'><td>" + intitule + "</td>";
+                    newRow += "<td></td><td>";
+                    newRow += "<a class='btn btn-primary btn-sm' href='/stage/editIntitule/" + data.idStage + "/" + data.idIntitule + "' title='Modifier intitulé'><i class='fa fa-pencil' aria-hidden='true'></i>&nbsp;Modifier</a>";
+                    newRow += "</td></tr>";
+                    
+                    // Obtention de la fin de liste
+                    var oTable = $('#listeActivites > tbody');
+                    // Ajout du row dans la table
+                    oTable.append(newRow);
+
+                    // Attache l'évènement onClick au dernier élément ajouté
+                    $('#listeActivites > tbody > tr:last #deleteContributeur').bind('click', RemoveClick);
+                    $('#listeActivites > tbody > tr:last #editContributeur').bind('click', EditClick);
+                }
+                divMessage
+                    .text(data.message)
+                    .show('slow', null).delay(6000).hide('slow');
+            },
+            error:function(){
+                alert("Erreur d'accès à la méthode de suppression");
+                // Le bouton n'est pas grisé ...
+                $('btnNewIntituleModal').attr("disabled", false);
+            }
+        });
     });
 });

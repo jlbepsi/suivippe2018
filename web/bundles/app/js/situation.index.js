@@ -46,8 +46,8 @@ $(function () {
                         // CSS pour suppression
                         oTR.attr('class','');
                         // Le bouton n'est pas grisé ...
-                        var btnEdit = oTR.find("#btnDeleteSituation");
-                        btnEdit.attr("disabled", false);
+                        var btnDelete = oTR.find("#btnDeleteSituation");
+                        btnDelete.attr("disabled", false);
                     }
                     divMessage
                         .text(data.message)
@@ -56,10 +56,10 @@ $(function () {
                 error:function(){
                     alert("Erreur d'accès à la méthode de suppression");
                     var oTR = $('#' + refSituation);
-                    var btnEdit = oTR.find("#btnDeleteSituation");
+                    var btnDelete = oTR.find("#btnDeleteSituation");
                     oTR.attr('class','');
                     // Le bouton n'est pas grisé ...
-                    btnEdit.attr("disabled", false);
+                    btnDelete.attr("disabled", false);
                 }
             });
         }
