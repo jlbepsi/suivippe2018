@@ -125,8 +125,6 @@ $(function () {
     });
 
 
-
-
     $('#btnAjouterIntituleModal').click( function () {
         var intitule = $('#modalIntitule').val();
 
