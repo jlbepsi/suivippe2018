@@ -1,6 +1,18 @@
 
 class Activite
 
+
+    /**
+     * Get libelle court
+     *
+     * @return string
+     */
+    public function getLibelleCourt()
+    {
+        return substr($this->libelle, 0, $this->lngutile);
+    }
+
+
     /**
      * Get situation referenced
      *
@@ -27,6 +39,30 @@ class Activite
             }
         );
         return $exists;
+    }
+
+
+
+*********************************************************
+
+
+class Stageintitule
+{
+
+
+    /**
+     *
+     * Pour le tableau de synthèse
+     *
+     */
+    private $arrayStageActiviteCites;
+    public function setArrayStageActiviteCites($arrayStageActiviteCites)
+    {
+        $this->arrayStageActiviteCites = $arrayStageActiviteCites;
+    }
+    public function getArrayStageActiviteCites()
+    {
+        return $this->arrayStageActiviteCites;
     }
 
 
@@ -70,6 +106,16 @@ class Situation
 
 
     /**
+     * Get libelle court
+     *
+     * @return string
+     */
+    public function getLibelleCourt()
+    {
+        return substr($this->libelle, 0, 30);
+    }
+
+    /**
      * Get activite count
      *
      * @return integer
@@ -104,6 +150,23 @@ class Situation
     }
 
 
+
+    /**
+     *
+     * Pour le tableau de synthèse
+     *
+     */
+    private $arraySituationActiviteCites;
+    public function setArraySituationActiviteCites($arraySituationActiviteCites)
+    {
+        $this->arraySituationActiviteCites = $arraySituationActiviteCites;
+    }
+    public function getArraySituationActiviteCites()
+    {
+        return $this->arraySituationActiviteCites;
+    }
+
+
 *********************************************************
 
 
@@ -125,7 +188,20 @@ class StageRepository extends EntityRepository
 
 *********************************************************
 
+class Typologie
+{
 
+    /**
+     * Get libelle court
+     *
+     * @return string
+     */
+    public function getLibelleCourt()
+    {
+        return substr($this->libelle, 0, $this->lngutile);
+    }
+
+*********************************************************
 <?php
 
 namespace AppBundle\Entity;

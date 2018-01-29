@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Manager\StageManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -30,6 +31,10 @@ class SyntheseController extends Controller
     private function getSituationManager()
     {
         return new SituationManager($this->get('doctrine')->getManager());
+    }
+    private function getStageManager()
+    {
+        return new StageManager($this->get('doctrine')->getManager());
     }
 
     /**
@@ -94,7 +99,10 @@ class SyntheseController extends Controller
         // Obtention des situations
         $situations = $this->getSituationManager()->loadSituations($user->getLogin());
         $syntheseBuilder->addSituations($situations);
-        $syntheseBuilder->buildSituationActiviteCites();
+
+        // Obtention des stages
+        $stages = $this->getStageManager()->loadStageIntitulesActivitesUser($user->getLogin());
+        $syntheseBuilder->addStagesIntitules($stages);
 
 
         /*

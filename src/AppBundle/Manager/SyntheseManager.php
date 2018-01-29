@@ -38,6 +38,7 @@ class SyntheseManager
         )->setParameter('idParcours', $idParcours);
         $result = $query->getResult();
 
+        // Probleme
         if ($idParcours == 1 or $idParcours == 2)
         {
             // Pour SISR
@@ -53,7 +54,16 @@ class SyntheseManager
             $result2 = $query2->getResult();
 
             foreach ($result2 as $item) {
-                $result[] = $item;
+                // Ajoute ssi l'id n'est pas présent
+                $notFound = true;
+                foreach($result as $line) {
+                    if ($line->getIdactivite()->getId() == $item->getIdactivite()->getId()) {
+                        $notFound = false;
+                        break;
+                    }
+                }
+                if ($notFound)
+                    $result[] = $item;
             }
         }
 

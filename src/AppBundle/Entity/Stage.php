@@ -395,4 +395,5 @@ class Stage
     {
         return $this->login;
     }
+
 }

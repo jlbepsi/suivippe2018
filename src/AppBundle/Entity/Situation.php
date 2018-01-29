@@ -182,6 +182,16 @@ class Situation
     }
 
     /**
+     * Get libelle court
+     *
+     * @return string
+     */
+    public function getLibelleCourt()
+    {
+        return substr($this->libelle, 0, 30);
+    }
+
+    /**
      * Set descriptif
      *
      * @param string $descriptif
