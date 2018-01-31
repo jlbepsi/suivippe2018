@@ -89,5 +89,12 @@ class StageManager
 
         return $this->repositoryStageintitule->findAll();
     }
+    public function loadStageIntitulesActivitesUser($login)
+    {
+        if ($this->repositoryStageintitule == null)
+            $this->repositoryStageintitule = $this->entityManager->getRepository('AppBundle:Stageintitule');
+
+        return $this->repositoryStageintitule->loadStageIntitulesUser($login);
+    }
 
 }

@@ -15,6 +15,7 @@ class SyntheseBuilder
     private $arrayProcessus;
     private $typologies;
     private $situations;
+    private $stagesIntitules;
 
     public function addActivitesDomaine($activitesDomaine)
     {
@@ -63,6 +64,7 @@ class SyntheseBuilder
     public function addSituations($situations)
     {
         $this->situations = $situations;
+        $this->buildSituationActiviteCites();
     }
     public function getSituations()
     {
@@ -74,10 +76,10 @@ class SyntheseBuilder
         $arraySituationActiviteCites = array();
         foreach ($this->activitesDomaine as $evalue)
         {
-            $arraySituationActiviteCites[$evalue->getIdactivite()->getid()] = array(
-                'id' => $evalue->getIdactivite()->getid(),
-                'e6' => ($evalue->getIdepreuve()->getid()==3 ? true : false),
-                'present' => ' '
+            $arraySituationActiviteCites[$evalue->getIdactivite()->getId()] = array(
+                'id' => $evalue->getIdactivite()->getId(),
+                'e6' => ($evalue->getIdepreuve()->getId()==3 ? true : false),
+                'present' => " "
             );
         }
 
@@ -86,18 +88,71 @@ class SyntheseBuilder
             $newArraySituationActiviteCites = $arraySituationActiviteCites;
             foreach ($situation->getIdactivite() as $activite)
             {
-                $newArraySituationActiviteCites[$activite->getId()]["present"] = 'X';
+                if (array_key_exists($activite->getId(), $arraySituationActiviteCites)) {
+                    $newArraySituationActiviteCites[$activite->getId()]["present"] = 'X';
+                }
             }
             $situation->setArraySituationActiviteCites($newArraySituationActiviteCites);
         }
     }
 
+    public function setUtilisateur($user)
+    {
+        $this->utilisateur = $user;
+    }
     public function getUtilisateur()
     {
         return $this->utilisateur;
     }
-    public function setUtilisateur($user)
+
+    public function addStagesIntitules($stagesIntitules)
     {
-        $this->utilisateur = $user;
+        $this->stagesIntitules = array();
+
+        $this->stagesIntitules[1] = array();
+        $this->stagesIntitules[2] = array();
+
+        // Répartition des stages sur les 2 ans
+        foreach ($stagesIntitules as $stageintitule) {
+            if ($stageintitule->getIdstage()->getAnnee() == 1) {
+                $this->stagesIntitules[1][] = $stageintitule;
+            }
+            else{
+                $this->stagesIntitules[2][] = $stageintitule;
+            }
+        }
+
+        $this->buildStageActiviteCites();
+    }
+    public function buildStageActiviteCites()
+    {
+        $arrayStageActiviteCites = array();
+        foreach ($this->activitesDomaine as $evalue)
+        {
+            $arrayStageActiviteCites[$evalue->getIdactivite()->getId()] = array(
+                'id' => $evalue->getIdactivite()->getId(),
+                'e6' => ($evalue->getIdepreuve()->getId()==3 ? true : false),
+                'present' => " "
+            );
+        }
+
+        foreach ($this->stagesIntitules as $stageIntituleAnnee)
+        {
+            foreach ($stageIntituleAnnee as $stageintitule)
+            {
+                $newArrayStageActiviteCites = $arrayStageActiviteCites;
+                foreach ($stageintitule->getIdactivite() as $activite) {
+                    if (array_key_exists($activite->getId(), $arrayStageActiviteCites)) {
+                        $newArrayStageActiviteCites[$activite->getId()]["present"] = 'X';
+                    }
+                }
+                $stageintitule->setArrayStageActiviteCites($newArrayStageActiviteCites);
+            }
+        }
+    }
+    public function getStagesIntitules($annee)
+    {
+
+        return $this->stagesIntitules[$annee];
     }
 }

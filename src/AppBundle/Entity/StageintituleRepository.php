@@ -21,4 +21,17 @@ class StageintituleRepository extends EntityRepository
 
         return $query->getResult();
     }
+
+    public function loadStageIntitulesUser($login)
+    {
+        $query = $this->getEntityManager()->createQuery(
+            'SELECT si
+                    FROM AppBundle:Stage s, AppBundle:StageIntitule si, AppBundle:Utilisateur us
+                    WHERE us.login = :pLogin
+                      AND s.login = us
+                      AND si.idstage = s'
+        )->setParameter('pLogin', $login);
+
+        return $query->getResult();
+    }
 }

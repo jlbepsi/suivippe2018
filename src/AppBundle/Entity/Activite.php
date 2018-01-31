@@ -164,6 +164,16 @@ class Activite
     }
 
     /**
+     * Get libelle court
+     *
+     * @return string
+     */
+    public function getLibelleCourt()
+    {
+        return substr($this->libelle, 0, $this->lngutile);
+    }
+
+    /**
      * Set iddomaine
      *
      * @param \AppBundle\Entity\Domaine $iddomaine

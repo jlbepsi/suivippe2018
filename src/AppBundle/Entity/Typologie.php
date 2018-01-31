@@ -108,6 +108,16 @@ class Typologie
     }
 
     /**
+     * Get libelle court
+     *
+     * @return string
+     */
+    public function getLibelleCourt()
+    {
+        return substr($this->libelle, 0, $this->lngutile);
+    }
+
+    /**
      * Add reference
      *
      * @param \AppBundle\Entity\Situation $reference
