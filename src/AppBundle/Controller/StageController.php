@@ -201,37 +201,56 @@ class StageController extends Controller
      * @Route("/stage/addIntitule", name="stage_intitule_add")
      */
     public function addIntituleAction(Request $request) {
-        // Récupération des infos
-        $idStage = $request->request->get('intitule');
 
+        $idStage = -1;
         $idIntitule = -1;
-        // Si l'utilisateur appelle bien la suppresion en AJAX - POST
+
+        // Si l'utilisateur appelle bien l'ajout en AJAX - POST
         if ($request->getMethod() == 'POST') {
 
             // Obtention du manager
             $manager = $this->getManager();
 
+            // Récupération des infos
+            $idStage = $request->request->get('idStage');
+            $intitule = $request->request->get('intitule');
+            // Obtention de l'utilisateur connecté
+            $user = $this->getUser();
 
-            $message = "TEST OK";
-            $status = 0;
-            $idIntitule = 99;
-
-            // Recherche de l'intitulé
-            /*if ($stageIntitule = $manager->loadStageIntitule($idStage, $idIntitule)) {
-                $message = "L'intitulé a ete supprimé";
+            // Recherche du stage
+            if ($stage = $manager->loadStage($idStage, $user->getLogin()))
+            {
+                $message = "l'intitulé a été ajouté";
                 $status = 0;
-                // Suppression du film
+
+                /*
+                 *
+                 * SELECT MAX(idIntitule) INTO idintitule
+FROM stageintitule
+WHERE idStage = 1;
+
+INSERT INTO  stageintitule(idStage, idIntitule, intitule)
+VALUES (idstage, idintitule, intitule);
+
+
+                 */
+                // Création de l'intitulé
                 try {
-                    $manager->removeStageIntitule($stageIntitule);
+                    $stageIntitule = new Stageintitule();
+                    $stageIntitule->setIdstage($idStage);
+                    $stageIntitule->setIdintitule(1);
+                    $stageIntitule->setIntitule($intitule);
+
+                    $manager->saveStageIntitule($stageIntitule);
                 } catch (\Exception $e) {
-                    $message = sprintf("L'erreur suivante est survenue lors de la suppression de l'intitulé: %s",
+                    $message = sprintf("L'erreur suivante est survenue lors de l'ajout de l'intitulé: %s",
                         $e->getMessage());
                     $status = -1;
                 }
             } else {
                 $message = "L'intitulé n'existe pas";
                 $status = -1;
-            }*/
+            }
         }
         else
         {

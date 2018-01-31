@@ -126,6 +126,7 @@ $(function () {
 
 
     $('#btnAjouterIntituleModal').click( function () {
+        var idStage = $('#idStage').val();
         var intitule = $('#modalIntitule').val();
 
         $('#newIntituleModal').modal('hide');
@@ -136,22 +137,17 @@ $(function () {
         $.ajax({
             url: "/stage/addIntitule",
             type: "post",
-            data: { "intitule": intitule },
+            data: { "idStage" : idStage, "intitule": intitule },
             success: function(data){
                 var divMessage = $('#update-message');
                 if (data.status === 0) {
                     divMessage.attr("class", 'label label-success');
 
-                }
-                else {
-                    divMessage.attr("class", 'label label-danger');
-                    $('btnNewIntituleModal').attr("disabled", false);
-
-                    var newRow = "<tr id='intitule" + data.idIntitule + "' idintitule='" + data.id + "'><td>" + intitule + "</td>";
+                    var newRow = "<tr id='intitule" + data.idIntitule + "' idintitule='" + data.idIntitule + "'><td>" + intitule + "</td>";
                     newRow += "<td></td><td>";
                     newRow += "<a class='btn btn-primary btn-sm' href='/stage/editIntitule/" + data.idStage + "/" + data.idIntitule + "' title='Modifier intitulé'><i class='fa fa-pencil' aria-hidden='true'></i>&nbsp;Modifier</a>";
                     newRow += "</td></tr>";
-                    
+
                     // Obtention de la fin de liste
                     var oTable = $('#listeActivites > tbody');
                     // Ajout du row dans la table
@@ -160,6 +156,11 @@ $(function () {
                     // Attache l'évènement onClick au dernier élément ajouté
                     $('#listeActivites > tbody > tr:last #deleteContributeur').bind('click', RemoveClick);
                     $('#listeActivites > tbody > tr:last #editContributeur').bind('click', EditClick);
+
+                }
+                else {
+                    divMessage.attr("class", 'label label-danger');
+                    $('btnNewIntituleModal').attr("disabled", false);
                 }
                 divMessage
                     .text(data.message)
