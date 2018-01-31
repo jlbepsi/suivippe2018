@@ -61,41 +61,46 @@ $(function () {
         var oTR = $(this).parent().parent();
         var idIntitule = oTR.attr("idintitule");
 
-        $.ajax({
-            url: "/situation/deleteIntitule",
-            type: "post",
-            data: {"idStage": idStage, "idIntitule": idIntitule},
-            success: function (data) {
-                // Successful requests get here
-                // Update the page elements
-                if (data.status == 1) {
-                    var oTR = $('#intitule' + data.id);
-                    var divMessage = $('#update-message');
-                    oTR.fadeOut('slow');
-                    divMessage.attr("class", 'label label-success');
-                }
-                else {
-                    divMessage.attr("class", 'label label-danger');
-                    // On remet les valeurs de départ
-                    // CSS pour suppression
+        if (confirm("La suppression de l'intitulé supprimera aussi les activités.\nConfirmer la suppression ?")) {
+            var btnDelete = oTR.find("#deleteIntituleActivite");
+            btnDelete.attr("disabled", true);
+
+            $.ajax({
+                url: "/stage/deleteIntitule",
+                type: "post",
+                data: {"idStage": idStage, "idIntitule": idIntitule},
+                success: function (data) {
+                    // Successful requests get here
+                    // Update the page elements
+                    if (data.status == 0) {
+                        var oTR = $('#intitule' + data.idStage + '-' + data.idIntitule);
+                        var divMessage = $('#update-message');
+                        oTR.fadeOut('slow');
+                        divMessage.attr("class", 'label label-success');
+                    }
+                    else {
+                        divMessage.attr("class", 'label label-danger');
+                        // On remet les valeurs de départ
+                        // CSS pour suppression
+                        oTR.attr('class', '');
+                        // Le bouton n'est pas grisé ...
+                        var btnDelete = oTR.find("#deleteIntituleActivite");
+                        btnDelete.attr("disabled", false);
+                    }
+                    divMessage
+                        .text(data.message)
+                        .show('slow', null).delay(6000).hide('slow');
+                },
+                error: function () {
+                    alert("Erreur d'accès à la méthode de suppression");
+                    var oTR = $('#intitule' + idStage + '-' + idIntitule);
+                    var btnDelete = oTR.find("#deleteIntituleActivite");
                     oTR.attr('class', '');
                     // Le bouton n'est pas grisé ...
-                    var btnDelete = oTR.find("#deleteIntituleActivite");
                     btnDelete.attr("disabled", false);
                 }
-                divMessage
-                    .text(data.message)
-                    .show('slow', null).delay(6000).hide('slow');
-            },
-            error: function () {
-                alert("Erreur d'accès à la méthode de suppression");
-                var oTR = $('#intitule' + idIntitule);
-                var btnDelete = oTR.find("#deleteIntituleActivite");
-                oTR.attr('class', '');
-                // Le bouton n'est pas grisé ...
-                btnDelete.attr("disabled", false);
-            }
-        });
+            });
+        }
     }
 
     $('#stage_datedebut').bind('change', dateChange);
@@ -143,9 +148,10 @@ $(function () {
                 if (data.status === 0) {
                     divMessage.attr("class", 'label label-success');
 
-                    var newRow = "<tr id='intitule" + data.idIntitule + "' idintitule='" + data.idIntitule + "'><td>" + intitule + "</td>";
+                    var newRow = "<tr id='intitule" + data.idIntitule + "' idintitule='" + data.idIntitule + "'><td>" + data.intitule + "</td>";
                     newRow += "<td></td><td>";
                     newRow += "<a class='btn btn-primary btn-sm' href='/stage/editIntitule/" + data.idStage + "/" + data.idIntitule + "' title='Modifier intitulé'><i class='fa fa-pencil' aria-hidden='true'></i>&nbsp;Modifier</a>";
+                    newRow += "<a class='btn btn-danger btn-sm' href='#' id='deleteIntituleActivite' name='deleteIntituleActivite' title='Supprimer intitulé'><i class='fa fa-trash' aria-hidden='true'></i>&nbsp;Supprimer</a>";
                     newRow += "</td></tr>";
 
                     // Obtention de la fin de liste

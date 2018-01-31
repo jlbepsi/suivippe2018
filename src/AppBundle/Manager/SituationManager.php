@@ -175,6 +175,5 @@ class SituationManager
                 $situation->addCode($typologie);
             }
         }
-        return $repository->findAll();
     }
 }

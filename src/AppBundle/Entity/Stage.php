@@ -99,7 +99,7 @@ class Stage
     private $datemodif;
 
     /**
-     * @var \Utilisateur
+     * @var \AppBundle\Entity\Utilisateur
      *
      * @ORM\ManyToOne(targetEntity="Utilisateur")
      * @ORM\JoinColumns({
@@ -108,6 +108,20 @@ class Stage
      */
     private $login;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Typologie", inversedBy="idstage")
+     * @ORM\JoinTable(name="stagetypo",
+     *   joinColumns={
+     *     @ORM\JoinColumn(name="idstage", referencedColumnName="id")
+     *   },
+     *   inverseJoinColumns={
+     *     @ORM\JoinColumn(name="code", referencedColumnName="code")
+     *   }
+     * )
+     */
+    private $code;
 
 
     /**
@@ -394,6 +408,65 @@ class Stage
     public function getLogin()
     {
         return $this->login;
+    }
+
+
+
+    /**
+     * Add code
+     *
+     * @param \AppBundle\Entity\Typologie $code
+     * @return Stage
+     */
+    public function addCode(\AppBundle\Entity\Typologie $code)
+    {
+        $this->code[] = $code;
+
+        return $this;
+    }
+
+    /**
+     * Remove code
+     *
+     * @param \AppBundle\Entity\Typologie $code
+     */
+    public function removeCode(\AppBundle\Entity\Typologie $code)
+    {
+        $this->code->removeElement($code);
+    }
+
+    /**
+     *
+     * Supprime tous les codes
+     *
+     */
+    public function removeAllCodes()
+    {
+        $this->code->clear();
+    }
+
+    /**
+     * Get code
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
+
+    /**
+     * Test if code is present
+     *
+     * @return bool
+     */
+    public function isCodePresent($code)
+    {
+        $exists =  $this->code->exists(function($key, $element) use ($code){
+            return $element->getCode() == $code;
+        }
+        );
+        return $exists;
     }
 
 }

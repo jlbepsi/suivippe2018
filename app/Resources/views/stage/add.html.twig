@@ -88,6 +88,21 @@
                 </div>
             </div>
 
+            <div class="form-row">
+                <div class="form-group col-md-12">
+                    <label>Est-ce une situation obligatoire ?</label>
+                    {% for typology in typologies %}
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input name="mandatory[]"
+                                       class="form-check-input" type="checkbox" value="{{ typology.code }}">
+                                {{ typology.libelle }}
+                            </label>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+
             <input type="submit" id="submit" name="submit" class="btn btn-success" value="Valider" />
         </form>
     </div>

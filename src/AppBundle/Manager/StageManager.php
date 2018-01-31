@@ -76,6 +76,29 @@ class StageManager
         $this->entityManager->persist($stageIntitule);
         $this->entityManager->flush();
     }
+    public function addStageIntitule($idStage, $intitule)
+    {
+        $em = $this->entityManager->getConnection();
+
+        $newidIntitule = 0;
+        try
+        {
+            // prepare statement
+            $stmt = $em->prepare("SELECT addStageIntitule(:pIdStage, :pIntitule) AS newIdIntitule");
+            $stmt->bindValue(':pIdStage', $idStage);
+            $stmt->bindValue(':pIntitule', $intitule);
+            // execute and fetch one result
+            $stmt->execute();
+
+            $result = $stmt->fetch();
+            $newidIntitule = intval($result["newIdIntitule"]);
+        }
+        catch (\Exception $exception)
+        {
+        }
+
+        return $newidIntitule;
+    }
 
     /**
      *
@@ -95,6 +118,34 @@ class StageManager
             $this->repositoryStageintitule = $this->entityManager->getRepository('AppBundle:Stageintitule');
 
         return $this->repositoryStageintitule->loadStageIntitulesUser($login);
+    }
+
+
+    /*
+     *
+     * TYPOLOGIE
+     *
+     */
+    public function loadTypologies()
+    {
+        $repository = $this->entityManager->getRepository('AppBundle:Typologie');
+
+        return $repository->findAll();
+    }
+    public function saveTypologies(Stage $stage, $arrayIdTypologies)
+    {
+        // On enlève toutes les situations
+        $stage->removeAllCodes();
+        if ($arrayIdTypologies == null)
+            return;
+
+        $repository = $this->entityManager->getRepository('AppBundle:Typologie');
+        foreach ($arrayIdTypologies as $idTypo) {
+            $typologie = $repository->find($idTypo);
+            if ($typologie != null) {
+                $stage->addCode($typologie);
+            }
+        }
     }
 
 }

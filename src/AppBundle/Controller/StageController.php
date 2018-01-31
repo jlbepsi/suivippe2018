@@ -81,10 +81,17 @@ class StageController extends Controller
                     $stage->setEntrepriseLogo($fileName);
                 }
 
+                $typologies = $manager->loadTypologies();
+
+                // Obtention des situations obligatoires: Typologie
+                $mandatory = $request->request->get('mandatory');
+                $manager->saveTypologies($stage, $mandatory);
+
                 // Validation de l'entité
                 $manager->saveStage($stage);
 
-                return $this->redirectToRoute('stage_edit', array('id' => $stage->getId()));
+                return $this->redirectToRoute('stage_edit', array('id' => $stage->getId(),
+                    'typologies' => $typologies));
             }
         }
 
@@ -141,6 +148,11 @@ class StageController extends Controller
                 else {
                     $stage->setEntrepriseLogo($originalFileName);
                 }
+
+                // Obtention des situations obligatoires: Typologie
+                $mandatory = $request->request->get('mandatory');
+                $manager->saveTypologies($stage, $mandatory);
+
                 // Validation de l'entité
                 $manager->saveStage($stage);
             }
@@ -148,9 +160,12 @@ class StageController extends Controller
 
         // Obtention des activités
         $intitulesActivites = $manager->loadStageIntitulesActivites();
+        // Typologies
+        $typologies = $manager->loadTypologies();
 
         return $this->render('stage/edit.html.twig', array('form' => $model->createView(),
-                                'stage' => $stage, 'page' => $page, 'intitulesActivites' => $intitulesActivites));
+                             'stage' => $stage, 'page' => $page, 'intitulesActivites' => $intitulesActivites,
+                             'typologies' => $typologies));
     }
 
     /**
@@ -223,25 +238,13 @@ class StageController extends Controller
                 $message = "l'intitulé a été ajouté";
                 $status = 0;
 
-                /*
-                 *
-                 * SELECT MAX(idIntitule) INTO idintitule
-FROM stageintitule
-WHERE idStage = 1;
-
-INSERT INTO  stageintitule(idStage, idIntitule, intitule)
-VALUES (idstage, idintitule, intitule);
-
-
-                 */
                 // Création de l'intitulé
                 try {
-                    $stageIntitule = new Stageintitule();
-                    $stageIntitule->setIdstage($idStage);
-                    $stageIntitule->setIdintitule(1);
-                    $stageIntitule->setIntitule($intitule);
-
-                    $manager->saveStageIntitule($stageIntitule);
+                    $idIntitule = $manager->addStageIntitule($idStage, $intitule);
+                    if ($idIntitule == 0) {
+                        $message = "Impossible d'ajouter l'intitulé";
+                        $status = -1;
+                    }
                 } catch (\Exception $e) {
                     $message = sprintf("L'erreur suivante est survenue lors de l'ajout de l'intitulé: %s",
                         $e->getMessage());
@@ -259,7 +262,8 @@ VALUES (idstage, idintitule, intitule);
         }
 
         // Retour du résultat en Json
-        return new JsonResponse(array('status' => $status, 'message' => $message, 'idStage' => $idStage, 'idIntitule' => $idIntitule));
+        return new JsonResponse(array('status' => $status, 'message' => $message,
+                        'idStage' => $idStage, 'idIntitule' => $idIntitule, 'intitule' => $intitule));
     }
 
     /**
@@ -302,6 +306,7 @@ VALUES (idstage, idintitule, intitule);
         $idStage = $request->request->get('idStage');
         $idIntitule = $request->request->get('idIntitule');
 
+        $status = -1;
         // Si l'utilisateur appelle bien la suppresion en AJAX - POST
         if ($request->getMethod() == 'POST') {
 
