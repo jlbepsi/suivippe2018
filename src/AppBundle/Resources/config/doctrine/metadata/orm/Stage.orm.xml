@@ -51,5 +51,15 @@
         <join-column name="login" referenced-column-name="login"/>
       </join-columns>
     </many-to-one>
+    <many-to-many field="code" target-entity="Typologie" inversed-by="idstage" fetch="LAZY">
+      <join-table name="stagetypo">
+        <join-columns>
+          <join-column name="idstage" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="code" referenced-column-name="code"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
   </entity>
 </doctrine-mapping>

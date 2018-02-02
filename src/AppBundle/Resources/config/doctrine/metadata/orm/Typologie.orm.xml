@@ -15,5 +15,6 @@
       </options>
     </field>
     <many-to-many field="reference" target-entity="Situation" mapped-by="code" fetch="LAZY"/>
+    <many-to-many field="idstage" target-entity="Stage" mapped-by="code" fetch="LAZY"/>
   </entity>
 </doctrine-mapping>

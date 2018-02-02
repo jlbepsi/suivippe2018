@@ -123,11 +123,19 @@ class Stage
      */
     private $code;
 
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->code = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -138,6 +146,7 @@ class Stage
      * Set annee
      *
      * @param integer $annee
+     *
      * @return Stage
      */
     public function setAnnee($annee)
@@ -150,7 +159,7 @@ class Stage
     /**
      * Get annee
      *
-     * @return integer 
+     * @return integer
      */
     public function getAnnee()
     {
@@ -161,6 +170,7 @@ class Stage
      * Set libellecourt
      *
      * @param string $libellecourt
+     *
      * @return Stage
      */
     public function setLibellecourt($libellecourt)
@@ -173,7 +183,7 @@ class Stage
     /**
      * Get libellecourt
      *
-     * @return string 
+     * @return string
      */
     public function getLibellecourt()
     {
@@ -184,6 +194,7 @@ class Stage
      * Set descriptif
      *
      * @param string $descriptif
+     *
      * @return Stage
      */
     public function setDescriptif($descriptif)
@@ -196,7 +207,7 @@ class Stage
     /**
      * Get descriptif
      *
-     * @return string 
+     * @return string
      */
     public function getDescriptif()
     {
@@ -207,6 +218,7 @@ class Stage
      * Set entreprisenom
      *
      * @param string $entreprisenom
+     *
      * @return Stage
      */
     public function setEntreprisenom($entreprisenom)
@@ -219,7 +231,7 @@ class Stage
     /**
      * Get entreprisenom
      *
-     * @return string 
+     * @return string
      */
     public function getEntreprisenom()
     {
@@ -229,7 +241,7 @@ class Stage
     /**
      * Set entrepriseadresse
      *
-     * @param string $entrepriseadresse
+     * @param string $entrepriseadresse     *
      * @return Stage
      */
     public function setEntrepriseadresse($entrepriseadresse)
@@ -242,7 +254,7 @@ class Stage
     /**
      * Get entrepriseadresse
      *
-     * @return string 
+     * @return string
      */
     public function getEntrepriseadresse()
     {
@@ -252,7 +264,7 @@ class Stage
     /**
      * Set entreprisecontact
      *
-     * @param string $entreprisecontact
+     * @param string $entreprisecontact     *
      * @return Stage
      */
     public function setEntreprisecontact($entreprisecontact)
@@ -265,7 +277,7 @@ class Stage
     /**
      * Get entreprisecontact
      *
-     * @return string 
+     * @return string
      */
     public function getEntreprisecontact()
     {
@@ -275,7 +287,7 @@ class Stage
     /**
      * Set entrepriselogo
      *
-     * @param string $entrepriselogo
+     * @param string $entrepriselogo     *
      * @return Stage
      */
     public function setEntrepriselogo($entrepriselogo)
@@ -288,7 +300,7 @@ class Stage
     /**
      * Get entrepriselogo
      *
-     * @return string 
+     * @return string
      */
     public function getEntrepriselogo()
     {
@@ -298,7 +310,7 @@ class Stage
     /**
      * Set montant
      *
-     * @param float $montant
+     * @param float $montant     *
      * @return Stage
      */
     public function setMontant($montant)
@@ -311,7 +323,7 @@ class Stage
     /**
      * Get montant
      *
-     * @return float 
+     * @return float
      */
     public function getMontant()
     {
@@ -321,7 +333,7 @@ class Stage
     /**
      * Set datedebut
      *
-     * @param \DateTime $datedebut
+     * @param \DateTime $datedebut     *
      * @return Stage
      */
     public function setDatedebut($datedebut)
@@ -334,7 +346,7 @@ class Stage
     /**
      * Get datedebut
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDatedebut()
     {
@@ -344,7 +356,7 @@ class Stage
     /**
      * Set datefin
      *
-     * @param \DateTime $datefin
+     * @param \DateTime $datefin     *
      * @return Stage
      */
     public function setDatefin($datefin)
@@ -357,7 +369,7 @@ class Stage
     /**
      * Get datefin
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDatefin()
     {
@@ -367,7 +379,7 @@ class Stage
     /**
      * Set datemodif
      *
-     * @param \DateTime $datemodif
+     * @param \DateTime $datemodif     *
      * @return Stage
      */
     public function setDatemodif($datemodif)
@@ -380,7 +392,7 @@ class Stage
     /**
      * Get datemodif
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDatemodif()
     {
@@ -390,7 +402,7 @@ class Stage
     /**
      * Set login
      *
-     * @param \AppBundle\Entity\Utilisateur $login
+     * @param \AppBundle\Entity\Utilisateur $login     *
      * @return Stage
      */
     public function setLogin(\AppBundle\Entity\Utilisateur $login = null)
@@ -403,19 +415,17 @@ class Stage
     /**
      * Get login
      *
-     * @return \AppBundle\Entity\Utilisateur 
+     * @return \AppBundle\Entity\Utilisateur
      */
     public function getLogin()
     {
         return $this->login;
     }
 
-
-
     /**
      * Add code
      *
-     * @param \AppBundle\Entity\Typologie $code
+     * @param \AppBundle\Entity\Typologie $code     *
      * @return Stage
      */
     public function addCode(\AppBundle\Entity\Typologie $code)
@@ -445,6 +455,7 @@ class Stage
         $this->code->clear();
     }
 
+
     /**
      * Get code
      *
@@ -468,5 +479,4 @@ class Stage
         );
         return $exists;
     }
-
 }

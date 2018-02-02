@@ -53,14 +53,14 @@
       </options>
     </field>
     <field name="datenaissance" type="datetime" column="dateNaissance" nullable="true"/>
-    <field name="adresse" type="string" column="adresse" length="250" nullable="true">
-      <options>
-        <option name="fixed"/>
-      </options>
-    </field>
     <field name="numexamen" type="integer" column="numExamen" nullable="true">
       <options>
         <option name="unsigned"/>
+      </options>
+    </field>
+    <field name="adresse" type="string" column="adresse" length="255" nullable="true">
+      <options>
+        <option name="fixed"/>
       </options>
     </field>
     <many-to-one field="numparcours" target-entity="Parcours" fetch="LAZY">

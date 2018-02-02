@@ -43,18 +43,26 @@ class Typologie
     private $reference;
 
     /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Stage", mappedBy="code")
+     */
+    private $idstage;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->reference = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->idstage = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
     /**
      * Get code
      *
-     * @return integer 
+     * @return integer
      */
     public function getCode()
     {
@@ -65,6 +73,7 @@ class Typologie
      * Set lngutile
      *
      * @param integer $lngutile
+     *
      * @return Typologie
      */
     public function setLngutile($lngutile)
@@ -77,7 +86,7 @@ class Typologie
     /**
      * Get lngutile
      *
-     * @return integer 
+     * @return integer
      */
     public function getLngutile()
     {
@@ -88,6 +97,7 @@ class Typologie
      * Set libelle
      *
      * @param string $libelle
+     *
      * @return Typologie
      */
     public function setLibelle($libelle)
@@ -100,7 +110,7 @@ class Typologie
     /**
      * Get libelle
      *
-     * @return string 
+     * @return string
      */
     public function getLibelle()
     {
@@ -121,6 +131,7 @@ class Typologie
      * Add reference
      *
      * @param \AppBundle\Entity\Situation $reference
+     *
      * @return Typologie
      */
     public function addReference(\AppBundle\Entity\Situation $reference)
@@ -143,10 +154,44 @@ class Typologie
     /**
      * Get reference
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getReference()
     {
         return $this->reference;
+    }
+
+    /**
+     * Add idstage
+     *
+     * @param \AppBundle\Entity\Stage $idstage
+     *
+     * @return Typologie
+     */
+    public function addIdstage(\AppBundle\Entity\Stage $idstage)
+    {
+        $this->idstage[] = $idstage;
+
+        return $this;
+    }
+
+    /**
+     * Remove idstage
+     *
+     * @param \AppBundle\Entity\Stage $idstage
+     */
+    public function removeIdstage(\AppBundle\Entity\Stage $idstage)
+    {
+        $this->idstage->removeElement($idstage);
+    }
+
+    /**
+     * Get idstage
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getIdstage()
+    {
+        return $this->idstage;
     }
 }

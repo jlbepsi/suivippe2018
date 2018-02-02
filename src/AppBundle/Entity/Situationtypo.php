@@ -31,4 +31,52 @@ class Situationtypo
     private $code;
 
 
+
+    /**
+     * Set reference
+     *
+     * @param integer $reference
+     *
+     * @return Situationtypo
+     */
+    public function setReference($reference)
+    {
+        $this->reference = $reference;
+
+        return $this;
+    }
+
+    /**
+     * Get reference
+     *
+     * @return integer
+     */
+    public function getReference()
+    {
+        return $this->reference;
+    }
+
+    /**
+     * Set code
+     *
+     * @param integer $code
+     *
+     * @return Situationtypo
+     */
+    public function setCode($code)
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    /**
+     * Get code
+     *
+     * @return integer
+     */
+    public function getCode()
+    {
+        return $this->code;
+    }
 }
