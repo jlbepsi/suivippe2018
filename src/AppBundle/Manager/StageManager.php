@@ -18,12 +18,20 @@ class StageManager
     protected $entityManager;
     protected $repository;
     protected $repositoryStageintitule;
+    protected $repositoryActivites;
 
     public function __construct(EntityManager $em)
     {
         $this->entityManager = $em;
         $this->repository = $em->getRepository('AppBundle:Stage');
         $this->repositoryActivites = null;
+    }
+
+    private function getRepositoryActivites()
+    {
+        if ($this->repositoryActivites == null)
+            $this->repositoryActivites = $this->entityManager->getRepository('AppBundle:Activite');
+        return $this->repositoryActivites;
     }
 
     public function loadStages($login)
@@ -68,6 +76,9 @@ class StageManager
     }
     public function removeStageIntitule(Stageintitule $stageIntitule)
     {
+        // Supprime toutes les activtés
+
+        // puis supprime l 'intitulé du stage
         $this->entityManager->remove($stageIntitule);
         $this->entityManager->flush();
     }
@@ -119,6 +130,26 @@ class StageManager
 
         return $this->repositoryStageintitule->loadStageIntitulesUser($login);
     }
+    public function addStageActivite(Stageintitule $stateIntitule, $idActivite)
+    {
+        $repository = $this->getRepositoryActivites();
+        $activite = $repository->find($idActivite);
+
+        $activite->addIdstage($stateIntitule);
+
+        $this->entityManager->persist($activite);
+        $this->entityManager->flush();
+    }
+    public function removeStageActivite(Stageintitule $stateIntitule, $idActivite)
+    {
+        $repository = $this->getRepositoryActivites();
+        $activite = $repository->find($idActivite);
+
+        $activite->removeIdstage($stateIntitule);
+        $this->entityManager->persist($activite);
+        $this->entityManager->flush();
+    }
+
 
 
     /*

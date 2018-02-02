@@ -5,17 +5,18 @@ $(function () {
 
     function deleteStageIntituleActivite() {
         // Obtention de la référence
-        var situationReference = $('#situationReference').val();
-        var oTR = $(this).parent().parent().parent();
+        var idstage = $('#stageId').val();
+        var idintitule = $('#intituleId').val();
+        var oTR = $(this).parent().parent();
         var activiteId = oTR.attr("activiteId");
 
         // Perform the ajax post
-        $.post("/situation/removeactivite", { "id": activiteId, "reference": situationReference },
+        $.post("/stage/removeactivite", { "id": activiteId, "idstage": idstage, "idintitule": idintitule },
             function (data) {
                 // Successful requests get here
                 // Update the page elements
                 if (data.status == 1) {
-                    var oTR = $('#activite' + data.id);
+                    var oTR = $('#activite' + data.idActivite);
                     oTR.attr('class', 'tr_nonactif');
                     var spanok = oTR.find('#spanok');
                     spanok.hide();
@@ -37,17 +38,18 @@ $(function () {
 
     function addStageIntituleActivite() {
         // Obtention de la référence
-        var situationReference = $('#situationReference').val();
-        var oTR = $(this).parent().parent().parent();
+        var idstage = $('#stageId').val();
+        var idintitule = $('#intituleId').val();
+        var oTR = $(this).parent().parent();
         var activiteId = oTR.attr("activiteId");
 
         // Perform the ajax post
-        $.post("/situation/addactivite", { "id": activiteId, "reference": situationReference },
+        $.post("/stage/addactivite", { "id": activiteId, "idstage": idstage, "idintitule": idintitule },
             function (data) {
                 // Successful requests get here
                 // Update the page elements
                 if (data.status == 1) {
-                    var oTR = $('#activite' + data.id);
+                    var oTR = $('#activite' + data.idActivite);
                     oTR.attr('class', 'tr_actif');
                     var spanok = oTR.find('#spanok');
                     spanok.show();

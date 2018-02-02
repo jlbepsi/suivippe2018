@@ -188,7 +188,7 @@ class SituationController extends Controller
             // Recherche de la situation
             if ($situation = $manager->loadSituation($refSituation, $user->getLogin())) {
                 $message = "La situation a été supprimé";
-                $status = 0;
+                $status = 1;
                 // Suppression du film
                 try {
                     $manager->removeSituation($situation);

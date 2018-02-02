@@ -36,7 +36,7 @@ $(function () {
                 success: function(data){
                     var oTR = $('#' + data.id);
                     var divMessage = $('#update-message');
-                    if (data.status === 0) {
+                    if (data.status === 1) {
                         oTR.fadeOut('slow');
                         divMessage.attr("class", 'label label-success');
                     }

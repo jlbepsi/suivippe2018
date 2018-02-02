@@ -70,11 +70,11 @@ $(function () {
                 type: "post",
                 data: {"idStage": idStage, "idIntitule": idIntitule},
                 success: function (data) {
+                    var divMessage = $('#update-message');
                     // Successful requests get here
                     // Update the page elements
-                    if (data.status == 0) {
-                        var oTR = $('#intitule' + data.idStage + '-' + data.idIntitule);
-                        var divMessage = $('#update-message');
+                    var oTR = $('#intitule' + data.idStage + '-' + data.idIntitule);
+                    if (data.status == 1) {
                         oTR.fadeOut('slow');
                         divMessage.attr("class", 'label label-success');
                     }
@@ -145,7 +145,7 @@ $(function () {
             data: { "idStage" : idStage, "intitule": intitule },
             success: function(data){
                 var divMessage = $('#update-message');
-                if (data.status === 0) {
+                if (data.status == 1) {
                     divMessage.attr("class", 'label label-success');
 
                     var newRow = "<tr id='intitule" + data.idIntitule + "' idintitule='" + data.idIntitule + "'><td>" + data.intitule + "</td>";

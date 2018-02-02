@@ -32,10 +32,22 @@ class StageController extends Controller
     {
         // Obtention de l'utilisateur connecté
         $user = $this->getUser();
-        // Obtention des situations
+        // Obtention des stages
         $stages = $this->getManager()->loadStages($user->getLogin());
 
         return $this->render('stage/index.html.twig', array("arrayStages" => $stages));
+    }
+
+    /**
+     * @Route("/stage/count", name="stage_count")
+     */
+    public function countAction()
+    {
+        // Obtention de l'utilisateur connecté
+        $user = $this->getUser();
+        $count = $this->getManager()->countStages($user->getLogin());
+
+        return new JsonResponse(array('count' => $count));
     }
 
     /**
@@ -185,7 +197,7 @@ class StageController extends Controller
             // Recherche du stage
             if ($stage = $manager->loadStage($idStage, $user->getLogin())) {
                 $message = "Le stage a ete supprimé";
-                $status = 0;
+                $status = 1;
                 // Suppression du film
                 try {
                     $manager->removeStage($stage);
@@ -236,7 +248,7 @@ class StageController extends Controller
             if ($stage = $manager->loadStage($idStage, $user->getLogin()))
             {
                 $message = "l'intitulé a été ajouté";
-                $status = 0;
+                $status = 1;
 
                 // Création de l'intitulé
                 try {
@@ -264,6 +276,50 @@ class StageController extends Controller
         // Retour du résultat en Json
         return new JsonResponse(array('status' => $status, 'message' => $message,
                         'idStage' => $idStage, 'idIntitule' => $idIntitule, 'intitule' => $intitule));
+    }
+
+    /**
+     * @Route("/stage/deleteIntitule", name="stage_intitule_delete")
+     */
+    public function deleteIntituleAction(Request $request) {
+        // Récupération des infos
+        $idStage = $request->request->get('idStage');
+        $idIntitule = $request->request->get('idIntitule');
+
+        $status = -1;
+        // Si l'utilisateur appelle bien la suppresion en AJAX - POST
+        if ($request->getMethod() == 'POST') {
+
+            // Obtention du manager
+            $manager = $this->getManager();
+            // Recherche de l'intitulé
+            if ($stageIntitule = $manager->loadStageIntitule($idStage, $idIntitule)) {
+                $message = "L'intitulé a ete supprimé";
+                $status = 1;
+                // Suppression du film
+                try {
+                    $manager->removeStageIntitule($stageIntitule);
+                } catch (\Exception $e) {
+                    $message = sprintf("L'erreur suivante est survenue lors de la suppression de l'intitulé: %s",
+                        $e->getMessage());
+                    $status = -1;
+                }
+            } else {
+                $message = "L'intitulé n'existe pas";
+                $status = -1;
+            }
+        }
+        else
+        {
+            $message = "L'appel de la méthode de suppression est incorrecte";
+            $status = $id = -1;
+        }
+
+        // Retour du résultat en Json
+        /*$response = new Response(json_encode(array('status' => $status, 'message' => $message, 'idStage' => $idStage, 'idIntitule' => $idIntitule)));
+        $response->headers->set('Content-Type', 'application/json');
+        return $response;*/
+        return new JsonResponse(array('status' => $status, 'message' => $message, 'idStage' => $idStage, 'idIntitule' => $idIntitule));
     }
 
     /**
@@ -298,60 +354,83 @@ class StageController extends Controller
         return $this->render('stage/editintitule.html.twig', array('stage' => $stage, 'intitule' => $intitule, 'activites' => $activites));
     }
 
-    /**
-     * @Route("/stage/deleteIntitule", name="stage_intitule_delete")
-     */
-    public function deleteIntituleAction(Request $request) {
-        // Récupération des infos
-        $idStage = $request->request->get('idStage');
-        $idIntitule = $request->request->get('idIntitule');
 
+    /**
+     * @Route("/stage/addactivite", name="stage_addactivite")
+     */
+    public function addActiviteAction(Request $request)
+    {
+        $idActivite = 0;
         $status = -1;
-        // Si l'utilisateur appelle bien la suppresion en AJAX - POST
-        if ($request->getMethod() == 'POST') {
+
+        // Obtention de l'objet "request"
+        //$request = $this->get('request');
+        // Si l'utilisateur soumet le formulaire
+        if ($request->getMethod() == 'POST')
+        {
+            // Récupération de l'ID du stage à supprimer
+            $idActivite = $request->request->get('id');
+            $idStage = $request->request->get('idstage');
+            $idIntitule = $request->request->get('idintitule');
 
             // Obtention du manager
             $manager = $this->getManager();
-            // Recherche de l'intitulé
-            if ($stageIntitule = $manager->loadStageIntitule($idStage, $idIntitule)) {
-                $message = "L'intitulé a ete supprimé";
-                $status = 0;
-                // Suppression du film
-                try {
-                    $manager->removeStageIntitule($stageIntitule);
-                } catch (\Exception $e) {
-                    $message = sprintf("L'erreur suivante est survenue lors de la suppression de l'intitulé: %s",
-                        $e->getMessage());
+            // Recherche du stage intitule
+            if ($stage = $manager->loadStageIntitule($idStage, $idIntitule)) {
+                $status = 1;
+                // Ajout de l'activité
+                try
+                {
+                    $manager->addStageActivite($stage, $idActivite);
+                }
+                catch (\Exception $e)
+                {
                     $status = -1;
                 }
-            } else {
-                $message = "L'intitulé n'existe pas";
-                $status = -1;
             }
-        }
-        else
-        {
-            $message = "L'appel de la méthode de suppression est incorrecte";
-            $status = $id = -1;
+
         }
 
         // Retour du résultat en Json
-        /*$response = new Response(json_encode(array('status' => $status, 'message' => $message, 'idStage' => $idStage, 'idIntitule' => $idIntitule)));
-        $response->headers->set('Content-Type', 'application/json');
-        return $response;*/
-        return new JsonResponse(array('status' => $status, 'message' => $message, 'idStage' => $idStage, 'idIntitule' => $idIntitule));
+        return new JsonResponse(array('status' => $status, 'idActivite' => $idActivite));
     }
 
     /**
-     * @Route("/stage/count", name="stage_count")
+     * @Route("/stage/removeactivite", name="stage_removeactivite")
      */
-    public function countAction()
+    public function removeActiviteAction(Request $request)
     {
-        // Obtention de l'utilisateur connecté
-        $user = $this->getUser();
-        $count = $this->getManager()->countStages($user->getLogin());
+        $idActivite = 0;
+        $status = -1;
 
-        return new JsonResponse(array('count' => $count));
+        // Si l'utilisateur soumet le formulaire
+        if ($request->getMethod() == 'POST')
+        {
+            // Récupération de l'ID du stage à supprimer
+            $idActivite = $request->request->get('id');
+            $idStage = $request->request->get('idstage');
+            $idIntitule = $request->request->get('idintitule');
+
+            // Obtention du manager
+            $manager = $this->getManager();
+            // Recherche du stage
+            if ($stage = $manager->loadStageIntitule($idStage, $idIntitule)) {
+                $status = 1;
+                // Ajout de l'activité
+                try
+                {
+                    $manager->removeStageActivite($stage, $idActivite);
+                }
+                catch (\Exception $e)
+                {
+                    $status = -1;
+                }
+            }
+
+        }
+
+        // Retour du résultat en Json
+        return new JsonResponse(array('status' => $status, 'idActivite' => $idActivite));
     }
 
 }

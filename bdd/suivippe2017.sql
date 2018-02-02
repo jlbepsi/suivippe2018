@@ -3,8 +3,8 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  localhost
--- Généré le :  Mar 23 Janvier 2018 à 10:00
--- Version du serveur :  5.7.20-0ubuntu0.16.04.1
+-- Généré le :  Jeu 01 Février 2018 à 16:48
+-- Version du serveur :  5.7.21-0ubuntu0.16.04.1
 -- Version de PHP :  7.0.22-0ubuntu0.16.04.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
@@ -20,6 +20,29 @@ SET time_zone = "+00:00";
 -- Base de données :  `suivippe2017`
 --
 
+DELIMITER $$
+--
+-- Fonctions
+--
+CREATE DEFINER=`root`@`localhost` FUNCTION `addStageIntitule` (`pIdStage` INT, `pIntitule` VARCHAR(150)) RETURNS INT(11) BEGIN
+
+SET @newid = 0;
+
+-- Obtient le max de l'id intitule pour un stage, 0 s'il n'existe pas
+SELECT IFNULL(MAX(idIntitule), 0) INTO @newid
+FROM stageintitule
+WHERE idStage = pIdStage;
+-- Ajoute 1 au max
+set @newid = @newid +1;
+
+INSERT INTO stageintitule(idStage, idIntitule, intitule)
+VALUES (pIdStage, @newid, pIntitule);
+
+RETURN @newid;
+END$$
+
+DELIMITER ;
+
 -- --------------------------------------------------------
 
 --
@@ -29,7 +52,7 @@ SET time_zone = "+00:00";
 CREATE TABLE `activite` (
   `id` int(11) NOT NULL,
   `idDomaine` int(11) NOT NULL,
-  `nomenclature` varchar(7) COLLATE utf8_unicode_ci NOT NULL,
+  `nomenclature` varchar(6) COLLATE utf8_unicode_ci NOT NULL,
   `lngutile` int(11) NOT NULL,
   `libelle` varchar(250) COLLATE utf8_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -81,7 +104,7 @@ INSERT INTO `activite` (`id`, `idDomaine`, `nomenclature`, `lngutile`, `libelle`
 (40, 11, 'A4.1.7', 54, 'Développement, utilisation ou adaptation de composants logiciels'),
 (41, 11, 'A4.1.8', 49, 'Réalisation des tests nécessaires à la validation d\'éléments adaptés ou développés'),
 (42, 11, 'A4.1.9', 40, 'Rédaction d\'une documentation technique'),
-(43, 11, 'A4.1.10', 45, 'Rédaction d\'une documentation d\'utilisatio'),
+(43, 11, 'A4.1.1', 45, 'Rédaction d\'une documentation d\'utilisatio'),
 (44, 12, 'A4.2.1', 44, 'Analyse et correction d\'un dysfonctionnement, d\'un problème de qualité de service ou de sécurité'),
 (45, 12, 'A4.2.2', 52, 'Adaptation d\'une solution applicative aux évolutions de ses composants'),
 (46, 12, 'A4.2.3', 57, 'Réalisation des tests nécessaires à la mise en production d\'éléments mis à jour'),
@@ -113,11 +136,10 @@ CREATE TABLE `activitecitee` (
 --
 
 INSERT INTO `activitecitee` (`idActivite`, `refSituation`) VALUES
-(1, 3),
-(1, 11),
-(2, 2),
+(2, 3),
 (4, 3),
 (34, 3),
+(36, 3),
 (40, 3);
 
 -- --------------------------------------------------------
@@ -350,7 +372,7 @@ CREATE TABLE `domaine` (
 
 INSERT INTO `domaine` (`id`, `nomenclature`, `libelle`, `idProcessus`) VALUES
 (1, 'D1.1  ', 'Analyse de la demande', 1),
-(2, 'D1.2  ', 'Choix d\'une solution', 1),
+(2, 'D1.2  ', 'Choix d\'une solutio', 1),
 (3, 'D1.3  ', 'Mise en production d\'un service', 1),
 (4, 'D1.4  ', 'Travail en mode projet', 1),
 (5, 'D2.1  ', 'Exploitation des services', 2),
@@ -571,12 +593,7 @@ INSERT INTO `exploite` (`idParcours`, `idProcessus`) VALUES
 (2, 1),
 (2, 2),
 (2, 4),
-(2, 5),
-(3, 1),
-(3, 2),
-(3, 3),
-(3, 4),
-(3, 5);
+(2, 5);
 
 -- --------------------------------------------------------
 
@@ -627,19 +644,6 @@ INSERT INTO `langage` (`id`, `libelle`) VALUES
 -- --------------------------------------------------------
 
 --
--- Doublure de structure pour la vue `libelleSynthese`
---
-CREATE TABLE `libelleSynthese` (
-`id` int(11)
-,`nomenclature` varchar(7)
-,`libelle` varchar(250)
-,`idEpreuve` bigint(20)
-,`idDomaine` bigint(20)
-);
-
--- --------------------------------------------------------
-
---
 -- Structure de la table `operatingsystem`
 --
 
@@ -674,8 +678,7 @@ CREATE TABLE `parcours` (
 
 INSERT INTO `parcours` (`id`, `nomenclature`, `libelle`) VALUES
 (1, 'SISR  ', 'Solutions d’infrastructure, systèmes et réseaux'),
-(2, 'SLAM  ', 'solutions logicielles et applications métiers'),
-(3, '', 'Pas d option');
+(2, 'SLAM  ', 'solutions logicielles et applications métiers');
 
 -- --------------------------------------------------------
 
@@ -747,14 +750,9 @@ CREATE TABLE `situation` (
 --
 
 INSERT INTO `situation` (`reference`, `login`, `libelle`, `descriptif`, `datedebut`, `datefin`, `codeCadre`, `codeLocalisation`, `codeLangage`, `codeFramework`, `codeOS`, `codeService`) VALUES
-(2, 'test.v2', 'SuiviPPE', 'Site de gestion du PPE', NULL, NULL, NULL, NULL, 3, 4, NULL, NULL),
-(3, 'test.v2', 'Voiture', 'TP Voiture C#', NULL, NULL, NULL, NULL, 2, 2, NULL, NULL),
-(4, 'test2.v2', 'test csharp', 'desc', NULL, NULL, NULL, NULL, 2, 2, NULL, NULL),
-(6, 'test.v2', 'test 13.12', 'desc', NULL, NULL, NULL, NULL, 3, 4, NULL, NULL),
-(7, 'test2.v2', 'Test Réseau', 'Réseau', '2017-12-04 00:00:00', '2017-12-22 00:00:00', 1, NULL, NULL, NULL, NULL, NULL),
-(8, 'test.v2', 'wfdh', 'gfwd', NULL, NULL, NULL, NULL, 2, 2, NULL, NULL),
-(9, 'test0.v2', 'test symfony', 'test', NULL, NULL, NULL, NULL, 3, 4, NULL, NULL),
-(11, 'test0.v2', 'test linux dns', 'réseau', NULL, NULL, NULL, NULL, NULL, NULL, 2, 1);
+(1, 'test.v2', 'test', 'test', '2018-01-02 00:00:00', '2018-01-08 00:00:00', NULL, NULL, 4, 6, NULL, NULL),
+(2, 'test.v2', 'SuiviPPE', 'Site de gestion du PPE', '2018-01-01 00:00:00', '2018-01-08 00:00:00', NULL, NULL, 3, 4, NULL, NULL),
+(3, 'test.v2', 'Voiture', 'TP Voiture C#', NULL, NULL, NULL, NULL, 2, 2, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -774,11 +772,8 @@ CREATE TABLE `situationtypo` (
 INSERT INTO `situationtypo` (`reference`, `code`) VALUES
 (2, 2),
 (2, 4),
-(6, 1),
-(8, 1),
-(9, 1),
-(9, 4),
-(11, 1);
+(3, 2),
+(3, 4);
 
 -- --------------------------------------------------------
 
@@ -807,7 +802,9 @@ CREATE TABLE `stage` (
 --
 
 INSERT INTO `stage` (`id`, `login`, `annee`, `libelleCourt`, `descriptif`, `entrepriseNom`, `entrepriseAdresse`, `entrepriseContact`, `entrepriseLogo`, `montant`, `dateDebut`, `dateFin`, `dateModif`) VALUES
-(1, 'test.v2', 1, 'stage 1ère année', 'test desc', 'CAP ALPHA', 'rue du coq qui chante', 'le mail', NULL, 0, '2017-05-01', '2017-06-30', '2017-11-05 00:00:00');
+(1, 'test.v2', 1, 'test', 'Descriptif', 'entreprisetest', 'Adresse de l\'entreprise', 'Contact de l\'entreprise', NULL, 0, '2018-01-01', '2018-02-24', '2018-01-24 09:39:33'),
+(2, 'test.v2', 2, 'eee', 'Descriptif', 'Entreprise', 'Adresse', 'Contact', NULL, 0, '2018-01-02', '2018-01-26', '2018-01-24 09:44:55'),
+(3, 'test.v2', 2, 'test 2', 'e', 'Entreprise', 'e', 'e', NULL, 0, '2018-04-02', '2018-06-01', '2018-01-24 09:47:09');
 
 -- --------------------------------------------------------
 
@@ -826,8 +823,7 @@ CREATE TABLE `stageintitule` (
 --
 
 INSERT INTO `stageintitule` (`idIntitule`, `intitule`, `idStage`) VALUES
-(1, 'in1-change', 1),
-(2, 'in2', 1);
+(1, 'eeee', 3);
 
 -- --------------------------------------------------------
 
@@ -841,15 +837,28 @@ CREATE TABLE `stageintituleactivite` (
   `idActivite` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+-- --------------------------------------------------------
+
 --
--- Contenu de la table `stageintituleactivite`
+-- Structure de la table `stagetypo`
 --
 
-INSERT INTO `stageintituleactivite` (`idStage`, `idIntitule`, `idActivite`) VALUES
-(1, 1, 6),
-(1, 1, 18),
-(1, 1, 28),
-(1, 2, 44);
+CREATE TABLE `stagetypo` (
+  `idstage` int(11) NOT NULL,
+  `code` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Contenu de la table `stagetypo`
+--
+
+INSERT INTO `stagetypo` (`idstage`, `code`) VALUES
+(2, 2),
+(2, 4),
+(3, 1),
+(3, 2),
+(3, 3),
+(3, 4);
 
 -- --------------------------------------------------------
 
@@ -892,27 +901,16 @@ CREATE TABLE `utilisateur` (
   `numParcours` int(11) DEFAULT NULL,
   `sexe` char(1) COLLATE utf8_unicode_ci DEFAULT NULL,
   `dateNaissance` datetime DEFAULT NULL,
-  `adresse` varchar(250) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `numExamen` int(11) DEFAULT NULL
+  `numExamen` int(11) DEFAULT NULL,
+  `adresse` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Contenu de la table `utilisateur`
 --
 
-INSERT INTO `utilisateur` (`login`, `password`, `type`, `classe`, `nom`, `prenom`, `mail`, `salt`, `roles`, `numParcours`, `sexe`, `dateNaissance`, `adresse`, `numExamen`) VALUES
-('test.v2', '123ABC', 1, 'B2', 'DUPONT', 'Marc', 'jlb.epsi@gmail.com', '', 'ROLE_USER', 2, '2', '1996-04-09 16:00:57', 'Mon adresse perso 31', 0),
-('test0.v2', '123ABC', 1, 'B2', 'TEST2', 'v2', 'jlb.epsi@gmail.com', '', 'ROLE_USER', 3, NULL, NULL, NULL, 0),
-('test2.v2', '123ABC', 1, 'B2', 'TEST2', 'v2', 'jlb.epsi@gmail.com', '', 'ROLE_USER', 1, NULL, NULL, NULL, 0);
-
--- --------------------------------------------------------
-
---
--- Structure de la vue `libelleSynthese`
---
-DROP TABLE IF EXISTS `libelleSynthese`;
-
-CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `libelleSynthese`  AS  select `A`.`id` AS `id`,`A`.`nomenclature` AS `nomenclature`,left(`A`.`libelle`,`A`.`lngutile`) AS `libelle`,`E`.`idEpreuve` AS `idEpreuve`,`D`.`id` AS `idDomaine` from ((`activite` `A` join `domaine` `D`) join `evalue` `E`) where ((`A`.`id` = `E`.`idActivite`) and (`A`.`idDomaine` = `D`.`id`) and (`E`.`idParcours` = 2)) union select `A`.`id` AS `id`,`A`.`nomenclature` AS `nomenclature`,left(`A`.`libelle`,`A`.`lngutile`) AS `libelle`,1 AS `idEpreuve`,9 AS `idDomaine` from `activite` `A` where (`A`.`id` in (26,27)) order by `id` ;
+INSERT INTO `utilisateur` (`login`, `password`, `type`, `classe`, `nom`, `prenom`, `mail`, `salt`, `roles`, `numParcours`, `sexe`, `dateNaissance`, `numExamen`, `adresse`) VALUES
+('test.v2', '123ABC', 1, 'B2', 'DUPONT', 'Marc', 'jlb.epsi@gmail.com', '', 'ROLE_USER', 2, '1', '1995-06-23 00:00:00', NULL, NULL);
 
 --
 -- Index pour les tables exportées
@@ -966,14 +964,6 @@ ALTER TABLE `domaine`
 --
 ALTER TABLE `epreuve`
   ADD PRIMARY KEY (`id`);
-
---
--- Index pour la table `evalue`
---
-ALTER TABLE `evalue`
-  ADD PRIMARY KEY (`idParcours`,`idEpreuve`,`idActivite`),
-  ADD KEY `idEpreuve` (`idEpreuve`),
-  ADD KEY `idActivite` (`idActivite`);
 
 --
 -- Index pour la table `exploite`
@@ -1063,6 +1053,14 @@ ALTER TABLE `stageintituleactivite`
   ADD KEY `IDX_37AB326AEBD67F4E` (`idActivite`);
 
 --
+-- Index pour la table `stagetypo`
+--
+ALTER TABLE `stagetypo`
+  ADD PRIMARY KEY (`idstage`,`code`),
+  ADD KEY `reference` (`idstage`),
+  ADD KEY `code` (`code`);
+
+--
 -- Index pour la table `typologie`
 --
 ALTER TABLE `typologie`
@@ -1120,35 +1118,25 @@ ALTER TABLE `framework`
 ALTER TABLE `langage`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
--- AUTO_INCREMENT pour la table `operatingsystem`
---
-ALTER TABLE `operatingsystem`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
---
 -- AUTO_INCREMENT pour la table `parcours`
 --
 ALTER TABLE `parcours`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT pour la table `processus`
 --
 ALTER TABLE `processus`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
--- AUTO_INCREMENT pour la table `services`
---
-ALTER TABLE `services`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
---
 -- AUTO_INCREMENT pour la table `situation`
 --
 ALTER TABLE `situation`
-  MODIFY `reference` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `reference` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT pour la table `stage`
 --
 ALTER TABLE `stage`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT pour la table `typologie`
 --
@@ -1191,14 +1179,6 @@ ALTER TABLE `domaine`
   ADD CONSTRAINT `domaine_ibfk_1` FOREIGN KEY (`idProcessus`) REFERENCES `processus` (`id`);
 
 --
--- Contraintes pour la table `evalue`
---
-ALTER TABLE `evalue`
-  ADD CONSTRAINT `evalue_ibfk_1` FOREIGN KEY (`idParcours`) REFERENCES `parcours` (`id`),
-  ADD CONSTRAINT `evalue_ibfk_2` FOREIGN KEY (`idEpreuve`) REFERENCES `epreuve` (`id`),
-  ADD CONSTRAINT `evalue_ibfk_3` FOREIGN KEY (`idActivite`) REFERENCES `activite` (`id`);
-
---
 -- Contraintes pour la table `exploite`
 --
 ALTER TABLE `exploite`
@@ -1220,8 +1200,8 @@ ALTER TABLE `situation`
 -- Contraintes pour la table `situationtypo`
 --
 ALTER TABLE `situationtypo`
-  ADD CONSTRAINT `situationtypo_ibfk_1` FOREIGN KEY (`reference`) REFERENCES `situation` (`reference`),
-  ADD CONSTRAINT `situationtypo_ibfk_2` FOREIGN KEY (`code`) REFERENCES `typologie` (`code`);
+  ADD CONSTRAINT `situationtypo_ibfk_1` FOREIGN KEY (`code`) REFERENCES `typologie` (`code`),
+  ADD CONSTRAINT `situationtypo_ibfk_2` FOREIGN KEY (`reference`) REFERENCES `situation` (`reference`);
 
 --
 -- Contraintes pour la table `stage`
@@ -1241,6 +1221,13 @@ ALTER TABLE `stageintitule`
 ALTER TABLE `stageintituleactivite`
   ADD CONSTRAINT `FK_37AB326AD5B8D07464CA0FFD` FOREIGN KEY (`idStage`,`idIntitule`) REFERENCES `stageintitule` (`idStage`, `idIntitule`),
   ADD CONSTRAINT `FK_37AB326AEBD67F4E` FOREIGN KEY (`idActivite`) REFERENCES `activite` (`id`);
+
+--
+-- Contraintes pour la table `stagetypo`
+--
+ALTER TABLE `stagetypo`
+  ADD CONSTRAINT `stagetypo_ibfk_1` FOREIGN KEY (`idstage`) REFERENCES `stage` (`id`),
+  ADD CONSTRAINT `stagetypo_ibfk_2` FOREIGN KEY (`code`) REFERENCES `typologie` (`code`);
 
 --
 -- Contraintes pour la table `utilisateur`
