@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  localhost
--- Généré le :  Jeu 01 Février 2018 à 16:48
+-- Généré le :  Ven 02 Février 2018 à 15:33
 -- Version du serveur :  5.7.21-0ubuntu0.16.04.1
 -- Version de PHP :  7.0.22-0ubuntu0.16.04.1
 
@@ -28,11 +28,9 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `addStageIntitule` (`pIdStage` INT, `
 
 SET @newid = 0;
 
--- Obtient le max de l'id intitule pour un stage, 0 s'il n'existe pas
 SELECT IFNULL(MAX(idIntitule), 0) INTO @newid
 FROM stageintitule
 WHERE idStage = pIdStage;
--- Ajoute 1 au max
 set @newid = @newid +1;
 
 INSERT INTO stageintitule(idStage, idIntitule, intitule)
@@ -678,7 +676,8 @@ CREATE TABLE `parcours` (
 
 INSERT INTO `parcours` (`id`, `nomenclature`, `libelle`) VALUES
 (1, 'SISR  ', 'Solutions d’infrastructure, systèmes et réseaux'),
-(2, 'SLAM  ', 'solutions logicielles et applications métiers');
+(2, 'SLAM  ', 'solutions logicielles et applications métiers'),
+(3, '', 'Indifférencié');
 
 -- --------------------------------------------------------
 
@@ -966,6 +965,14 @@ ALTER TABLE `epreuve`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Index pour la table `evalue`
+--
+ALTER TABLE `evalue`
+  ADD PRIMARY KEY (`idParcours`,`idEpreuve`,`idActivite`),
+  ADD KEY `idEpreuve` (`idEpreuve`),
+  ADD KEY `idActivite` (`idActivite`);
+
+--
 -- Index pour la table `exploite`
 --
 ALTER TABLE `exploite`
@@ -1121,7 +1128,7 @@ ALTER TABLE `langage`
 -- AUTO_INCREMENT pour la table `parcours`
 --
 ALTER TABLE `parcours`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT pour la table `processus`
 --
@@ -1177,6 +1184,14 @@ ALTER TABLE `competence`
 --
 ALTER TABLE `domaine`
   ADD CONSTRAINT `domaine_ibfk_1` FOREIGN KEY (`idProcessus`) REFERENCES `processus` (`id`);
+
+--
+-- Contraintes pour la table `evalue`
+--
+ALTER TABLE `evalue`
+  ADD CONSTRAINT `evalue_ibfk_1` FOREIGN KEY (`idParcours`) REFERENCES `parcours` (`id`),
+  ADD CONSTRAINT `evalue_ibfk_2` FOREIGN KEY (`idEpreuve`) REFERENCES `epreuve` (`id`),
+  ADD CONSTRAINT `evalue_ibfk_3` FOREIGN KEY (`idActivite`) REFERENCES `activite` (`id`);
 
 --
 -- Contraintes pour la table `exploite`
