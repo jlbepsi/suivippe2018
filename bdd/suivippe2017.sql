@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Client :  localhost
--- Généré le :  Ven 02 Février 2018 à 15:33
+-- Généré le :  Lun 05 Février 2018 à 11:39
 -- Version du serveur :  5.7.21-0ubuntu0.16.04.1
 -- Version de PHP :  7.0.22-0ubuntu0.16.04.1
 
@@ -134,6 +134,8 @@ CREATE TABLE `activitecitee` (
 --
 
 INSERT INTO `activitecitee` (`idActivite`, `refSituation`) VALUES
+(1, 1),
+(2, 1),
 (2, 3),
 (4, 3),
 (34, 3),
@@ -370,7 +372,7 @@ CREATE TABLE `domaine` (
 
 INSERT INTO `domaine` (`id`, `nomenclature`, `libelle`, `idProcessus`) VALUES
 (1, 'D1.1  ', 'Analyse de la demande', 1),
-(2, 'D1.2  ', 'Choix d\'une solutio', 1),
+(2, 'D1.2  ', 'Choix d\'une solution', 1),
 (3, 'D1.3  ', 'Mise en production d\'un service', 1),
 (4, 'D1.4  ', 'Travail en mode projet', 1),
 (5, 'D2.1  ', 'Exploitation des services', 2),
@@ -751,7 +753,7 @@ CREATE TABLE `situation` (
 INSERT INTO `situation` (`reference`, `login`, `libelle`, `descriptif`, `datedebut`, `datefin`, `codeCadre`, `codeLocalisation`, `codeLangage`, `codeFramework`, `codeOS`, `codeService`) VALUES
 (1, 'test.v2', 'test', 'test', '2018-01-02 00:00:00', '2018-01-08 00:00:00', NULL, NULL, 4, 6, NULL, NULL),
 (2, 'test.v2', 'SuiviPPE', 'Site de gestion du PPE', '2018-01-01 00:00:00', '2018-01-08 00:00:00', NULL, NULL, 3, 4, NULL, NULL),
-(3, 'test.v2', 'Voiture', 'TP Voiture C#', NULL, NULL, NULL, NULL, 2, 2, NULL, NULL);
+(3, 'test.v2', 'Voiture', 'TP Voiture C#', '2018-01-01 00:00:00', '2018-02-01 00:00:00', NULL, NULL, 2, 2, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -802,7 +804,6 @@ CREATE TABLE `stage` (
 
 INSERT INTO `stage` (`id`, `login`, `annee`, `libelleCourt`, `descriptif`, `entrepriseNom`, `entrepriseAdresse`, `entrepriseContact`, `entrepriseLogo`, `montant`, `dateDebut`, `dateFin`, `dateModif`) VALUES
 (1, 'test.v2', 1, 'test', 'Descriptif', 'entreprisetest', 'Adresse de l\'entreprise', 'Contact de l\'entreprise', NULL, 0, '2018-01-01', '2018-02-24', '2018-01-24 09:39:33'),
-(2, 'test.v2', 2, 'eee', 'Descriptif', 'Entreprise', 'Adresse', 'Contact', NULL, 0, '2018-01-02', '2018-01-26', '2018-01-24 09:44:55'),
 (3, 'test.v2', 2, 'test 2', 'e', 'Entreprise', 'e', 'e', NULL, 0, '2018-04-02', '2018-06-01', '2018-01-24 09:47:09');
 
 -- --------------------------------------------------------
@@ -822,6 +823,7 @@ CREATE TABLE `stageintitule` (
 --
 
 INSERT INTO `stageintitule` (`idIntitule`, `intitule`, `idStage`) VALUES
+(1, 'aa2', 1),
 (1, 'eeee', 3);
 
 -- --------------------------------------------------------
@@ -835,6 +837,18 @@ CREATE TABLE `stageintituleactivite` (
   `idIntitule` int(11) NOT NULL,
   `idActivite` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Contenu de la table `stageintituleactivite`
+--
+
+INSERT INTO `stageintituleactivite` (`idStage`, `idIntitule`, `idActivite`) VALUES
+(1, 1, 1),
+(3, 2, 1),
+(3, 2, 2),
+(1, 1, 5),
+(3, 1, 34),
+(3, 1, 35);
 
 -- --------------------------------------------------------
 
@@ -852,12 +866,9 @@ CREATE TABLE `stagetypo` (
 --
 
 INSERT INTO `stagetypo` (`idstage`, `code`) VALUES
-(2, 2),
-(2, 4),
 (3, 1),
 (3, 2),
-(3, 3),
-(3, 4);
+(3, 3);
 
 -- --------------------------------------------------------
 
@@ -1234,7 +1245,6 @@ ALTER TABLE `stageintitule`
 -- Contraintes pour la table `stageintituleactivite`
 --
 ALTER TABLE `stageintituleactivite`
-  ADD CONSTRAINT `FK_37AB326AD5B8D07464CA0FFD` FOREIGN KEY (`idStage`,`idIntitule`) REFERENCES `stageintitule` (`idStage`, `idIntitule`),
   ADD CONSTRAINT `FK_37AB326AEBD67F4E` FOREIGN KEY (`idActivite`) REFERENCES `activite` (`id`);
 
 --

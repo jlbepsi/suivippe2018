@@ -16,16 +16,5 @@
         <join-column name="idStage" referenced-column-name="id"/>
       </join-columns>
     </one-to-one>
-    <many-to-many field="idactivite" target-entity="Activite" inversed-by="idstage" fetch="LAZY">
-      <join-table name="stageintituleactivite">
-        <join-columns>
-          <join-column name="idStage" referenced-column-name="idStage"/>
-          <join-column name="idIntitule" referenced-column-name="idIntitule"/>
-        </join-columns>
-        <inverse-join-columns>
-          <join-column name="idActivite" referenced-column-name="id"/>
-        </inverse-join-columns>
-      </join-table>
-    </many-to-many>
   </entity>
 </doctrine-mapping>

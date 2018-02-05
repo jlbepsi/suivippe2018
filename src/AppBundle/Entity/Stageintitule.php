@@ -167,6 +167,20 @@ class Stageintitule
         return $this->idactivite;
     }
 
+    /**
+     * Test if code is present
+     *
+     * @return bool
+     */
+    public function activiteReferenced($id)
+    {
+        $exists =  $this->idactivite->exists(function($key, $element) use ($id){
+            return $element->getId() == $id;
+        }
+        );
+        return $exists;
+    }
+
 
     /**
      *

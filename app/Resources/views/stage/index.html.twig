@@ -16,6 +16,7 @@
         <a class="btn btn-primary btn-sm" href="{{  path("stage_add") }}">Nouveau stage</a>
     </p>
 
+    <div id="update-message"></div>
 
     <table id="listeStages" class="table table-bordered table-striped table-condensed">
     <thead>
@@ -30,7 +31,7 @@
 {% for stage in arrayStages %}
         <tr id="stage{{  stage.id }}">
             <td>{{ stage.annee }}</td>
-            <td>{{ stage.libellecourt }}</td>
+            <td id="libcourt">{{ stage.libellecourt }}</td>
             <td>{{ stage.entreprisenom }}</td>
             <td>
                 <a class="btn btn-primary btn-sm" href="{{ path('stage_edit', {'id':stage.id}) }}" title="Modifier le stage"><i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;Modifier</a>

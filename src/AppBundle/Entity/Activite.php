@@ -68,26 +68,18 @@ class Activite
     private $refsituation;
 
     /**
-     * @var \Doctrine\Common\Collections\Collection
-     *
-     * @ORM\ManyToMany(targetEntity="Stageintitule", mappedBy="idactivite")
-     */
-    private $idstage;
-
-    /**
      * Constructor
      */
     public function __construct()
     {
         $this->refsituation = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->idstage = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -98,6 +90,7 @@ class Activite
      * Set nomenclature
      *
      * @param string $nomenclature
+     *
      * @return Activite
      */
     public function setNomenclature($nomenclature)
@@ -110,7 +103,7 @@ class Activite
     /**
      * Get nomenclature
      *
-     * @return string 
+     * @return string
      */
     public function getNomenclature()
     {
@@ -121,6 +114,7 @@ class Activite
      * Set lngutile
      *
      * @param integer $lngutile
+     *
      * @return Activite
      */
     public function setLngutile($lngutile)
@@ -133,7 +127,7 @@ class Activite
     /**
      * Get lngutile
      *
-     * @return integer 
+     * @return integer
      */
     public function getLngutile()
     {
@@ -144,6 +138,7 @@ class Activite
      * Set libelle
      *
      * @param string $libelle
+     *
      * @return Activite
      */
     public function setLibelle($libelle)
@@ -156,7 +151,7 @@ class Activite
     /**
      * Get libelle
      *
-     * @return string 
+     * @return string
      */
     public function getLibelle()
     {
@@ -177,6 +172,7 @@ class Activite
      * Set iddomaine
      *
      * @param \AppBundle\Entity\Domaine $iddomaine
+     *
      * @return Activite
      */
     public function setIddomaine(\AppBundle\Entity\Domaine $iddomaine = null)
@@ -189,7 +185,7 @@ class Activite
     /**
      * Get iddomaine
      *
-     * @return \AppBundle\Entity\Domaine 
+     * @return \AppBundle\Entity\Domaine
      */
     public function getIddomaine()
     {
@@ -204,8 +200,8 @@ class Activite
     public function isSituationReferenced($situationId)
     {
         $exists =  $this->refsituation->exists(function($key, $element) use ($situationId){
-                return $element->getReference() == $situationId;
-            }
+            return $element->getReference() == $situationId;
+        }
         );
         return $exists;
     }
@@ -214,6 +210,7 @@ class Activite
      * Add refsituation
      *
      * @param \AppBundle\Entity\Situation $refsituation
+     *
      * @return Activite
      */
     public function addRefsituation(\AppBundle\Entity\Situation $refsituation)
@@ -236,57 +233,10 @@ class Activite
     /**
      * Get refsituation
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getRefsituation()
     {
         return $this->refsituation;
-    }
-
-    /**
-     * Add idstage
-     *
-     * @param \AppBundle\Entity\Stageintitule $idstage
-     * @return Activite
-     */
-    public function addIdstage(\AppBundle\Entity\Stageintitule $idstage)
-    {
-        $this->idstage[] = $idstage;
-
-        return $this;
-    }
-
-    /**
-     * Remove idstage
-     *
-     * @param \AppBundle\Entity\Stageintitule $idstage
-     */
-    public function removeIdstage(\AppBundle\Entity\Stageintitule $idstage)
-    {
-        $this->idstage->removeElement($idstage);
-    }
-
-    /**
-     * Get situation referenced
-     *
-     * @return bool
-     */
-    public function isStageReferenced($stageId, $idintitule)
-    {
-        $exists =  $this->idstage->exists(function($key, $element) use ($stageId, $idintitule){
-                return $element->getIdstage()->getId() == $stageId && $element->getIdintitule() == $idintitule;
-            }
-        );
-        return $exists;
-    }
-
-    /**
-     * Get idstage
-     *
-     * @return \Doctrine\Common\Collections\Collection 
-     */
-    public function getIdstage()
-    {
-        return $this->idstage;
     }
 }

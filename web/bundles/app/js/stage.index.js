@@ -5,18 +5,19 @@ $(function () {
     function RemoveStage() {
         // Get the id from the link
         var oDiv = $(this).parent().parent();
-        var id = oDiv.attr("id");
-        var libelle = oDiv.attr("libcourt");
+        var id = oDiv.attr("id").substr(5);
+        var oTD = oDiv.find('#libcourt');
+        var libelle = oTD.html();
 
         if (id != '' && confirm("Voulez-vous supprimer le stage '" + libelle + "' ? ")) {
             $('#loader').show('slow', null);
             // Perform the ajax post
-            $.post("/stage/delete", { "id": id },
+            $.post("/stage/delete", { "idStage": id },
                 function (data) {
                     // Successful requests get here
                     // Update the page elements
                     if (data.Status == 1) {
-                        $('#' + id).fadeOut('slow');
+                        $('#stage' + data.id).fadeOut('slow');
                         oDiv.parent().remove();
                         $('#update-message').attr("class", 'label label-success');
                     }

@@ -30,7 +30,7 @@
             </div>
          </div>
 
-         <input type="submit" id="submit" name="submit" class="btn btn-success" value="Valider" />
+         <input type="submit" id="submit" name="submit" class="btn btn-success" value="Valider l'intitulé" />
     </form>
 
     <div class="checkbox">
@@ -50,23 +50,29 @@
         </tr>
         </thead>
         <tbody>
+        {%  set idDomaine = 0 %}
         {% for activite in activites %}
-            {%  set isPresent = activite.stageReferenced(stage.id, intitule.idintitule) %}
-            <tr id="activite{{ activite.id }}" activiteId="{{ activite.id }}" class="{%  if not isPresent %}tr_nonactif{% else%}tr_actif{%  endif %}">
-                <td><i id="spanok" style="display: {%  if isPresent %}block{% else%}none{% endif %}" class="fa fa-check" aria-hidden="true"></i></td>
-                <td>{{ activite.nomenclature }}</td>
-                <td>{{ activite.libelle }}</td>
-                <td>
-                      <a class="btn btn-danger btn-sm" style="display: {%  if isPresent %}inline{% else%}none{% endif %}" href="#" name="deleteStageIntituleActivite" id="deleteStageIntituleActivite" title="Retirer l'activité"><i class="fa fa-minus" aria-hidden="true"></i>&nbsp;Retirer</a>
-                      <a class="btn btn-primary btn-sm" style="display: {%  if isPresent %}none{% else%}inline{% endif %}" href="#" name="addStageIntituleActivite" id="addStageIntituleActivite" title="Ajouter l'activité"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Ajouter</a>
-                     <div id="divretirer" style="display: {%  if isPresent %}block{% else%}none{% endif %}">
-                    </div>
-                    <div id="divajouter" style="display: {%  if isPresent %}none{% else%}block{% endif %}">
-                   </div>
-                </td>
-            </tr>
-        {% else %}
-            <tr><td colspan="4">Aucun stage</td> </tr>
+            {% if (activite.iddomaine.idprocessus.parcourspresent(idParcours)) %}
+                {% if activite.iddomaine.id != idDomaine %}
+                    <tr class="tr_caption"><td colspan="4">{{ activite.iddomaine.nomenclature }} - {{ activite.iddomaine.libelle }}</td></tr>
+                    {%  set idDomaine = activite.iddomaine.id %}
+                {% endif %}
+
+                {%  set isPresent = intitule.activiteReferenced(activite.id) %}
+                <tr id="activite{{ activite.id }}" activiteId="{{ activite.id }}" class="{%  if not isPresent %}tr_nonactif{% else%}tr_actif{%  endif %}">
+                    <td><i id="spanok" style="display: {%  if isPresent %}block{% else%}none{% endif %}" class="fa fa-check" aria-hidden="true"></i></td>
+                    <td>{{ activite.nomenclature }}</td>
+                    <td>{{ activite.libelle }}</td>
+                    <td>
+                          <a class="btn btn-danger btn-sm" style="display: {%  if isPresent %}inline{% else%}none{% endif %}" href="#" name="deleteStageIntituleActivite" id="deleteStageIntituleActivite" title="Retirer l'activité"><i class="fa fa-minus" aria-hidden="true"></i>&nbsp;Retirer</a>
+                          <a class="btn btn-primary btn-sm" style="display: {%  if isPresent %}none{% else%}inline{% endif %}" href="#" name="addStageIntituleActivite" id="addStageIntituleActivite" title="Ajouter l'activité"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Ajouter</a>
+                         <div id="divretirer" style="display: {%  if isPresent %}block{% else%}none{% endif %}">
+                        </div>
+                        <div id="divajouter" style="display: {%  if isPresent %}none{% else%}block{% endif %}">
+                       </div>
+                    </td>
+                </tr>
+            {% endif %}
         {% endfor %}
         </tbody>
     </table>

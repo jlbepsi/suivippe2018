@@ -148,7 +148,7 @@ $(function () {
                 if (data.status == 1) {
                     divMessage.attr("class", 'label label-success');
 
-                    var newRow = "<tr id='intitule" + data.idIntitule + "' idintitule='" + data.idIntitule + "'><td>" + data.intitule + "</td>";
+                    var newRow = "<tr id='intitule" + data.idStage + '-' + data.idIntitule + "' idintitule='" + data.idIntitule + "'><td>" + data.intitule + "</td>";
                     newRow += "<td></td><td>";
                     newRow += "<a class='btn btn-primary btn-sm' href='/stage/editIntitule/" + data.idStage + "/" + data.idIntitule + "' title='Modifier intitulé'><i class='fa fa-pencil' aria-hidden='true'></i>&nbsp;Modifier</a>";
                     newRow += "<a class='btn btn-danger btn-sm' href='#' id='deleteIntituleActivite' name='deleteIntituleActivite' title='Supprimer intitulé'><i class='fa fa-trash' aria-hidden='true'></i>&nbsp;Supprimer</a>";
@@ -160,8 +160,7 @@ $(function () {
                     oTable.append(newRow);
 
                     // Attache l'évènement onClick au dernier élément ajouté
-                    $('#listeActivites > tbody > tr:last #deleteContributeur').bind('click', RemoveClick);
-                    $('#listeActivites > tbody > tr:last #editContributeur').bind('click', EditClick);
+                    $('#listeActivites > tbody > tr:last #deleteIntituleActivite').bind('click', deleteIntituleActivite);
 
                 }
                 else {

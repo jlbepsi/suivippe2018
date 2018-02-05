@@ -174,7 +174,6 @@
                 <tbody>
                 {%  set idDomaine = 0 %}
                 {% for activite in activites %}
-
                     {% if (activite.iddomaine.idprocessus.parcourspresent(idParcours)) %}
                         {% if activite.iddomaine.id != idDomaine %}
                             <tr class="tr_caption"><td colspan="4">{{ activite.iddomaine.nomenclature }} - {{ activite.iddomaine.libelle }}</td></tr>

@@ -101,7 +101,7 @@ class SyntheseController extends Controller
         $syntheseBuilder->addSituations($situations);
 
         // Obtention des stages
-        $stages = $this->getStageManager()->loadStageIntitulesActivitesUser($user->getLogin());
+        $stages = $this->getStageManager()->loadStageIntitulesUser($user);
         $syntheseBuilder->addStagesIntitules($stages);
 
 

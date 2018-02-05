@@ -45,7 +45,7 @@ class StageController extends Controller
     {
         // Obtention de l'utilisateur connecté
         $user = $this->getUser();
-        $count = $this->getManager()->countStages($user->getLogin());
+        $count = $this->getManager()->countStages($user); //->getLogin()
 
         return new JsonResponse(array('count' => $count));
     }
@@ -171,7 +171,7 @@ class StageController extends Controller
         }
 
         // Obtention des activités
-        $intitulesActivites = $manager->loadStageIntitulesActivites();
+        $intitulesActivites = $manager->loadStageIntitules($id);
         // Typologies
         $typologies = $manager->loadTypologies();
 
@@ -351,7 +351,8 @@ class StageController extends Controller
             $manager->saveStageIntitule($intitule);
         }
 
-        return $this->render('stage/editintitule.html.twig', array('stage' => $stage, 'intitule' => $intitule, 'activites' => $activites));
+        return $this->render('stage/editintitule.html.twig', array('stage' => $stage, 'intitule' => $intitule,
+            'activites' => $activites, 'idParcours' => $user->getNumparcours()->getId()));
     }
 
 
@@ -381,7 +382,7 @@ class StageController extends Controller
                 // Ajout de l'activité
                 try
                 {
-                    $manager->addStageActivite($stage, $idActivite);
+                    $manager->addStageActivite($idStage, $idIntitule, $idActivite);
                 }
                 catch (\Exception $e)
                 {
@@ -419,7 +420,7 @@ class StageController extends Controller
                 // Ajout de l'activité
                 try
                 {
-                    $manager->removeStageActivite($stage, $idActivite);
+                    $manager->removeStageActivite($idStage, $idIntitule, $idActivite);
                 }
                 catch (\Exception $e)
                 {
