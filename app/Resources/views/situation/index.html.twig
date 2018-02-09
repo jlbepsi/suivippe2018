@@ -22,9 +22,9 @@
 
     <form action="" method="post" id="formRecherche">
         <div class="form-inline">
-            {{ form_row(form.libelle) }}
-            {{ form_row(form.descriptif) }}
-            {{ form_row(form.date) }}
+            {{ form_row(form.libelle) }}&nbsp;
+            {{ form_row(form.descriptif) }}&nbsp;
+            {{ form_row(form.date) }}&nbsp;
 
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
@@ -110,6 +110,8 @@
 
 {% block javascripts %}
     {% javascripts
+        'bundles/app/bootstrap/js/bootstrap-datepicker.js'
+        'bundles/app/bootstrap/js/bootstrap-datepicker.fr.js'
         'bundles/app/js/situation.index.js'
     %}
     <script type="text/javascript" src="{{ asset_url }}"></script>

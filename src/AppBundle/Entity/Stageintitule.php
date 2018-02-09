@@ -180,20 +180,4 @@ class Stageintitule
         );
         return $exists;
     }
-
-
-    /**
-     *
-     * Pour le tableau de synthèse
-     *
-     */
-    private $arrayStageActiviteCites;
-    public function setArrayStageActiviteCites($arrayStageActiviteCites)
-    {
-        $this->arrayStageActiviteCites = $arrayStageActiviteCites;
-    }
-    public function getArrayStageActiviteCites()
-    {
-        return $this->arrayStageActiviteCites;
-    }
 }

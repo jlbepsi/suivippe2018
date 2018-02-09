@@ -195,14 +195,14 @@ class SynthesePDF extends \FPDF
             // année en cours
             $this->showSitiationIntitule($typeSituation[$cpt], $police, $largeurPointTexte, $hauteurLigneSituation);
 
-            $tagesIntitules = $this->syntheseBuilder->getStagesIntitules($cpt);
-            foreach ($tagesIntitules as $stageintitule) {
+            $stages = $this->syntheseBuilder->getStages($cpt);
+            foreach ($stages as $stage) {
 
                 $this->SetFont($police,'B',$largeurPointCroix);
                 foreach ($this->syntheseBuilder->getTypologies() as $typology) {
-                    /*if ($stageintitule->isCodePresent($typology->getCode()))
+                    if ($stage->isCodePresent($typology->getCode()))
                         $caractere = "X";
-                    else*/
+                    else
                         $caractere = " ";
                     $this->Cell($largeurColonneThemeObligatoire,$hauteurLigneSituation,$caractere,1,0);
                 }
@@ -212,54 +212,20 @@ class SynthesePDF extends \FPDF
                 $y0=$this->getY();
 
 
-                $dates = $stageintitule->getIdstage()->getDatedebut()->format("d/m/Y") . ' - '.$stageintitule->getIdstage()->getDatefin()->format("d/m/Y");
-                $this->MultiCell($largeurColonneSituationLibelle,5,$stageintitule->getIdstage()->getLibellecourt() ."\n". $dates,0);
+                $dates = $stage->getDatedebut()->format("d/m/Y") . ' - '.$stage->getDatefin()->format("d/m/Y");
+                $this->MultiCell($largeurColonneSituationLibelle,5,$stage->getLibellecourt() ."\n". $dates,0);
                 $this->setXY($x0,$y0);
                 $this->Cell($largeurColonneSituationLibelle,$hauteurLigneSituation,"",1,0);
                 //affichage des X pour les activites citées
                 $this->SetFont($police,'B',$largeurPointCroix);
 
-                foreach ($stageintitule->getArrayStageActiviteCites() as $stageActiviteCites)
+                foreach ($stage->getArrayStageActiviteCites() as $stageActiviteCites)
                 {
                     $this->Cell($largeurColonne,$hauteurLigneSituation," ".$stageActiviteCites["present"],1,0,"C", $stageActiviteCites["e6"]);
                 }
                 $this->Ln($hauteurLigneSituation);
             }
         }
-        /*
-         *
-         * LES STAGES
-         *
-         *
-        foreach ($this->syntheseBuilder->getStagesIntitules() as $stageintitule) {
-
-            $this->SetFont($police,'B',$largeurPointCroix);
-            foreach ($this->syntheseBuilder->getTypologies() as $typology) {
-                 if ($stageintitule->isCodePresent($typology->getCode()))
-                    $caractere = "X";
-                else
-                    $caractere = " ";
-                $this->Cell($largeurColonneThemeObligatoire,$hauteurLigneSituation,$caractere,1,0);
-            }
-            $this->Cell($margeinterne,$hauteurLigneSituation,"",0,0);
-            $this->SetFont($police,'B',$largeurPointLibelle);
-            $x0=$this->getX();
-            $y0=$this->getY();
-
-
-            $dates = $stageintitule->getIdstage()->getDatedebut()->format("d/m/Y") . ' - '.$stageintitule->getIdstage()->getDatefin()->format("d/m/Y");
-            $this->MultiCell($largeurColonneSituationLibelle,5,$stageintitule->getIdstage()->getLibellecourt() ."\n". $dates,0);
-            $this->setXY($x0,$y0);
-            $this->Cell($largeurColonneSituationLibelle,$hauteurLigneSituation,"",1,0);
-            //affichage des X pour les activites citées
-            $this->SetFont($police,'B',$largeurPointCroix);
-
-            foreach ($situation->getArraySituationActiviteCites() as $situationActiviteCites)
-            {
-                $this->Cell($largeurColonne,$hauteurLigneSituation," ".$situationActiviteCites["present"],1,0,"C", $situationActiviteCites["e6"]);
-            }
-            $this->Ln($hauteurLigneSituation);
-        }*/
         $this->Ln(10);
 
         //gestion bas de page : soussigné...

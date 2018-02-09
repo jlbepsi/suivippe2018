@@ -25,7 +25,7 @@ $(function () {
                     var oAjouter = oTR.find('#addStageIntituleActivite');
                     oAjouter.show();
 
-                    if ($('#showSituationActivitiesOnly').prop('checked')) {
+                    if ($('#showStageActivitiesOnly').prop('checked')) {
                         oTR.hide();
                     }
                 }
@@ -65,7 +65,7 @@ $(function () {
         );
     }
 
-    $('#showIntituleActivitiesOnly').click( function () {
+    $('#showStageActivitiesOnly').click( function () {
 
         if ($(this).prop('checked')) {
             $("#listeActivites > tbody > tr.tr_nonactif").each(function() {

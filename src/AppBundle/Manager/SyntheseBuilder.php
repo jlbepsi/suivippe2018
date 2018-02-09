@@ -15,7 +15,7 @@ class SyntheseBuilder
     private $arrayProcessus;
     private $typologies;
     private $situations;
-    private $stagesIntitules;
+    private $stages;
 
     public function addActivitesDomaine($activitesDomaine)
     {
@@ -107,25 +107,6 @@ class SyntheseBuilder
 
     public function addStagesIntitules($stagesIntitules)
     {
-        $this->stagesIntitules = array();
-
-        $this->stagesIntitules[1] = array();
-        $this->stagesIntitules[2] = array();
-
-        // Répartition des stages sur les 2 ans
-        foreach ($stagesIntitules as $stageintitule) {
-            if ($stageintitule->getIdstage()->getAnnee() == 1) {
-                $this->stagesIntitules[1][] = $stageintitule;
-            }
-            else{
-                $this->stagesIntitules[2][] = $stageintitule;
-            }
-        }
-
-        $this->buildStageActiviteCites();
-    }
-    public function buildStageActiviteCites()
-    {
         $arrayStageActiviteCites = array();
         foreach ($this->activitesDomaine as $evalue)
         {
@@ -136,23 +117,43 @@ class SyntheseBuilder
             );
         }
 
-        foreach ($this->stagesIntitules as $stageIntituleAnnee)
-        {
-            foreach ($stageIntituleAnnee as $stageintitule)
-            {
-                $newArrayStageActiviteCites = $arrayStageActiviteCites;
-                foreach ($stageintitule->getIdactivite() as $activite) {
-                    if (array_key_exists($activite->getId(), $arrayStageActiviteCites)) {
-                        $newArrayStageActiviteCites[$activite->getId()]["present"] = 'X';
-                    }
-                }
-                $stageintitule->setArrayStageActiviteCites($newArrayStageActiviteCites);
+        $allStages = array();
+        foreach ($stagesIntitules as $stageintitule) {
+            $idStage = $stageintitule->getIdstage()->getId();
+            if (! array_key_exists($idStage, $allStages)) {
+                $allStages[$idStage] = array(
+                    "stage" => $stageintitule->getIdstage(),
+                    "annee" => $stageintitule->getIdstage()->getAnnee(),
+                    "activites" => array()
+                );
+            }
+
+            foreach ($stageintitule->getIdactivite() as $activite) {
+                $allStages[$idStage]["activites"][] = $activite->getId();
             }
         }
+
+        $this->stages = array();
+
+        $this->stages[1] = array();
+        $this->stages[2] = array();
+
+        foreach ($allStages as $stageArray)
+        {
+            $newArrayStageActiviteCites = $arrayStageActiviteCites;
+            foreach ($stageArray["activites"] as $idActivite) {
+                if (array_key_exists($idActivite, $newArrayStageActiviteCites)) {
+                    $newArrayStageActiviteCites[$idActivite]["present"] = 'X';
+                }
+            }
+            $stageArray["stage"]->setArrayStageActiviteCites($newArrayStageActiviteCites);
+
+            $this->stages[$stageArray["stage"]->getAnnee()][] = $stageArray["stage"];
+        }
     }
-    public function getStagesIntitules($annee)
+    public function getStages($annee)
     {
 
-        return $this->stagesIntitules[$annee];
+        return $this->stages[$annee];
     }
 }

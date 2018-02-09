@@ -63,6 +63,9 @@ class StageController extends Controller
         // Obtention du manager
         $manager = $this->getManager();
 
+        // Typologies
+        $typologies = $manager->loadTypologies();
+
         // Si l'utilisateur soumet le formulaire
         if ($request->getMethod() == 'POST')
         {
@@ -107,7 +110,8 @@ class StageController extends Controller
             }
         }
 
-        return $this->render('stage/add.html.twig', array('form' => $model->createView()));
+        return $this->render('stage/add.html.twig', array('form' => $model->createView(),
+                                'typologies' => $typologies));
     }
 
     /**

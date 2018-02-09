@@ -22,7 +22,7 @@ class SituationSearchType extends AbstractType
             ->add('libelle', 'Symfony\Component\Form\Extension\Core\Type\TextType', array('label' => 'Libelle : ', 'required' => false))
             ->add('descriptif', 'Symfony\Component\Form\Extension\Core\Type\TextType', array('label' => 'Descriptif : ', 'required' => false))
             //->add('date', 'text', array('label' => 'Date de stage : ', 'required' => false));
-            ->add('date', DateType::class, array('widget' => 'single_text', 'label' => 'Date comprise entre : ',
+            ->add('date', DateType::class, array('widget' => 'single_text', 'label' => 'Date incluse : ',
                   'required' => false, 'html5' => false, 'format' => 'dd/MM/yyyy'));
     }
 

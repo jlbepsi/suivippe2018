@@ -152,6 +152,58 @@
                     </div>
                 </div>
 
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        <fieldset class="withborder">
+                            <legend>Est-ce une situation E4 ?</legend>
+
+
+
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label for="">Type de situation: </label>
+                                    <input type="radio" name="options" id="poo" checked /> Client lourd
+                                    <input type="radio" name="options" id="poo" /> Site web
+                                    <input type="radio" name="options" id="poo" /> Application mobile
+                                </div>
+
+                                <div class="form-group col-md-8">
+                                    <label for="">Base de données: </label>
+                                    <input name="sgdb" type="checkbox" value="0" />
+                                    Utilisation de Procédure Sotckées / Trigger
+                                </div>
+                            </div>
+
+
+                            <div class="form-row">
+                                <div class="form-group col-md-4">
+                                    <label for="situation_libelle">Contexte: </label>
+                                    <input type="text" maxlength="80" placeholder="Libellé de la situation" class="form-control" value="" />
+                                </div>
+                                <div class="form-group col-md-8">
+                                    <label for="situation_descriptif">Intitule: </label>
+                                    <input type="text" maxlength="250" class="form-control" value="TP Voiture C#" />
+                                </div>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    <div class="form-check">
+                                        <label class="form-check-label">
+                                            <input name="equipe"
+                                                   class="form-check-input" type="checkbox" value="0">
+                                           En équipe
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="form-group col-md-10">
+                                    <label for="situation_descriptif">Réalisation: </label>
+                                    <textarea maxlength="250" class="form-control" value="TP Voiture C#" ></textarea>
+                                </div>
+                            </div>
+                        </fieldset>
+                    </div>
+                </div>
+
                 <input type="submit" id="submit" name="submit" class="btn btn-success" value="Valider" />
             </form>
         </div>

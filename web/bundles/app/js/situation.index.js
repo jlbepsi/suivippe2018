@@ -1,12 +1,13 @@
 
 $(function () {
 // Document.ready -> link up remove event handler
-    /*$('#SituationSearchCriteria_date').datepicker({
+
+    $('#appbundle_SituationSearchCriteria_date').datepicker({
         format: "dd/mm/yyyy",
         language: "fr",
         autoclose: true,
         todayHighlight: true
-    });*/
+    });
 
 
     $('button[id=btnDeleteSituation]').bind('click', RemoveSituationClick);

@@ -221,7 +221,8 @@ class StageManager
     public function removeStageActivite($idStage, $idIntitule, $idActivite)
     {
         $repository = $this->getRepositoryStageIntituleActivite();
-        $stageIntituleActivite = $repository->find(array($idStage, $idIntitule, $idActivite));
+        $stageIntituleActivite = $repository->findOneBy(array("idstage" => $idStage, "idintitule" => $idIntitule,
+                                                "idactivite" => $idActivite));
 
         if ($stageIntituleActivite)
         {

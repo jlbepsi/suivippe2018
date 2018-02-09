@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+  <entity name="Stageintituleactivite" table="stageintituleactivite">
+    <indexes>
+      <index name="IDX_37AB326AD5B8D07464CA0FFD" columns="idStage,idIntitule"/>
+      <index name="IDX_37AB326AEBD67F4E" columns="idActivite"/>
+    </indexes>
+    <id name="idstage" type="integer" column="idStage"/>
+    <id name="idintitule" type="integer" column="idIntitule"/>
+    <id name="idactivite" association-key="true"/>
+    <one-to-one field="idactivite" target-entity="Activite" fetch="LAZY">
+      <join-columns>
+        <join-column name="idActivite" referenced-column-name="id"/>
+      </join-columns>
+    </one-to-one>
+  </entity>
+</doctrine-mapping>
