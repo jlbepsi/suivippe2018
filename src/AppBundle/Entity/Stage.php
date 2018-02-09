@@ -377,6 +377,17 @@ class Stage
     }
 
     /**
+     * Get duree
+     *
+     * @return integer
+     */
+    public function getDuree()
+    {
+        $interval = $this->datedebut->diff($this->datefin);
+        return ceil($interval->days/7);
+    }
+
+    /**
      * Set datemodif
      *
      * @param \DateTime $datemodif     *

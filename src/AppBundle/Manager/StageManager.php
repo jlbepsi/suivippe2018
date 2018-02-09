@@ -99,7 +99,7 @@ class StageManager
      **/
     /**
      * @param $idStage integer
-     * @return Stage[]|array
+     * @return Stageintitule[]|array
      */
     public function loadStageIntitules($idStage)
     {

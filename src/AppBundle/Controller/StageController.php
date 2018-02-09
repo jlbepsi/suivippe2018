@@ -4,15 +4,19 @@ namespace AppBundle\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+
+use PhpOffice\PhpWord\TemplateProcessor;
 
 use AppBundle\Entity\Stageintitule;
 use AppBundle\Manager\ActiviteManager;
 use AppBundle\Entity\Stage;
 use AppBundle\Manager\StageManager;
 use AppBundle\Form\StageType;
+use AppBundle\Form\WordResponse;
 
 class StageController extends Controller
 {
@@ -436,6 +440,84 @@ class StageController extends Controller
 
         // Retour du résultat en Json
         return new JsonResponse(array('status' => $status, 'idActivite' => $idActivite));
+    }
+
+
+
+    /**
+     * @Route("/stage/documentword/{id}", name="stage_document_word")
+     */
+    public function documentWordAction(Request $request, $id)
+    {
+        // Obtention du manager
+        $manager = $this->getManager();
+        // Obtention de l'utilisateur connecté
+        $utilisateur = $this->getUser();
+        // Recherche du stage
+        if (!$stage = $manager->loadStage($id, $utilisateur->getLogin()))
+        {
+            return $this->render("TwigBundle/views/Exception/error404.html.twig");
+        }
+
+        // Obtention du template Attestation de stage
+        $path = $this->getParameter('kernel.root_dir');
+        $path .= "/Resources/word/";
+        $filename    = 'attestation-stage-2018.docx';
+        $templateProcessor = new TemplateProcessor($path . $filename);
+
+        // On charge le valeurs dans le document
+        /** VALEURS A RECUPERER **/
+        $userNom = $utilisateur->getNom();
+        $userPrenom = $utilisateur->getPrenom();
+        $userDateNaissance = $utilisateur->getDateNaissance()->format("d/m/Y");
+        $userSexe = ($utilisateur->getSexe()==1 ? "M" : "F");
+        $userAdresse = $utilisateur->getAdresse();
+        $userMail = $utilisateur->getMail();
+        $userParcours = $utilisateur->getNumparcours()->getLibelle();
+        $templateProcessor->setValue('userNom', $userNom);
+        $templateProcessor->setValue('userPrenom', $userPrenom);
+        $templateProcessor->setValue('userDateNaissance', $userDateNaissance);
+        $templateProcessor->setValue('userSexe', $userSexe);
+        $templateProcessor->setValue('userAdresse', $userAdresse);
+        $templateProcessor->setValue('userMail', $userMail);
+        $templateProcessor->setValue('userParcours', $userParcours);
+
+        $entrepriseNom = $stage->getEntreprisenom();
+        $entrepriseAdresse = $stage->getEntrepriseadresse();
+
+        $stageDateDebut = $stage->getDatedebut();
+        $stageDateFin = $stage->getDatefin();
+        $stageDuree = $stage->getDuree();
+        $stageMontant = $stage->getMontant();
+        $templateProcessor->setValue('entrepriseNom', $entrepriseNom);
+        $templateProcessor->setValue('entrepriseAdresse', $entrepriseAdresse);
+        $templateProcessor->setValue('stageDateDebut', $stageDateDebut->format("d/m/Y"));
+        $templateProcessor->setValue('stageDateFin', $stageDateFin->format("d/m/Y"));
+        $templateProcessor->setValue('stageDuree', $stageDuree);
+        $templateProcessor->setValue('stageMontant', $stageMontant);
+
+        $dateDuJour = new \DateTime("now");
+        $templateProcessor->setValue('dateDuJour', $dateDuJour->format("d/m/Y"));
+
+        // Obtention des activités
+        $intitulesActivites = $manager->loadStageIntitules($id);
+        $count = count($intitulesActivites);
+        $templateProcessor->cloneRow('stageIntituleActivite', $count);
+
+        $cpt = 1;
+        foreach ($intitulesActivites as $intitulesActivite) {
+            $templateProcessor->setValue('stageIntitule#'.$cpt, $intitulesActivite->getIntitule());
+
+            $activitesChaine = "";
+            foreach ($intitulesActivite->getIdactivite() as $activite) {
+                $activitesChaine .= $activite->getNomenclature() . "-" . $activite->getLibelle()."\n";
+            }
+            $templateProcessor->setValue('stageIntituleActivite#'.$cpt, $activitesChaine);
+
+            $cpt++;
+        }
+
+        return new WordResponse($templateProcessor, "attestation-stage-".$userNom . "-".$dateDuJour->format("Ymd").".docx");
     }
 
 }
