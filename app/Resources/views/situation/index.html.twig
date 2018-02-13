@@ -42,15 +42,20 @@
 
     <div class="row">
         <div id="update-message" style="display: none" class="col-md-8"></div>
-        <div class="col-md-4"></div>
     </div>
 
+    <div class="row">
+        <div id="analysys-message" style="display: none" class="alert alert-danger col-md-8" role="alert"></div>
+    </div>
     <span class="label label-info">{{ count }} situations trouvées</span>
     <table class="table table-condensed table-bordered table-striped">
         <thead>
         <tr>
             <th>Libellé</th>
             <th>Descriptif</th>
+            {%  if classe == "B2" %}
+            <th width="4">E4</th>
+            {% endif %}
             <th width="160">Activités citées</th>
             {% if idParcours == 1 %}  <!-- SISR -->
                 <th width="80">OS</th>
@@ -70,12 +75,27 @@
 
         </thead>
         <tbody>
+        {%  if classe == "B2" %}
+        {% set nbSituationE4 = 0 %}
+        {% set nbSituationSansActivites = 0 %}
+        {% else %}
+        {% set nbSituationE4 = 10 %}
+        {% set nbSituationSansActivites = 10 %}
+        {% endif %}
+
         {% for situation in arraySituations %}
         <tr id="{{  situation.reference }}" >
             <td id="libelle">{{  situation.libelle }}</td>
             <td>{{  situation.descriptif }}</td>
+
+            {%  if classe == "B2" %}
+            <td>{% if situation.refe4 %} <b>Oui</b> {% set nbSituationE4 = nbSituationE4 +1 %} {% else %} Non {% endif %}</td>
+            {% endif %}
+
             {%  set activiteCount = situation.activiteCount %}
-            <td {% if activiteCount==0 %} class="nonnote" {% endif %}>{{ activiteCount }}</td>
+            <td {% if activiteCount==0 %} class="nonnote"
+                    {% set nbSituationSansActivites = nbSituationSansActivites +1 %}
+                    {% endif %}>{{ activiteCount }}</td>
             {% if idParcours == 1 %}  <!-- SISR -->
                 <td>{{  situation.codeos.libelle }}</td>
                 <td>{{  situation.codeservice.libelle }}</td>
@@ -105,6 +125,9 @@
         {% endfor %}
         </tbody>
     </table>
+
+    <input type="hidden" id="situationAnalysys_nbE4" value="{{ nbSituationE4 }}" />
+    <input type="hidden" id="situationAnalysys_nbSansActivites" value="{{ nbSituationSansActivites }}" />
 
 {% endblock %}
 

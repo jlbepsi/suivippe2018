@@ -9,6 +9,7 @@
       <index name="FK_Situation_Utilisateur" columns="login"/>
       <index name="codeOS" columns="codeOS,codeService"/>
       <index name="codeService" columns="codeService"/>
+      <index name="refe4" columns="refe4"/>
       <index name="IDX_EC2D9ACA5B1B06D0" columns="codeOS"/>
     </indexes>
     <id name="reference" type="integer" column="reference">
@@ -59,6 +60,11 @@
     <many-to-one field="codeservice" target-entity="Services" fetch="LAZY">
       <join-columns>
         <join-column name="codeService" referenced-column-name="id"/>
+      </join-columns>
+    </many-to-one>
+    <many-to-one field="refe4" target-entity="Situatione4" fetch="LAZY">
+      <join-columns>
+        <join-column name="refe4" referenced-column-name="referencee4"/>
       </join-columns>
     </many-to-one>
     <many-to-many field="idactivite" target-entity="Activite" mapped-by="refsituation" fetch="LAZY"/>

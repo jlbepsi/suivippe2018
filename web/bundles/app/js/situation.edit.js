@@ -170,4 +170,11 @@ $(function () {
         $('#divParcoursSISR').show();
     });
 
+    $('#situationE4').click( function () {
+
+        var disabled = ! ($(this).prop('checked'));
+        $("[id^='e4_']").each(function (index, value) {
+            $(this).attr("disabled", disabled);
+        });
+    });
 });

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Situation
  *
- * @ORM\Table(name="situation", indexes={@ORM\Index(name="FK_Situation_Cadre", columns={"codeCadre"}), @ORM\Index(name="FK_Situation_Localisation", columns={"codeLocalisation"}), @ORM\Index(name="FK_Situation_Source", columns={"codeLangage"}), @ORM\Index(name="FK_Situation_TypeSituation", columns={"codeFramework"}), @ORM\Index(name="FK_Situation_Utilisateur", columns={"login"}), @ORM\Index(name="codeOS", columns={"codeOS", "codeService"}), @ORM\Index(name="codeService", columns={"codeService"}), @ORM\Index(name="IDX_EC2D9ACA5B1B06D0", columns={"codeOS"})})
+ * @ORM\Table(name="situation", indexes={@ORM\Index(name="FK_Situation_Cadre", columns={"codeCadre"}), @ORM\Index(name="FK_Situation_Localisation", columns={"codeLocalisation"}), @ORM\Index(name="FK_Situation_Source", columns={"codeLangage"}), @ORM\Index(name="FK_Situation_TypeSituation", columns={"codeFramework"}), @ORM\Index(name="FK_Situation_Utilisateur", columns={"login"}), @ORM\Index(name="codeOS", columns={"codeOS", "codeService"}), @ORM\Index(name="codeService", columns={"codeService"}), @ORM\Index(name="refe4", columns={"refe4"}), @ORM\Index(name="IDX_EC2D9ACA5B1B06D0", columns={"codeOS"})})
  * @ORM\Entity
  */
 class Situation
@@ -117,6 +117,16 @@ class Situation
     private $codeservice;
 
     /**
+     * @var \Situatione4
+     *
+     * @ORM\ManyToOne(targetEntity="Situatione4")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="refe4", referencedColumnName="referencee4")
+     * })
+     */
+    private $refe4;
+
+    /**
      * @var \Doctrine\Common\Collections\Collection
      *
      * @ORM\ManyToMany(targetEntity="Activite", mappedBy="refsituation")
@@ -151,7 +161,7 @@ class Situation
     /**
      * Get reference
      *
-     * @return integer 
+     * @return integer
      */
     public function getReference()
     {
@@ -162,6 +172,7 @@ class Situation
      * Set libelle
      *
      * @param string $libelle
+     *
      * @return Situation
      */
     public function setLibelle($libelle)
@@ -174,7 +185,7 @@ class Situation
     /**
      * Get libelle
      *
-     * @return string 
+     * @return string
      */
     public function getLibelle()
     {
@@ -195,6 +206,7 @@ class Situation
      * Set descriptif
      *
      * @param string $descriptif
+     *
      * @return Situation
      */
     public function setDescriptif($descriptif)
@@ -207,7 +219,7 @@ class Situation
     /**
      * Get descriptif
      *
-     * @return string 
+     * @return string
      */
     public function getDescriptif()
     {
@@ -218,6 +230,7 @@ class Situation
      * Set datedebut
      *
      * @param \DateTime $datedebut
+     *
      * @return Situation
      */
     public function setDatedebut($datedebut)
@@ -230,7 +243,7 @@ class Situation
     /**
      * Get datedebut
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDatedebut()
     {
@@ -241,6 +254,7 @@ class Situation
      * Set datefin
      *
      * @param \DateTime $datefin
+     *
      * @return Situation
      */
     public function setDatefin($datefin)
@@ -253,7 +267,7 @@ class Situation
     /**
      * Get datefin
      *
-     * @return \DateTime 
+     * @return \DateTime
      */
     public function getDatefin()
     {
@@ -264,6 +278,7 @@ class Situation
      * Set codelocalisation
      *
      * @param integer $codelocalisation
+     *
      * @return Situation
      */
     public function setCodelocalisation($codelocalisation)
@@ -276,7 +291,7 @@ class Situation
     /**
      * Get codelocalisation
      *
-     * @return integer 
+     * @return integer
      */
     public function getCodelocalisation()
     {
@@ -287,6 +302,7 @@ class Situation
      * Set login
      *
      * @param \AppBundle\Entity\Utilisateur $login
+     *
      * @return Situation
      */
     public function setLogin(\AppBundle\Entity\Utilisateur $login = null)
@@ -299,7 +315,7 @@ class Situation
     /**
      * Get login
      *
-     * @return \AppBundle\Entity\Utilisateur 
+     * @return \AppBundle\Entity\Utilisateur
      */
     public function getLogin()
     {
@@ -310,6 +326,7 @@ class Situation
      * Set codecadre
      *
      * @param \AppBundle\Entity\Cadre $codecadre
+     *
      * @return Situation
      */
     public function setCodecadre(\AppBundle\Entity\Cadre $codecadre = null)
@@ -322,7 +339,7 @@ class Situation
     /**
      * Get codecadre
      *
-     * @return \AppBundle\Entity\Cadre 
+     * @return \AppBundle\Entity\Cadre
      */
     public function getCodecadre()
     {
@@ -333,6 +350,7 @@ class Situation
      * Set codelangage
      *
      * @param \AppBundle\Entity\Langage $codelangage
+     *
      * @return Situation
      */
     public function setCodelangage(\AppBundle\Entity\Langage $codelangage = null)
@@ -345,7 +363,7 @@ class Situation
     /**
      * Get codelangage
      *
-     * @return \AppBundle\Entity\Langage 
+     * @return \AppBundle\Entity\Langage
      */
     public function getCodelangage()
     {
@@ -356,6 +374,7 @@ class Situation
      * Set codeframework
      *
      * @param \AppBundle\Entity\Framework $codeframework
+     *
      * @return Situation
      */
     public function setCodeframework(\AppBundle\Entity\Framework $codeframework = null)
@@ -368,7 +387,7 @@ class Situation
     /**
      * Get codeframework
      *
-     * @return \AppBundle\Entity\Framework 
+     * @return \AppBundle\Entity\Framework
      */
     public function getCodeframework()
     {
@@ -379,6 +398,7 @@ class Situation
      * Set codeos
      *
      * @param \AppBundle\Entity\Operatingsystem $codeos
+     *
      * @return Situation
      */
     public function setCodeos(\AppBundle\Entity\Operatingsystem $codeos = null)
@@ -391,7 +411,7 @@ class Situation
     /**
      * Get codeos
      *
-     * @return \AppBundle\Entity\Operatingsystem 
+     * @return \AppBundle\Entity\Operatingsystem
      */
     public function getCodeos()
     {
@@ -402,6 +422,7 @@ class Situation
      * Set codeservice
      *
      * @param \AppBundle\Entity\Services $codeservice
+     *
      * @return Situation
      */
     public function setCodeservice(\AppBundle\Entity\Services $codeservice = null)
@@ -414,7 +435,7 @@ class Situation
     /**
      * Get codeservice
      *
-     * @return \AppBundle\Entity\Services 
+     * @return \AppBundle\Entity\Services
      */
     public function getCodeservice()
     {
@@ -433,9 +454,34 @@ class Situation
     }
 
     /**
+     * Set refe4
+     *
+     * @param \AppBundle\Entity\Situatione4 $refe4
+     *
+     * @return Situation
+     */
+    public function setRefe4(\AppBundle\Entity\Situatione4 $refe4 = null)
+    {
+        $this->refe4 = $refe4;
+
+        return $this;
+    }
+
+    /**
+     * Get refe4
+     *
+     * @return \AppBundle\Entity\Situatione4
+     */
+    public function getRefe4()
+    {
+        return $this->refe4;
+    }
+
+    /**
      * Add idactivite
      *
      * @param \AppBundle\Entity\Activite $idactivite
+     *
      * @return Situation
      */
     public function addIdactivite(\AppBundle\Entity\Activite $idactivite)
@@ -458,7 +504,7 @@ class Situation
     /**
      * Get idactivite
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getIdactivite()
     {
@@ -475,11 +521,11 @@ class Situation
         return count($this->idactivite);
     }
 
-
     /**
      * Add code
      *
      * @param \AppBundle\Entity\Typologie $code
+     *
      * @return Situation
      */
     public function addCode(\AppBundle\Entity\Typologie $code)
@@ -512,7 +558,7 @@ class Situation
     /**
      * Get code
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getCode()
     {
@@ -548,5 +594,4 @@ class Situation
     {
         return $this->arraySituationActiviteCites;
     }
-
 }

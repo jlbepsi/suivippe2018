@@ -14,10 +14,10 @@ class SituationType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('libelle')
-            ->add('descriptif')
-            ->add('datedebut')
-            ->add('datefin');
+            ->add('libelle', 'Symfony\Component\Form\Extension\Core\Type\TextType')
+            ->add('descriptif', 'Symfony\Component\Form\Extension\Core\Type\TextType')
+            ->add('datedebut', 'Symfony\Component\Form\Extension\Core\Type\DateType', array('widget' => 'single_text', 'format' => 'dd/MM/yyyy'))
+            ->add('datefin', 'Symfony\Component\Form\Extension\Core\Type\DateType', array('widget' => 'single_text', 'format' => 'dd/MM/yyyy'));
 
         // Ajout des champs liés à une table
         $builder->add('codelangage', 'Symfony\Bridge\Doctrine\Form\Type\EntityType', array(

@@ -41,11 +41,11 @@
 
                 <div class="form-row">
                     <div class="form-group col-md-4">
-                        <label for="situation_libelle">Libellé: </label>
+                        <label for="appbundle_situation_libelle">Libellé: </label>
                         {{ form_widget(form.libelle, {'attr': {'placeholder': 'Libellé de la situation'}}) }}
                     </div>
                     <div class="form-group col-md-8">
-                        <label for="situation_descriptif">Descriptif: </label>
+                        <label for="appbundle_situation_descriptif">Descriptif: </label>
                         {{ form_widget(form.descriptif) }}
                     </div>
                 </div>
@@ -53,22 +53,22 @@
                 {% if idParcours == 1 %}  <!-- SISR -->
                     <div class="form-row">
                         <div class="form-group col-md-4">
-                            <label for="situation_codelangage">Système d'exploitation: </label>
+                            <label for="appbundle_situation_codelangage">Système d'exploitation: </label>
                             {{ form_widget(form.codeos) }}
                         </div>
                         <div class="form-group col-md-8">
-                            <label for="situation_codeframework">Service: </label>
+                            <label for="appbundle_situation_codeframework">Service: </label>
                             {{ form_widget(form.codeservice) }}
                         </div>
                     </div>
                 {% elseif idParcours == 2 %}  <!-- SLAM -->
                 <div class="form-row">
                     <div class="form-group col-md-4">
-                        <label for="situation_codelangage">Langage: </label>
+                        <label for="appbundle_situation_codelangage">Langage: </label>
                         {{ form_widget(form.codelangage) }}
                     </div>
                     <div class="form-group col-md-8">
-                        <label for="situation_codeframework">Framework: </label>
+                        <label for="appbundle_situation_codeframework">Framework: </label>
                         {{ form_widget(form.codeframework) }}
                     </div>
                 </div>
@@ -97,7 +97,7 @@
                                 {{ form_widget(form.codeos) }}
                             </div>
                             <div class="form-group col-md-8">
-                                <label for="situation_codeframework">Service: </label>
+                                <label for="appbundle_situation_codeframework">Service: </label>
                                 {{ form_widget(form.codeservice) }}
                             </div>
                         </div>
@@ -108,11 +108,11 @@
                     >
                         <div class="form-row">
                             <div class="form-group col-md-4">
-                                <label class="control-label required" for="situation_codelangage">Langage: </label>
+                                <label class="control-label required" for="appbundle_situation_codelangage">Langage: </label>
                                 {{ form_widget(form.codelangage) }}
                             </div>
                             <div class="form-group col-md-8">
-                                <label class="control-label required" for="situation_codeframework">Framework: </label>
+                                <label class="control-label required" for="appbundle_situation_codeframework">Framework: </label>
                                 {{ form_widget(form.codeframework) }}
                             </div>
                         </div>
@@ -122,11 +122,11 @@
                 <div class="form-row">
                     <div class="form-group col-md-4">
                         <label for="DateDebut">Date de</label>
-                        <input type="text" id="situation_datedebut" name="situation[datedebut]" required="required" class="form-control" value="{{  situation.datedebut | date("d/m/Y") }}" />
+                        <input type="text" id="situation_datedebut" name="appbundle_situation[datedebut]" required="required" class="form-control" value="{{  situation.datedebut | date("d/m/Y") }}" />
                     </div>
                     <div class="form-group col-md-4">
                         <label for="DateFin">à</label>
-                        <input type="text" id="situation_datefin" name="situation[datefin]" required="required" class="form-control" value="{{  situation.datefin | date("d/m/Y") }}" />
+                        <input type="text" id="situation_datefin" name="appbundle_situation[datefin]" required="required" class="form-control" value="{{  situation.datefin | date("d/m/Y") }}" />
                     </div>
                     <div class="form-group col-md-4">
                         <label for="Duree">Durée</label>
@@ -152,57 +152,62 @@
                     </div>
                 </div>
 
+                {%  if situation.login.classe == "B2" %}
                 <div class="form-row">
                     <div class="form-group col-md-12">
                         <fieldset class="withborder">
+                            {% set isSituationE4 = false %}
+                            {% set situationE4Disabled = "disabled" %}
                             <legend>Est-ce une situation E4 ?</legend>
-
-
+                            <input id="situationE4" name="situationE4" type="checkbox"
+                                    {% if situation.refe4 %}
+                                        {% set isSituationE4 = true %}
+                                        {% set situationE4Disabled = "" %}
+                                        checked
+                                    {% endif %}
+                                > Oui
 
                             <div class="form-row">
                                 <div class="form-group col-md-4">
                                     <label for="">Type de situation: </label>
-                                    <input type="radio" name="options" id="poo" checked /> Client lourd
-                                    <input type="radio" name="options" id="poo" /> Site web
-                                    <input type="radio" name="options" id="poo" /> Application mobile
+                                    <input type="radio" name="optionsE4" id="e4_poo" value="1"
+                                            {%  if isSituationE4 and situation.refe4.competenceapplication == 1 %} checked {% endif %} {{ situationE4Disabled }} /> Client lourd
+                                    <input type="radio" name="optionsE4" id="e4_siteweb" value="2"
+                                            {%  if isSituationE4 and situation.refe4.competenceapplication == 2 %} checked {% endif %} {{ situationE4Disabled }} /> Site web
+                                    <input type="radio" name="optionsE4" id="e4_mobile" value="3"
+                                            {%  if isSituationE4 and situation.refe4.competenceapplication == 3 %} checked {% endif %} {{ situationE4Disabled }} align=""/> Application mobile
                                 </div>
 
                                 <div class="form-group col-md-8">
                                     <label for="">Base de données: </label>
-                                    <input name="sgdb" type="checkbox" value="0" />
+                                    <input id="e4_sgdb" name="e4_sgdb" type="checkbox" {{ situationE4Disabled }}
+                                            {%  if isSituationE4 and situation.refe4.competencesgbd == 1 %} checked {% endif %}/>
                                     Utilisation de Procédure Sotckées / Trigger
                                 </div>
                             </div>
 
+                            <div class="form-row">
+                                <div class="form-group col-md-1">
+                                    <label for="equipe">Effectué : </label>
+                                    <select id="e4_equipe" name="e4_equipe" class="form-control" {{ situationE4Disabled }} >
+                                        <option value="0" {%  if isSituationE4 and situation.refe4.equipe == 0 %} selected {% endif %}>Seul</option>
+                                        <option value="1" {%  if isSituationE4 and situation.refe4.equipe == 1 %} selected {% endif %}>En équipe</option>
+                                    </select>
+                                </div>
 
-                            <div class="form-row">
-                                <div class="form-group col-md-4">
+                                <div class="form-group col-md-5">
                                     <label for="situation_libelle">Contexte: </label>
-                                    <input type="text" maxlength="80" placeholder="Libellé de la situation" class="form-control" value="" />
+                                    <input type="text" id="e4_contexte" name="e4_contexte" maxlength="80" placeholder="Contexte" class="form-control" value="{{ (isSituationE4 ? situation.refe4.contexte : "") }}" {{ situationE4Disabled }} />
                                 </div>
-                                <div class="form-group col-md-8">
-                                    <label for="situation_descriptif">Intitule: </label>
-                                    <input type="text" maxlength="250" class="form-control" value="TP Voiture C#" />
-                                </div>
-                            </div>
-                            <div class="form-row">
-                                <div class="form-group col-md-2">
-                                    <div class="form-check">
-                                        <label class="form-check-label">
-                                            <input name="equipe"
-                                                   class="form-check-input" type="checkbox" value="0">
-                                           En équipe
-                                        </label>
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-10">
+                                <div class="form-group col-md-6">
                                     <label for="situation_descriptif">Réalisation: </label>
-                                    <textarea maxlength="250" class="form-control" value="TP Voiture C#" ></textarea>
+                                    <textarea id="e4_realisation" name="e4_realisation" maxlength="250" class="form-control" {{ situationE4Disabled }} >{{ (isSituationE4 ? situation.refe4.realisation : "") }}</textarea>
                                 </div>
                             </div>
                         </fieldset>
                     </div>
                 </div>
+                {% endif %}
 
                 <input type="submit" id="submit" name="submit" class="btn btn-success" value="Valider" />
             </form>

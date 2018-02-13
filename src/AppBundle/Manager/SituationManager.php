@@ -9,6 +9,7 @@
 namespace AppBundle\Manager;
 
 use AppBundle\Entity\Situation;
+use AppBundle\Entity\Situatione4;
 use AppBundle\Form\SituationSearchCriteria;
 use Doctrine\ORM\EntityManager;
 
@@ -105,13 +106,36 @@ class SituationManager
     }
 
     /**
+     * Save Situation entity
+     *
+     * @param Situation $situatione4
+     */
+    public function saveSituationE4(Situatione4 $situatione4)
+    {
+        $this->entityManager->persist($situatione4);
+        $this->entityManager->flush();
+    }
+
+    /**
      * Remove Situation entity
      *
-     * @param Integer $situationId
+     * @param Situation $situation
      */
     public function removeSituation(Situation $situation)
     {
         $this->entityManager->remove($situation);
+        $this->entityManager->flush();
+    }
+
+
+    /**
+     * Remove Situatione4 entity
+     *
+     * @param Situatione4 $situatione4
+     */
+    public function removeSituationE4(Situatione4 $situatione4)
+    {
+        $this->entityManager->remove($situatione4);
         $this->entityManager->flush();
     }
 

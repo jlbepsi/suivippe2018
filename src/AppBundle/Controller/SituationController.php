@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Entity\Situatione4;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -47,7 +48,7 @@ class SituationController extends Controller
         $idParcours = $user->getNumparcours()->getId();
 
         return $this->render('situation/index.html.twig', array('arraySituations' => $situations, 'count' => count($situations),
-            'form' => $form->createView(), 'idParcours' => $idParcours));
+            'form' => $form->createView(), 'idParcours' => $idParcours, 'classe' => $user->getClasse()));
     }
 
     /**
@@ -155,7 +156,36 @@ class SituationController extends Controller
                 $mandatory = $request->request->get('mandatory');
                 $manager->saveTypologies($situation, $mandatory);
 
-                // Validation de l'entité
+                // Situation E4 ?
+                $situationE4Active = $request->request->get('situationE4');
+                if ($situationE4Active == "on")
+                {
+                    $optionsE4 = $request->request->get('optionsE4');
+                    $sgdbE4 = $request->request->get('e4_sgdb');
+                    $equipeE4 = $request->request->get('e4_equipe');
+                    $contexteE4 = $request->request->get('e4_contexte');
+                    $realisationE4 = $request->request->get('e4_realisation');
+
+                    $situationE4 = new Situatione4();
+                    $situationE4->setReferencee4($situation->getReference());
+                    $situationE4->setCompetenceapplication($optionsE4);
+                    $situationE4->setCompetencesgbd($sgdbE4=="on" ? 1 : 0);
+                    $situationE4->setEquipe($equipeE4);
+                    $situationE4->setContexte($contexteE4);
+                    $situationE4->setRealisation($realisationE4);
+                    $situationE4->setIntitule($situation->getLibelle());
+
+                    // Validation de l'entité
+                    $manager->saveSituationE4($situationE4);
+
+                    $situation->setRefe4($situationE4);
+                }
+                else
+                {
+                    // La situation E4 doit être supprimée si elle existe
+                    $manager->removeSituationE4($situation->getRefe4());
+                }
+                // Validation de la situation
                 $manager->saveSituation($situation);
             }
         }
@@ -191,6 +221,8 @@ class SituationController extends Controller
                 $status = 1;
                 // Suppression du film
                 try {
+                    // La situation E4 doit être supprimée si elle existe
+                    $manager->removeSituationE4($situation->getRefe4());
                     $manager->removeSituation($situation);
                 } catch (\Exception $e) {
                     $message = sprintf("Vous ne pouvez pas supprimer la situation: %s",
