@@ -1,0 +1,82 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Liste des situations
+{% endblock %}
+
+{% block stylesheets %}
+    {% stylesheets
+        'bundles/app/bootstrap/css/bootstrap-datepicker.css'
+        filter='cssrewrite' %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Liste des situations</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+
+    <table class="table table-condensed table-bordered table-striped">
+        <thead>
+        <tr>
+            <th>Libellé</th>
+            <th>Descriptif</th>
+            <th width="4">E4</th>
+            <th width="80">Activités</th>
+
+            <!-- SISR -->
+            <th width="80">OS</th>
+            <th width="120">Service</th>
+            <!-- SLAM -->
+            <th width="80">Langage</th>
+            <th width="120">Framework</th>
+            <th width="120"></th>
+        </tr>
+
+        </thead>
+        <tbody>
+        {% for utilisateurSituations in utilisateursSituations.utilisateurs %}
+            <tr class="tr_caption">
+                <td colspan="9">{{  utilisateurSituations.utilisateur.nomlong }} ({{  utilisateurSituations.utilisateur.numparcours.nomenclature }})</td>
+            </tr>
+            {% for situation in utilisateurSituations.situations %}
+            <tr>
+                <td>{{  situation.libelle }}</td>
+                <td>{{  situation.descriptif }}</td>
+                <td>{% if situation.refe4 %} <b>Oui</b> {% else %} Non {% endif %}</td>
+
+                {%  set activiteCount = situation.activiteCount %}
+                <td {% if activiteCount==0 %} class="nonnote" {% endif %}>{{ activiteCount }}
+                </td>
+                <!-- SISR -->
+                <td>{%  if situation.codeos %} {{  situation.codeos.libelle }} {% else %} - {% endif %}</td>
+                <td>{%  if situation.codeservice %} {{  situation.codeservice.libelle }} {% else %} - {% endif %}</td>
+                <!-- SLAM -->
+                <td>{%  if situation.codelangage %} {{  situation.codelangage.libelle }} {% else %} - {% endif %}</td>
+                <td>{%  if situation.codeframework %} {{  situation.codeframework.libelle }} {% else %} - {% endif %}</td>
+                <td>
+                    <a class="btn btn-primary btn-sm" href="{{  path('situation_edit', {'id': situation.reference}) }}" >
+                        <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;Modifier</a>
+                </td>
+            </tr>
+            {% endfor %}
+        {% else %}
+            <tr><td colspan="9">Aucune situation n'a été trouvé.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
+
+{% block javascripts %}
+    {% javascripts
+        'bundles/app/bootstrap/js/bootstrap-datepicker.js'
+        'bundles/app/bootstrap/js/bootstrap-datepicker.fr.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <title>{% block title %}{% endblock %}</title>
+        {% stylesheets
+            'bundles/app/bootstrap/css/bootstrap.css'
+            'bundles/app/font-awesome/css/font-awesome.css'
+            'bundles/app/css/sb-admin-4.css'
+            'bundles/app/css/main.css'
+        filter='cssrewrite' %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+        {% endstylesheets %}
+
+        {% block stylesheets %}{% endblock %}
+        <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
+    </head>
+
+    <body class="fixed-nav sticky-footer bg-light" id="page-top">
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top" id="mainNav">
+        <a class="navbar-brand" href="/">EPSI Montpellier - SuiviPPE Professeur</a>
+        <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarResponsive">
+            <ul class="navbar-nav navbar-sidenav" id="exampleAccordion">
+                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Tableau de bord">
+                    <a class="nav-link" href="{{  path("homepage") }}">
+                        <i class="fa fa-fw fa-dashboard"></i>
+                        <span class="nav-link-text">Tableau de bord</span>
+                    </a>
+                </li>
+
+                <!-- STAGE/SITUATIONS -->
+                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Mes activités">
+                    <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseActivites" data-parent="#exampleAccordion">
+                        <i class="fa fa-fw fa-wrench"></i>
+                        <span class="nav-link-text">Les activités</span>
+                    </a>
+                    <ul name="elementUL"  class="sidenav-second-level collapse" id="collapseActivites">
+                        <li name="elementLI1" >
+                            <a name="elementA1" href="{{  path("prof_stage_index") }}">Les stages</a>
+                        </li>
+                        <li name="elementLI2" >
+                            <a name="elementA2" href="{{  path("prof_situation_index") }}">Les situations</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <!-- SYNTHESE -->
+                <li class="nav-item" data-toggle="tooltip" data-placement="right" title="Synthèse">
+                    <a class="nav-link nav-link-collapse collapsed" data-toggle="collapse" href="#collapseSynthese" data-parent="#exampleAccordion">
+                        <i class="fa fa-fw fa-wrench"></i>
+                        <span class="nav-link-text">Synthèse</span>
+                    </a>
+                    <ul class="sidenav-second-level collapse" id="collapseSynthese">
+                        <li>
+                            <a href="{{  path("synthese_index") }}">Bilan individuel</a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ path("logout") }}">
+                        <i class="fa fa-fw fa-sign-out"></i>Déconnexion</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+
+    <div class="content-wrapper">
+        <div class="container-fluid">
+            {% block body %}{% endblock %}
+
+            <script src="https://npmcdn.com/tether@1.2.4/dist/js/tether.min.js"></script>
+            {% javascripts
+                'bundles/app/js/jquery-3.2.1.js'
+                'bundles/app/bootstrap/js/bootstrap.min.js'
+                'bundles/app/js/jquery.easing.min.js'
+                'bundles/app/js/sb-admin.js'
+            %}
+            <script type="text/javascript" src="{{ asset_url }}"></script>
+            {% endjavascripts %}
+
+            {% block javascripts %}{% endblock %}
+        </div>
+    </div>
+    <!-- /.container-fluid-->
+    <!-- /.content-wrapper-->
+    <footer class="sticky-footer">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-3"><a href="mailto:admin.reseau@montpellier-epsi.fr" title="Envoyer un email">Envoyer un email à l'administrateur réseau</a></div>
+                <div class="col-md-3"><a href="http://www.epsi.fr/" target="_blank" title="Ecole informatique">Le site de l'école EPSI</a></div>
+                <div class="col-md-3"><a href="http://ecampusmontpellier.epsi.fr/" target="_blank" title="ECampus Montpellier">ECampus Montpellier</a></div>
+                <div class="col-md-3">1.0.0.0</div>
+            </div>
+        </div>
+    </footer>
+
+    </body>
+</html>
