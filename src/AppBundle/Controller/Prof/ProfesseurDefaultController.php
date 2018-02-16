@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Controller\Teacher;
+namespace AppBundle\Controller\Prof;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;

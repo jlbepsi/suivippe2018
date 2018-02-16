@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends 'base-admin.html.twig' %}
 
 {% block title %}
     Liste des situations
@@ -23,6 +23,7 @@
     <table class="table table-condensed table-bordered table-striped">
         <thead>
         <tr>
+            <th>Vérification</th>
             <th>Libellé</th>
             <th>Descriptif</th>
             <th width="4">E4</th>
@@ -41,10 +42,16 @@
         <tbody>
         {% for utilisateurSituations in utilisateursSituations.utilisateurs %}
             <tr class="tr_caption">
+                <td class="td_warning"><ul>
+                        {% for recommandations in utilisateurSituations.verifierSituation %}
+                            <li>{{ recommandations }} </li>
+                        {% endfor %}
+                </ul></td>
                 <td colspan="9">{{  utilisateurSituations.utilisateur.nomlong }} ({{  utilisateurSituations.utilisateur.numparcours.nomenclature }})</td>
             </tr>
             {% for situation in utilisateurSituations.situations %}
             <tr>
+                <td></td>
                 <td>{{  situation.libelle }}</td>
                 <td>{{  situation.descriptif }}</td>
                 <td>{% if situation.refe4 %} <b>Oui</b> {% else %} Non {% endif %}</td>

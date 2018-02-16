@@ -6,9 +6,9 @@
  * Time: 10:22
  */
 
-namespace AppBundle\Controller\Teacher\Utils;
+namespace AppBundle\Controller\Prof\Utils;
 
-use AppBundle\Controller\Teacher\Utils\UtilisateurSituations;
+use AppBundle\Controller\Prof\Utils\UtilisateurSituations;
 
 class UtilisateursSituations
 {
@@ -22,10 +22,6 @@ class UtilisateursSituations
         return $this->utilisateurs;
     }
 
-    /**
-     * UtilisateursSituations constructor.
-     * @param  \Doctrine\Common\Collections\Collection $situation
-     */
     public function setSituations($situations)
     {
         $count = count($situations);

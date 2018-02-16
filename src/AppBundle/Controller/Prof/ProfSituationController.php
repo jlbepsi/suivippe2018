@@ -1,8 +1,8 @@
 <?php
 
-namespace AppBundle\Controller\Teacher;
+namespace AppBundle\Controller\Prof;
 
-use AppBundle\Controller\Teacher\Utils\UtilisateursSituations;
+use AppBundle\Controller\Prof\Utils\UtilisateursSituations;
 use AppBundle\Manager\SituationManager;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -25,6 +25,6 @@ class ProfSituationController extends Controller
         $utilisateursSituations = new UtilisateursSituations();
         $utilisateursSituations->setSituations($situations);
 
-        return $this->render('admin/situation/index.html.twig', array('utilisateursSituations' => $utilisateursSituations));
+        return $this->render('prof/situation/index.html.twig', array('utilisateursSituations' => $utilisateursSituations));
     }
 }
