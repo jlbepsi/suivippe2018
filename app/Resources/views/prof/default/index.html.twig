@@ -1,0 +1,68 @@
+{% extends 'base-admin.html.twig' %}
+
+{% block title %}
+    Tableau de bord
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Tableau de bord</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+    <!-- /.row -->
+    <div class="row">
+        <!-- stages -->
+        <div class="col-xl-3 col-lg-6">
+            <!-- stages -->
+            <div id="panelStages" class="card" style="width: 20rem;">
+                <div class="card-header text-white bg-primary">
+                    <h4 class="card-title">
+                        <i class="fa fa-list-ul"></i>&nbsp;Stages&nbsp;
+                        <span id="nbStages" class="badge badge-pill badge-light">0</span>
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div  class="card-text">
+                        <span id="loaderStages"><i class="fa fa-spinner fa-spin"></i>Traitement en cours</span>
+
+                    </div>
+                    <a id="btnStageListe" href="{{  path("stage_index") }}" class="btn btn-outline-primary btn-block" style="display: none">Voir la liste</a>
+                    <a id="btnStageAdd" href="{{  path("stage_add") }}" class="btn btn-outline-success btn-block">Ajouter un stage</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- situations -->
+        <div class="col-xl-3 col-lg-6">
+            <!-- stages -->
+            <div id="panelStages" class="card" style="width: 20rem;">
+                <div class="card-header text-white bg-primary">
+                    <h4 class="card-title">
+                        <i class="fa fa-server"></i>&nbsp;Situations&nbsp;
+                        <span id="nbSituations" class="badge badge-pill badge-light">0</span>
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div  class="card-text">
+                        <span id="loaderSituations"><i class="fa fa-spinner fa-spin"></i>Traitement en cours</span>
+
+                    </div>
+                    <a id="btnSituationListe" href="{{  path("situation_index") }}" class="btn btn-outline-primary btn-block" style="display: none">Voir la liste</a>
+                    <a id="btnSituationAdd" href="{{  path("situation_add") }}" class="btn btn-outline-success btn-block">Ajouter une situation</a>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <!-- /.row -->
+{% endblock %}
+
+{% block javascripts %}
+    {% javascripts
+        'bundles/app/js/home.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

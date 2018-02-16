@@ -57,7 +57,7 @@ class Situation
     private $codelocalisation;
 
     /**
-     * @var \Utilisateur
+     * @var \AppBundle\Entity\Utilisateur
      *
      * @ORM\ManyToOne(targetEntity="Utilisateur")
      * @ORM\JoinColumns({
@@ -67,7 +67,7 @@ class Situation
     private $login;
 
     /**
-     * @var \Cadre
+     * @var \AppBundle\Entity\Cadre
      *
      * @ORM\ManyToOne(targetEntity="Cadre")
      * @ORM\JoinColumns({
@@ -77,7 +77,7 @@ class Situation
     private $codecadre;
 
     /**
-     * @var \Langage
+     * @var \AppBundle\Entity\Langage
      *
      * @ORM\ManyToOne(targetEntity="Langage")
      * @ORM\JoinColumns({
@@ -87,7 +87,7 @@ class Situation
     private $codelangage;
 
     /**
-     * @var \Framework
+     * @var \AppBundle\Entity\Framework
      *
      * @ORM\ManyToOne(targetEntity="Framework")
      * @ORM\JoinColumns({
@@ -97,7 +97,7 @@ class Situation
     private $codeframework;
 
     /**
-     * @var \Operatingsystem
+     * @var \AppBundle\Entity\Operatingsystem
      *
      * @ORM\ManyToOne(targetEntity="Operatingsystem")
      * @ORM\JoinColumns({
@@ -107,7 +107,7 @@ class Situation
     private $codeos;
 
     /**
-     * @var \Services
+     * @var \AppBundle\Entity\Services
      *
      * @ORM\ManyToOne(targetEntity="Services")
      * @ORM\JoinColumns({
@@ -117,7 +117,7 @@ class Situation
     private $codeservice;
 
     /**
-     * @var \Situatione4
+     * @var \AppBundle\Entity\Situatione4
      *
      * @ORM\ManyToOne(targetEntity="Situatione4")
      * @ORM\JoinColumns({

@@ -61,28 +61,5 @@ class DefaultController extends Controller
         }
 
         return $this->render('default/profil.html.twig', array('utilisateur' => $utilisateur, 'erreur' => $erreur));
-        /*
-
-        // Création du modèle du formulaire
-        $model = $this->get('form.factory')->create(UtilisateurType::class, $utilisateur);
-
-        // Si l'utilisateur soumet le formulaire
-        if ($request->getMethod() == 'POST')
-        {
-            // L'utilsateur ne peut changer que 3 champs: sexe, datenaissance et adresse
-            $utilisateur->setSexe($request->get('sexe'));
-            // Attachement du modèle à l'objet "request"
-            $model->handleRequest($request);
-            // Validation du modèle
-            if ($model->isValid())
-            {
-                // Validation de l'entité
-                $manager->saveUser($utilisateur);
-            }
-        }
-
-        return $this->render('default/profil.html.twig', array('form' => $model->createView(),
-            'utilisateur' => $utilisateur));
-        */
     }
 }

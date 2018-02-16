@@ -250,6 +250,16 @@ class Utilisateur implements UserInterface
     }
 
     /**
+     * Get Nom + prenom
+     *
+     * @return string
+     */
+    public function getNomlong()
+    {
+        return ucwords($this->nom) . " " . ucfirst($this->prenom);
+    }
+
+    /**
      * Set mail
      *
      * @param string $mail

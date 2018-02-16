@@ -6,6 +6,7 @@ security:
           algorithm: plaintext
 
     role_hierarchy:
+        ROLE_PROF:     ROLE_USER
         ROLE_ADMIN:       ROLE_USER
         ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
@@ -23,19 +24,11 @@ security:
 
         main:
             anonymous: ~
-            # activate different ways to authenticate
-
-            # http_basic: ~
-            # http://symfony.com/doc/current/security.html#a-configuring-how-your-users-will-authenticate
-
-            # form_login: ~
-            # http://symfony.com/doc/current/cookbook/security/form_login_setup.html
-
-            # Notre prider interne
             provider: internal_provider
             form_login:
                 login_path: login
                 check_path: login
+                success_handler: redirect.after.login
             logout:
                 path:   /logout
                 target: /
@@ -44,3 +37,4 @@ security:
     access_control:
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/, roles: ROLE_USER }
+        - { path: ^/prof, roles: ROLE_PROF }

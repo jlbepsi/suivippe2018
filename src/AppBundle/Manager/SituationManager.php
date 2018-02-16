@@ -38,6 +38,11 @@ class SituationManager
         return $this->repositoryActivites;
     }
 
+    public function loadAllSituations()
+    {
+        return  $this->repository->findAll();
+    }
+
     public function loadSituations($login)
     {
         $entities = $this->repository->findBy(array("login" => $login));
