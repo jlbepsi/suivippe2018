@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Controller\Prof\Utils\UtilisateurSituations;
 use AppBundle\Entity\Situatione4;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -47,8 +48,17 @@ class SituationController extends Controller
         // Obtention du parcours
         $idParcours = $user->getNumparcours()->getId();
 
+        $utilisateurSituations = new UtilisateurSituations();
+        $utilisateurSituations->setUtilisateur($user);
+        $utilisateurSituations->setSituation($situations);
+        $recommandations = $utilisateurSituations->verifierSituation();
+        if (count($recommandations) == 0)
+            $recommandations = null;
+
+
         return $this->render('situation/index.html.twig', array('arraySituations' => $situations, 'count' => count($situations),
-            'form' => $form->createView(), 'idParcours' => $idParcours, 'classe' => $user->getClasse()));
+            'form' => $form->createView(), 'idParcours' => $idParcours, 'classe' => $user->getClasse(),
+            'recommandations' => $recommandations));
     }
 
     /**
@@ -135,7 +145,7 @@ class SituationController extends Controller
         $manager = $this->getManager();
         // Obtention de l'utilisateur connecté
         $user = $this->getUser();
-        // Recherche du film
+        // Recherche de la situation
         if (!$situation = $manager->loadSituation($id, $user->getLogin()))
         {
             return $this->render("TwigBundle/views/Exception/error404.html.twig");
@@ -194,11 +204,14 @@ class SituationController extends Controller
         $activites = $manager->loadSituationActivites();
         // Typologies
         $typologies = $manager->loadTypologies();
+        // Commentaires
+        $commentaires = $manager->loadCommentaires($id);
         // Obtention du parcours
-        $idParcours = $user->getNumparcours()->getId();
+        $idParcours = $situation->getLogin()->getNumparcours()->getId();
 
         return $this->render('situation/edit.html.twig', array('form' => $model->createView(),
                                 'situation' => $situation, 'typologies' => $typologies,
+                                'commentaires' => $commentaires,
                                 'activites' => $activites,'idParcours' => $idParcours));
     }
 
@@ -306,7 +319,8 @@ class SituationController extends Controller
             // Obtention de l'utilisateur connecté
             $user = $this->getUser();
             // Recherche de la situation
-            if ($situation = $manager->loadSituation($reference, $user->getLogin())) {
+            if ($situation = $manager->loadSituation($id, $user->getLogin()))
+            {
                 $status = 1;
                 // Ajout de l'activité
                 try

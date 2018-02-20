@@ -507,4 +507,31 @@ class Stage
     {
         return $this->arrayStageActiviteCites;
     }
+
+    /**
+     *
+     * Pour l'analyse des stages par le prof (voir UtilisateurStages)
+     *
+     */
+    /**
+     * @var array
+     */
+    private $arrayIntitulesActivites = null;
+
+    /**
+     * @return array
+     */
+    public function getArrayIntitulesActivites()
+    {
+        return $this->arrayIntitulesActivites;
+    }
+
+    /**
+     * @param $stagesIntitule \AppBundle\Entity\Stageintitule
+     */
+    public function addIntitulesActivites($stagesIntitule)
+    {
+        $info = array('idIntitule' => $stagesIntitule->getIdintitule(), 'nbActivite' => count($stagesIntitule->getIdactivite()));
+        $this->arrayIntitulesActivites[] = $info;
+    }
 }

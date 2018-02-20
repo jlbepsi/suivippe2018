@@ -1,1 +1,96 @@
-Prof stage index
+{% extends 'base-prof.html.twig' %}
+
+{% block title %}
+    Liste des stages
+{% endblock %}
+
+{% block stylesheets %}
+    {% stylesheets
+        'bundles/app/bootstrap/css/bootstrap-datepicker.css'
+        filter='cssrewrite' %}
+        <link rel="stylesheet" href="{{ asset_url }}" />
+    {% endstylesheets %}
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h1 class="page-header">Liste des stages</h1>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+
+    <table class="table table-condensed table-bordered table-striped">
+        <thead>
+        <tr>
+            <th width="24%">Vérification</th>
+            <th width="20">Année</th>
+            <th>Libellé</th>
+            <th>Descriptif</th>
+            <th>Intitulés et activités</th>
+            <th></th>
+        </tr>
+
+        </thead>
+        <tbody>
+        {% for utilisateurStages in utilisateursStages.utilisateurs %}
+            {% set nbStages = utilisateurStages.stages|length %}
+            {% set nbRecommendations = (utilisateurStages.verifierStage is null ? 0:1) %}
+            <tr class='tr_caption'>
+                <td colspan="6" {{ (nbStages==0 ? "class='td_warning'" : "") }}>
+                    {%  if nbStages == 0 %}
+                        <i class="fa fa-exclamation-triangle fa-2x"></i>&nbsp;{{  utilisateurStages.utilisateur.nomlong }} ({{  utilisateurStages.utilisateur.numparcours.nomenclature }}): AUCUN STAGE
+                    {% else %}
+                        {{  utilisateurStages.utilisateur.nomlong }} ({{  utilisateurStages.utilisateur.numparcours.nomenclature }})
+                    {% endif %}
+                </td>
+            </tr>
+            {%  set cptStage = 0 %}
+            {% for stage in utilisateurStages.stages %}
+                {%  set cptStage = cptStage +1 %}
+                <tr>
+                    {% if cptStage == 1 %}
+                        <td class='td_warning' rowspan='{{ nbStages }}'>{% if nbRecommendations > 0 %}<ul>
+                            {% for recommandations in utilisateurStages.verifierStage %}
+                                <li>{{ recommandations }} </li>
+                            {% endfor %}
+                            </ul>{% endif %}
+                        </td>
+                    {% endif %}
+                    <td>{{ stage.annee }}</td>
+                    <td>{{ stage.libellecourt }}</td>
+                    <td>{{ stage.descriptif }}</td>
+                    {% if stage.arrayintitulesactivites is null %}
+                    <td class='td_warning'>Aucun intitulé ni activités</td>
+                    {%  else %}
+                    <td>
+                        <ul>
+                        {% for arrayIntitulesActivites in stage.arrayintitulesactivites %}
+                            {% set nbActivite = arrayIntitulesActivites["nbActivite"] %}
+                            <li {{ (nbActivite < 2 ? "class='li_warning'" : "")  }}>Intitulé avec {{ nbActivite }} activités</li>
+                        {% endfor %}
+                        </ul>
+                    </td>
+                    {% endif %}
+                    <td>
+                        <a class="btn btn-primary btn-sm" href="{{  path('prof_stage_edit', {'id': stage.id, 'user': utilisateurStages.utilisateur.login}) }}" >
+                            <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;Voir</a>
+                    </td>
+                </tr>
+            {% endfor %}
+        {% else %}
+            <tr><td colspan="6">Aucune stage n'a été trouvé.</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}
+
+{% block javascripts %}
+    {% javascripts
+        'bundles/app/bootstrap/js/bootstrap-datepicker.js'
+        'bundles/app/bootstrap/js/bootstrap-datepicker.fr.js'
+    %}
+        <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

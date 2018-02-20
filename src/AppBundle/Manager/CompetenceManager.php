@@ -15,6 +15,9 @@ use AppBundle\Entity\CompetenceRepository;
 class CompetenceManager
 {
     protected $entityManager;
+    /**
+     * @var CompetenceRepository
+     */
     protected $repository;
 
     public function __construct(EntityManager $em)

@@ -136,7 +136,7 @@ $(function () {
 
         $('#newIntituleModal').modal('hide');
         // Bouton grisé
-        $('btnNewIntituleModal').attr("disabled", true);
+        $('#btnNewIntituleModal').attr("disabled", true);
 
         // Traitement
         $.ajax({
@@ -165,7 +165,7 @@ $(function () {
                 }
                 else {
                     divMessage.attr("class", 'label label-danger');
-                    $('btnNewIntituleModal').attr("disabled", false);
+                    $('#btnNewIntituleModal').attr("disabled", false);
                 }
                 divMessage
                     .text(data.message)
@@ -174,7 +174,7 @@ $(function () {
             error:function(){
                 alert("Erreur d'accès à la méthode de suppression");
                 // Le bouton n'est pas grisé ...
-                $('btnNewIntituleModal').attr("disabled", false);
+                $('#btnNewIntituleModal').attr("disabled", false);
             }
         });
     });

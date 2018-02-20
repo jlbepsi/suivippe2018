@@ -1,4 +1,4 @@
-{% extends 'base-admin.html.twig' %}
+{% extends 'base-prof.html.twig' %}
 
 {% block title %}
     Tableau de bord
@@ -13,35 +13,15 @@
     </div>
     <!-- /.row -->
     <div class="row">
-        <!-- stages -->
-        <div class="col-xl-3 col-lg-6">
-            <!-- stages -->
-            <div id="panelStages" class="card" style="width: 20rem;">
-                <div class="card-header text-white bg-primary">
-                    <h4 class="card-title">
-                        <i class="fa fa-list-ul"></i>&nbsp;Stages&nbsp;
-                        <span id="nbStages" class="badge badge-pill badge-light">0</span>
-                    </h4>
-                </div>
-                <div class="card-body">
-                    <div  class="card-text">
-                        <span id="loaderStages"><i class="fa fa-spinner fa-spin"></i>Traitement en cours</span>
-
-                    </div>
-                    <a id="btnStageListe" href="{{  path("stage_index") }}" class="btn btn-outline-primary btn-block" style="display: none">Voir la liste</a>
-                    <a id="btnStageAdd" href="{{  path("stage_add") }}" class="btn btn-outline-success btn-block">Ajouter un stage</a>
-                </div>
-            </div>
-        </div>
 
         <!-- situations -->
         <div class="col-xl-3 col-lg-6">
-            <!-- stages -->
-            <div id="panelStages" class="card" style="width: 20rem;">
+            <div class="card" style="width: 20rem;">
                 <div class="card-header text-white bg-primary">
                     <h4 class="card-title">
-                        <i class="fa fa-server"></i>&nbsp;Situations&nbsp;
-                        <span id="nbSituations" class="badge badge-pill badge-light">0</span>
+                        <i class="fa fa-server"></i>&nbsp;
+                        <span id="nbSituations" class="badge badge-pill badge-light">0</span>&nbsp;Situations
+                        <br />dont&nbsp;<span id="nbCommentaires" class="badge badge-pill badge-success">0</span>&nbsp;commentées
                     </h4>
                 </div>
                 <div class="card-body">
@@ -49,8 +29,7 @@
                         <span id="loaderSituations"><i class="fa fa-spinner fa-spin"></i>Traitement en cours</span>
 
                     </div>
-                    <a id="btnSituationListe" href="{{  path("situation_index") }}" class="btn btn-outline-primary btn-block" style="display: none">Voir la liste</a>
-                    <a id="btnSituationAdd" href="{{  path("situation_add") }}" class="btn btn-outline-success btn-block">Ajouter une situation</a>
+                    <a id="btnSituationListe" href="{{  path("prof_situation_index") }}" class="btn btn-outline-primary btn-block" style="display: none">Voir la liste</a>
                 </div>
             </div>
         </div>
@@ -61,7 +40,7 @@
 
 {% block javascripts %}
     {% javascripts
-        'bundles/app/js/home.js'
+        'bundles/app/js/prof_home.js'
     %}
         <script type="text/javascript" src="{{ asset_url }}"></script>
     {% endjavascripts %}

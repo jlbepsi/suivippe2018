@@ -8,8 +8,11 @@
 
 namespace AppBundle\Manager;
 
+use AppBundle\Controller\Prof\Utils\UtilisateursSituations;
+use AppBundle\Entity\Commentaire;
 use AppBundle\Entity\Situation;
 use AppBundle\Entity\Situatione4;
+use AppBundle\Entity\Utilisateur;
 use AppBundle\Form\SituationSearchCriteria;
 use Doctrine\ORM\EntityManager;
 
@@ -18,12 +21,14 @@ class SituationManager
 {
     protected $entityManager;
     protected $repository;
+    protected $repositoryCommentaires;
     protected $repositoryActivites;
 
     public function __construct(EntityManager $em)
     {
         $this->entityManager = $em;
         $this->repository = $em->getRepository('AppBundle:Situation');
+        $this->repositoryCommentaires = $em->getRepository('AppBundle:Commentaire');
         $this->repositoryActivites = null;
     }
 
@@ -38,9 +43,25 @@ class SituationManager
         return $this->repositoryActivites;
     }
 
-    public function loadAllSituations()
+    public function loadUtilisateursSituations()
     {
-        return  $this->repository->findAll();
+        /**
+         *
+         * SELECT * FROM utilisateur us LEFT JOIN situation si ON (si.login = us.login) WHERE us.classe ='B1' OR us.classe ='B2'
+         *
+         */
+
+        $utilisateursSituations = new UtilisateursSituations();
+        // On charge toutes les situations
+        $situations = $this->repository->findAll();
+        $utilisateursSituations->setSituations($situations);
+
+        // On charge tous les utilisateurs qui n'ont pas de situations
+        $repositoryUtilisateur = $this->entityManager->getRepository('AppBundle:Utilisateur');
+        $utilisateurs = $repositoryUtilisateur->findEtudiants();
+        $utilisateursSituations->setUtilisateursSansSituation($utilisateurs);
+
+        return $utilisateursSituations;
     }
 
     public function loadSituations($login)
@@ -77,6 +98,16 @@ class SituationManager
             ->getResult();
     }
 
+    public function countAllSituations()
+    {
+        $qb = $this->repository->createQueryBuilder('s');
+        $qb->select('COUNT(s)');
+
+        return $qb
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
     public function countSituations($login)
     {
         $qb = $this->repository->createQueryBuilder('s');
@@ -97,6 +128,17 @@ class SituationManager
     public function loadSituation($situationId, $login)
     {
         return $this->repository->findOneBy(array("reference" => $situationId, "login" => $login));
+    }
+
+    /**
+     * Load Situation entity
+     *
+     * @param $situationId
+     * @return Situation|null
+     */
+    public function loadSingleSituation($situationId)
+    {
+        return $this->repository->find($situationId);
     }
 
     /**
@@ -204,5 +246,92 @@ class SituationManager
                 $situation->addCode($typologie);
             }
         }
+    }
+
+    /*
+     *
+     * COMMENTAIRES
+     *
+     *
+     */
+
+    /**
+     * Load Commentaire entities
+     */
+
+    /**
+     * Load Commentaire entities
+     */
+    public function countCommentaires($login)
+    {
+        $qb = $this->repositoryCommentaires->createQueryBuilder('c');
+        $qb->select('COUNT(c)');
+        $qb->where('c.loginprofesseur=:profLogin');
+
+        return $qb
+            ->getQuery()
+            ->setParameter(":profLogin", $login)
+            ->getSingleScalarResult();
+    }
+
+    public function loadCommentaires($situationId)
+    {
+        //return $this->repositoryCommentaires->findBy(array("refsituation" => $situationId));
+
+        $qb = $this->repositoryCommentaires->createQueryBuilder('c');
+        $qb->where('c.refsituation=:refSituation')
+            ->orderBy('c.datecommentaire', 'DESC');
+
+        return $qb
+            ->getQuery()
+            ->setParameter(":refSituation", $situationId)
+            ->getResult();
+    }
+
+    public function loadCommentaire($id)
+    {
+        return $this->repositoryCommentaires->find($id);
+    }
+
+    /**
+     * @param Situation $situation
+     * @param $commentaire string
+     * @param Utilisateur $prof
+     * @param $date \DateTime
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function addSituationCommentaire(Situation $situation, $commentaire, Utilisateur $prof, $date)
+    {
+        $repository = $this->repositoryCommentaires;
+        $entity = new Commentaire();
+        $entity->setRefsituation($situation);
+        $entity->setCommentaire($commentaire);
+        $entity->setLoginprofesseur($prof);
+        $entity->setDatecommentaire($date);
+
+        $this->entityManager->persist($entity);
+        $this->entityManager->flush();
+
+        return $entity->getNumero();
+    }
+
+    /**
+     * @param \AppBundle\Entity\Commentaire $commentaire
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function saveCommentaire($commentaire)
+    {
+        $this->entityManager->persist($commentaire);
+        $this->entityManager->flush();
+    }
+
+    /**
+     * @param \AppBundle\Entity\Commentaire $commentaire
+     * @throws \Doctrine\ORM\OptimisticLockException
+     */
+    public function removeCommentaire($commentaire)
+    {
+        $this->entityManager->remove($commentaire);
+        $this->entityManager->flush();
     }
 }

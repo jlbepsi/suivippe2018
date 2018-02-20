@@ -1,4 +1,4 @@
-{% extends 'base-admin.html.twig' %}
+{% extends 'base-prof.html.twig' %}
 
 {% block title %}
     Liste des situations
@@ -23,7 +23,7 @@
     <table class="table table-condensed table-bordered table-striped">
         <thead>
         <tr>
-            <th>Vérification</th>
+            <th width="24%"></th>
             <th>Libellé</th>
             <th>Descriptif</th>
             <th width="4">E4</th>
@@ -41,38 +41,50 @@
         </thead>
         <tbody>
         {% for utilisateurSituations in utilisateursSituations.utilisateurs %}
+            {% set nbSituations = utilisateurSituations.situations|length %}
+            {% set nbRecommendations = (utilisateurSituations.verifierSituation is null ? 0:1) %}
             <tr class="tr_caption">
-                <td class="td_warning"><ul>
-                        {% for recommandations in utilisateurSituations.verifierSituation %}
-                            <li>{{ recommandations }} </li>
-                        {% endfor %}
-                </ul></td>
-                <td colspan="9">{{  utilisateurSituations.utilisateur.nomlong }} ({{  utilisateurSituations.utilisateur.numparcours.nomenclature }})</td>
+                <td colspan="10" {{ (nbSituations==0 ? "class='td_warning'" : "") }}>
+                    {%  if nbSituations == 0 %}
+                        <i class="fa fa-exclamation-triangle fa-2x"></i>&nbsp;{{  utilisateurSituations.utilisateur.nomlong }} ({{  utilisateurSituations.utilisateur.numparcours.nomenclature }}): AUCUNE SITUATION
+                    {% else %}
+                        {{  utilisateurSituations.utilisateur.nomlong }} ({{  utilisateurSituations.utilisateur.numparcours.nomenclature }})
+                    {% endif %}
+                </td>
             </tr>
+            {%  set cptSituation = 0 %}
             {% for situation in utilisateurSituations.situations %}
-            <tr>
-                <td></td>
-                <td>{{  situation.libelle }}</td>
-                <td>{{  situation.descriptif }}</td>
-                <td>{% if situation.refe4 %} <b>Oui</b> {% else %} Non {% endif %}</td>
+                {%  set cptSituation = cptSituation +1 %}
+                <tr>
+                    {% if cptSituation == 1 %}
+                        <td class='td_warning' rowspan='{{ nbSituations }}'>{% if nbRecommendations > 0 %}<ul>
+                                {% for recommandations in utilisateurSituations.verifierSituation %}
+                                    <li>{{ recommandations }} </li>
+                                {% endfor %}
+                                </ul>{% endif %}
+                        </td>
+                    {% endif %}
+                    <td>{{  situation.libelle }}</td>
+                    <td>{{  situation.descriptif }}</td>
+                    <td>{% if situation.refe4 %} <b>Oui</b> {% else %} Non {% endif %}</td>
 
-                {%  set activiteCount = situation.activiteCount %}
-                <td {% if activiteCount==0 %} class="nonnote" {% endif %}>{{ activiteCount }}
-                </td>
-                <!-- SISR -->
-                <td>{%  if situation.codeos %} {{  situation.codeos.libelle }} {% else %} - {% endif %}</td>
-                <td>{%  if situation.codeservice %} {{  situation.codeservice.libelle }} {% else %} - {% endif %}</td>
-                <!-- SLAM -->
-                <td>{%  if situation.codelangage %} {{  situation.codelangage.libelle }} {% else %} - {% endif %}</td>
-                <td>{%  if situation.codeframework %} {{  situation.codeframework.libelle }} {% else %} - {% endif %}</td>
-                <td>
-                    <a class="btn btn-primary btn-sm" href="{{  path('situation_edit', {'id': situation.reference}) }}" >
-                        <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;Modifier</a>
-                </td>
-            </tr>
+                    {%  set activiteCount = situation.activiteCount %}
+                    <td {% if activiteCount==0 %} class="nonnote" {% endif %}>{{ activiteCount }}
+                    </td>
+                    <!-- SISR -->
+                    <td>{%  if situation.codeos %} {{  situation.codeos.libelle }} {% else %} - {% endif %}</td>
+                    <td>{%  if situation.codeservice %} {{  situation.codeservice.libelle }} {% else %} - {% endif %}</td>
+                    <!-- SLAM -->
+                    <td>{%  if situation.codelangage %} {{  situation.codelangage.libelle }} {% else %} - {% endif %}</td>
+                    <td>{%  if situation.codeframework %} {{  situation.codeframework.libelle }} {% else %} - {% endif %}</td>
+                    <td>
+                        <a class="btn btn-primary btn-sm" href="{{  path('prof_situation_edit', {'id': situation.reference, 'user': utilisateurSituations.utilisateur.login}) }}" >
+                            <i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;Voir</a>
+                    </td>
+                </tr>
             {% endfor %}
         {% else %}
-            <tr><td colspan="9">Aucune situation n'a été trouvé.</td></tr>
+            <tr><td colspan="10">Aucune situation n'a été trouvé.</td></tr>
         {% endfor %}
         </tbody>
     </table>

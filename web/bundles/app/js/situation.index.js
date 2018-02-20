@@ -65,28 +65,4 @@ $(function () {
             });
         }
     }
-
-    function displaySituationsAnalysis() {
-        var message = new Array();
-        var nb = parseInt($("#situationAnalysys_nbE4").val());
-        if (nb < 2) {
-            message.push("Vous n'avez pas les 2 situations E4 obligatoires<br />");
-        }
-        nb = parseInt($("#situationAnalysys_nbSansActivites").val());
-        if (nb > 0) {
-            message.push("Vous avez des situations sans activités");
-        }
-        var count = message.length;
-        if (count > 0) {
-            var i, msg = "<i class='fa fa-exclamation-triangle'></i>&nbsp;<b>Veuillez corriger vos erreurs !</b><ul>";
-            for (i = 0; i < count; i++) {
-                msg += "<li>" + message[i] + "</li>";
-            }
-            msg += "</ul>";
-            $("#analysys-message").html(msg);
-            $("#analysys-message").show();
-        }
-    }
-
-    displaySituationsAnalysis();
 });

@@ -12,16 +12,22 @@ use AppBundle\Controller\Prof\Utils\UtilisateurSituations;
 
 class UtilisateursSituations
 {
+    /**
+     * @var UtilisateurSituations[]
+     */
     private $utilisateurs = array();
 
     /**
-     * @return mixed
+     * @return UtilisateurSituations[]
      */
     public function getUtilisateurs()
     {
         return $this->utilisateurs;
     }
 
+    /**
+     * @param $situations \AppBundle\Entity\Situation[]
+     */
     public function setSituations($situations)
     {
         $count = count($situations);
@@ -42,5 +48,36 @@ class UtilisateursSituations
 
             $this->utilisateurs[] = $utilisateurSituations;
         }
+    }
+
+    /**
+     * @param $utilisateurs \AppBundle\Entity\Utilisateur[]
+     */
+    public function setUtilisateursSansSituation($utilisateurs)
+    {
+        foreach ($utilisateurs as $utilisateur)
+        {
+            if (! $this->findLogin($utilisateur->getLogin()))
+            {
+                // Ajoute l'utilisateur sans situations
+                $utilisateurSituations = new UtilisateurSituations();
+                $utilisateurSituations->setUtilisateur($utilisateur);
+                $this->utilisateurs[] = $utilisateurSituations;
+            }
+        }
+    }
+
+    /**
+     * @param $login string
+     * @return bool
+     */
+    private function findLogin($login)
+    {
+        foreach ($this->utilisateurs as $utilisateurSituations)
+        {
+            if ($utilisateurSituations->getUtilisateur()->getLogin() === $login)
+                return true;
+        }
+        return false;
     }
 }

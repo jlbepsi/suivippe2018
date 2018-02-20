@@ -9,6 +9,7 @@
 namespace AppBundle\Manager;
 
 
+use AppBundle\Controller\Prof\Utils\UtilisateursStages;
 use AppBundle\Entity\Stage;
 use AppBundle\Entity\Stageintitule;
 use AppBundle\Entity\Stageintituleactivite;
@@ -30,6 +31,9 @@ class StageManager
         $this->repositoryActivites = null;
     }
 
+    /**
+     * @return \Doctrine\ORM\EntityRepository|null
+     */
     private function getRepositoryActivites()
     {
         if ($this->repositoryActivites == null)
@@ -37,6 +41,9 @@ class StageManager
         return $this->repositoryActivites;
     }
 
+    /**
+     * @return \Doctrine\ORM\EntityRepository
+     */
     private function getRepositoryStageIntituleActivite()
     {
         if ($this->repositoryStageIntituleActivite == null)
@@ -45,18 +52,26 @@ class StageManager
     }
 
     /**
-     * @param $login string
+     * @return \AppBundle\Entity\Stage[]
+     */
+    public function loadAllStages()
+    {
+        return $this->repository->findAll();
+    }
+
+    /**
+     * @param $login
+     * @return \AppBundle\Entity\Stage[]
      */
     public function loadStages($login)
     {
-        $entities = $this->repository->findBy(array("login" => $login));
-        return $entities;
+        return $this->repository->findBy(array("login" => $login));
     }
 
     /**
      * @param $id integer
      * @param $login string
-     * @return Stage|null|object
+     * @return Stage|null
      */
     public function loadStage($id, $login)
     {
@@ -64,8 +79,17 @@ class StageManager
     }
 
     /**
+     * @param $id integer
+     * @return Stage|null
+     */
+    public function loadSingleStage($id)
+    {
+        return $this->repository->find($id);
+    }
+
+    /**
      * @param \AppBundle\Entity\Utilisateur $login
-     * @return mixed
+     * @return integer
      */
     public function countStages(Utilisateur $login)
     {
@@ -97,6 +121,19 @@ class StageManager
      * Intitule
      *
      **/
+
+    /**
+     * @param $idStage integer
+     * @return Stageintitule[]|array
+     */
+    public function loadStagesIntitules()
+    {
+        if ($this->repositoryStageintitule == null)
+            $this->repositoryStageintitule = $this->entityManager->getRepository('AppBundle:Stageintitule');
+
+        return $this->repositoryStageintitule->findAll();
+    }
+
     /**
      * @param $idStage integer
      * @return Stageintitule[]|array
@@ -111,7 +148,7 @@ class StageManager
 
     /**
      * @param \AppBundle\Entity\Utilisateur $login
-     * @return array
+     * @return Stageintitule[]|array
      */
     public function loadStageIntitulesUser(Utilisateur $login)
     {
@@ -238,6 +275,10 @@ class StageManager
      * TYPOLOGIE
      *
      */
+
+    /**
+     * @return \AppBundle\Entity\Typologie[]
+     */
     public function loadTypologies()
     {
         $repository = $this->entityManager->getRepository('AppBundle:Typologie');
@@ -247,7 +288,7 @@ class StageManager
 
     /**
      * @param \AppBundle\Entity\Stage $stage
-     * @param $arrayIdTypologies
+     * @param $arrayIdTypologies integer[]
      */
     public function saveTypologies(Stage $stage, $arrayIdTypologies)
     {
@@ -263,6 +304,42 @@ class StageManager
                 $stage->addCode($typologie);
             }
         }
+    }
+
+    /**
+     *
+     * PROF
+     *
+     */
+
+    /**
+     * @return UtilisateursStages
+     */
+    public function loadUtilisateursStages()
+    {
+        /**
+         *
+         * SELECT * FROM utilisateur us LEFT JOIN stage st ON (st.login = us.login) WHERE us.classe ='B1' OR us.classe ='B2'
+         *
+         */
+
+        $utilisateursStages = new UtilisateursStages();
+        // On charge toutes les stages
+        $stages = $this->loadAllStages();
+        $utilisateursStages->setStages($stages);
+        // On charge toutes les intitulés de stage
+        $stagesIntitules = $this->loadStagesIntitules();
+        foreach ($stagesIntitules as $stagesIntitule) {
+            $utilisateursStages->addStageIntitule($stagesIntitule);
+        }
+
+
+        // On charge tous les utilisateurs qui n'ont pas de situations
+        $repositoryUtilisateur = $this->entityManager->getRepository('AppBundle:Utilisateur');
+        $utilisateurs = $repositoryUtilisateur->findEtudiants();
+        $utilisateursStages->setUtilisateursSansStage($utilisateurs);
+
+        return $utilisateursStages;
     }
 
 }

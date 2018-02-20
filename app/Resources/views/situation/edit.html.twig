@@ -28,7 +28,7 @@
             <a class="nav-link" id="activite-tab" href="#activite" aria-controls="activite" role="tab" data-toggle="tab">Activités</a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" id="messages-tab" href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a>
+            <a class="nav-link" id="commentaires-tab" href="#commentaires" aria-controls="commentaires" role="tab" data-toggle="tab">Commentaires</a>
         </li>
     </ul>
 
@@ -253,7 +253,28 @@
             </table>
         </div>
 
-        <div role="tabpanel" class="tab-pane" id="messages">Aucun message</div>
+        <div role="tabpanel" class="tab-pane" id="commentaires">
+            <table class="table table-bordered table-striped table-condensed">
+                <thead>
+                <tr>
+                    <th width='100'>Date</th>
+                    <th width='220'>Professeur</th>
+                    <th>Commentaire</th>
+                </tr>
+                </thead>
+                <tbody>
+                {%  for commentaire in commentaires %}
+                    <tr>
+                        <td>{{ commentaire.datecommentaire | date("d/m/Y") }}</td>
+                        <td>{{ commentaire.loginprofesseur.nomlong }}</td>
+                        <td>{{ commentaire.commentaire }}</td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="3">Aucun commentaire</td></tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <input type="hidden" id="situationReference" value="{{ situation.reference }}" />

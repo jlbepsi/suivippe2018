@@ -1,0 +1,216 @@
+{% extends 'base-prof.html.twig' %}
+
+{% block title %}
+    Modification de la situation
+{% endblock %}
+
+
+{% block body %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h2 class="page-header">
+                    Commentaire sur la situation '{{ situation.libelle }}'
+            </h2>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+
+    <p>
+        <a class="btn btn-outline-primary" href="{{  path('prof_situation_index') }}">Retourner à la liste</a>
+    </p>
+
+
+    <table class="table table-bordered table-condensed">
+        <thead>
+        <tr>
+            <th>Situation</th>
+            <th>Activités</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>
+                <form>
+                    <div class="form-row">
+                        <div class="form-group col-md-2">
+                            <label>Parcours: </label>
+                            <input class="form-control" value="{% if idParcours == 1 %} Développeur {% elseif idParcours == 2 %} SISR {% else %} Aucun {% endif %}" disabled />
+                        </div>
+                        <div class="form-group col-md-4">
+                            <label for="appbundle_situation_libelle">Libellé: </label>
+                            <input class="form-control" value="{{ situation.libelle }}" disabled />
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="appbundle_situation_descriptif">Descriptif: </label>
+                            <input class="form-control" value="{{ situation.descriptif }}" disabled />
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        {% set type = situation.typeSituation %}
+                        {%  if type == 1 %} <!-- Réseau -->
+                            <div class="form-group col-md-2">
+                                <label>Type de situation: </label>
+                                <input class="form-control" value="Réseau" disabled />
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Système d'exploitation: </label>
+                                <input class="form-control" value="{% if situation.codeos %}{{ situation.codeos.libelle }}{% endif %}" disabled />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="appbundle_situation_codeframework">Service: </label>
+                                <input class="form-control" value="{% if situation.codeservice %}{{ situation.codeservice.libelle }}{% endif %}" disabled />
+                            </div>
+                        {% else %}
+                            <div class="form-group col-md-2">
+                                <label>Type: </label>
+                                <input class="form-control" value="Dév." disabled />
+                            </div>
+                            <div class="form-group col-md-4">
+                                <label>Langage: </label>
+                                <input class="form-control" value="{% if situation.codelangage %}{{ situation.codelangage.libelle }}{% endif %}" disabled />
+                            </div>
+                            <div class="form-group col-md-6">
+                                <label for="appbundle_situation_codeframework">Framework: </label>
+                                <input class="form-control" value="{% if situation.codeframework %}{{ situation.codeframework.libelle }}{% endif %}" disabled />
+                            </div>
+                        {% endif %}
+                    </div>
+
+                    {%  if situation.login.classe == "B2" %}
+                        {% set isSituationE4 = (situation.refe4 != null) %}
+                        {% if isSituationE4 %}
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    <label>E4: </label>
+                                    <input class="form-control" value="OUI" disabled />
+                                </div>
+                                <div class="form-group col-md-7">
+                                    <label>Type: </label>
+                                    <input class="form-control" value="{%  if situation.refe4.competenceapplication == 1 %}Programmation Objet
+                                    {% elseif situation.refe4.competenceapplication == 2 %}Site Web
+                                    {% elseif situation.refe4.competenceapplication == 3 %}Application Mobile
+                                {% endif %}" disabled />
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label>Base de données: </label>
+                                    <input class="form-control" value="{%  if situation.refe4.competencesgbd == 1 %}Oui{% else %}Non{% endif %}" disabled />
+                                </div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    <label>Effectué: </label>
+                                    <input class="form-control" value="{%  if situation.refe4.competencesgbd == 1 %}Seul{% else %}Equipe{% endif %}" disabled />
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label>Contexte: </label>
+                                    <input class="form-control" value="{{ situation.refe4.contexte }}" disabled />
+                                </div>
+                                <div class="form-group col-md-6">
+                                    <label>Réalisation: </label>
+                                    <input class="form-control" value="{{ situation.refe4.realisation }}" disabled />
+                                </div>
+                            </div>
+                        {% else %}
+                            <div class="form-row">
+                                <div class="form-group col-md-2">
+                                    <label>Situation E4: </label>
+                                    <input class="form-control" value="NON" disabled />
+                                </div>
+                            </div>
+                        {% endif %}
+                    {% endif %}
+                </form>
+            </td>
+            <td>
+                <ul>
+                {% for activite in situation.idactivite %}
+                    <li>{{ activite.nomenclature }}-{{ activite.libelle }}</li>
+                {% endfor %}
+                </ul>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="newCommentaireModal" tabindex="-1" role="dialog" aria-labelledby="newCommentaireModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="newCommentaireModalLabel">Ajouter un commentaire</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form>
+                        <div class="form-group">
+                            <label for="modalCommentaire">Commentaire</label>
+                            <textarea class="form-control" id="modalCommentaire" placeholder="Commentaire de la situation" ></textarea>
+                            <input type="hidden" id="modalIdCommentaire" value="0" />
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                    <button type="button" id="btnAjouterCommentaireModal" class="btn btn-primary">Valider</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <h4>Liste des commentaires</h4>
+    <p>
+        <button id="btnNewCommentaireModal" type="button" class="btn btn-primary btn-sm" data-toggle="modal">
+            Ajouter un commentaire
+        </button>
+    </p>
+    <table id="listeCommentaires" class="table table-bordered table-striped table-condensed">
+        <thead>
+        <tr>
+            <th width='100'>Date</th>
+            <th width='220'>Professeur</th>
+            <th>Commentaire</th>
+            <th width='240'></th>
+        </tr>
+        </thead>
+        <tbody>
+        {%  for commentaire in commentaires %}
+            <tr id="{{ commentaire.numero }}">
+                <td id='date'>{{ commentaire.datecommentaire | date("d/m/Y") }}</td>
+                <td>{{ commentaire.loginprofesseur.nomlong }}</td>
+                <td id='commentaire'>{{ commentaire.commentaire }}</td>
+                <td>
+                    {% if loginProf == commentaire.loginprofesseur.username %}
+                        <button id="btnModifyCommentaire" name="btnModifyCommentaire" type="button" class="btn btn-sm btn-primary" aria-label="Modifier le commentaire">
+                            <i class="fa fa-edit" aria-hidden="true"></i>&nbsp;Modifier
+                        </button>
+                        <button id="btnDeleteCommentaire" name="btnDeleteCommentaire" type="button" class="btn btn-sm btn-danger" aria-label="Supprimer le commentaire">
+                            <i class="fa fa-trash" aria-hidden="true"></i>&nbsp;Supprimer
+                        </button>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr><td colspan="4">Aucun commentaire</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <input type="hidden" id="situationReference" value="{{ situation.reference }}" />
+
+
+{% endblock %}
+
+{% block javascripts %}
+    {% javascripts
+    'bundles/app/bootstrap/js/bootstrap-datepicker.js'
+    'bundles/app/bootstrap/js/bootstrap-datepicker.fr.js'
+    'bundles/app/js/prof_situation.edit.js'
+    %}
+    <script type="text/javascript" src="{{ asset_url }}"></script>
+    {% endjavascripts %}
+{% endblock %}

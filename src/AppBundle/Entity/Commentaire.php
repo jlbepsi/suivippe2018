@@ -36,7 +36,7 @@ class Commentaire
     private $datecommentaire;
 
     /**
-     * @var \Situation
+     * @var \AppBundle\Entity\Situation
      *
      * @ORM\ManyToOne(targetEntity="Situation")
      * @ORM\JoinColumns({
@@ -46,7 +46,7 @@ class Commentaire
     private $refsituation;
 
     /**
-     * @var \Utilisateur
+     * @var \AppBundle\Entity\Utilisateur
      *
      * @ORM\ManyToOne(targetEntity="Utilisateur")
      * @ORM\JoinColumns({

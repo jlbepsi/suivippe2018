@@ -20,14 +20,19 @@ tfoot {font-style:italic;}
 caption {background:#eee;}
 
 
-table.table.table-striped tr.tr_caption
+table.table tr.tr_caption
 {
     color: #495057;
     background-color: #e9ecef;
     border-color: #e9ecef;
     font-weight: bold;
 }
-table.table.table-striped td.td_warning
+table.table td.td_warning
+{
+    color: #ac2925;
+    font-weight: bold;
+}
+li.li_warning
 {
     color: #ac2925;
     font-weight: bold;
