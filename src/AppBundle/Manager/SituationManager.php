@@ -43,7 +43,11 @@ class SituationManager
         return $this->repositoryActivites;
     }
 
-    public function loadUtilisateursSituations()
+    /**
+     * @param $analyseSituationActivite integer
+     * @return UtilisateursSituations
+     */
+    public function loadUtilisateursSituations($analyseSituationActivite)
     {
         /**
          *
@@ -52,6 +56,7 @@ class SituationManager
          */
 
         $utilisateursSituations = new UtilisateursSituations();
+        $utilisateursSituations->setAnalyseSituationActivite($analyseSituationActivite);
         // On charge toutes les situations
         $situations = $this->repository->findAll();
         $utilisateursSituations->setSituations($situations);

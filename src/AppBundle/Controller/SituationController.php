@@ -48,7 +48,9 @@ class SituationController extends Controller
         // Obtention du parcours
         $idParcours = $user->getNumparcours()->getId();
 
+        $analyseSituationActivite = $this->getParameter('analyseSituationActivite');
         $utilisateurSituations = new UtilisateurSituations();
+        $utilisateurSituations->setAnalyseSituationActivite($analyseSituationActivite);
         $utilisateurSituations->setUtilisateur($user);
         $utilisateurSituations->setSituation($situations);
         $recommandations = $utilisateurSituations->verifierSituation();
@@ -209,9 +211,14 @@ class SituationController extends Controller
         // Obtention du parcours
         $idParcours = $situation->getLogin()->getNumparcours()->getId();
 
+        $recommandations = null;
+        $analyseSituationActivite = $this->getParameter('analyseSituationActivite');
+        if (count($situation->getIdactivite()) < $analyseSituationActivite) {
+            $recommandations = array('Une situation doit avoir '. $analyseSituationActivite .' activités minimum');
+        }
         return $this->render('situation/edit.html.twig', array('form' => $model->createView(),
                                 'situation' => $situation, 'typologies' => $typologies,
-                                'commentaires' => $commentaires,
+                                'commentaires' => $commentaires, 'recommandations' => $recommandations,
                                 'activites' => $activites,'idParcours' => $idParcours));
     }
 

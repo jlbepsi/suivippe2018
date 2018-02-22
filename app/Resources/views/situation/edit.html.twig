@@ -19,6 +19,25 @@
         <a class="btn btn-outline-primary" href="{{  path('situation_index') }}">Retourner à la liste</a>
     </p>
 
+    {% if recommandations %}
+        <div class="row">
+            <div class="alert alert-danger alert-dismissible fade show col-md-12" role="alert">
+                <h4 class="alert-heading">Corrections à apporter</h4>
+                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <hr>
+                <p>Vous devez corriger les éléments suivants:
+                <ul>
+                    {% for recommandations in recommandations %}
+                        <li>{{ recommandations }} </li>
+                    {% endfor %}
+                </ul>
+                </p>
+            </div>
+        </div>
+    {%  endif %}
+
     <!-- Nav tabs -->
     <ul class="nav nav-tabs" role="tablist">
         <li class="nav-item">

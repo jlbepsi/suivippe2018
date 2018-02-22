@@ -16,6 +16,26 @@ class UtilisateursSituations
      * @var UtilisateurSituations[]
      */
     private $utilisateurs = array();
+    /**
+     * @var integer
+     */
+    private $analyseSituationActivite;
+
+    /**
+     * @return int
+     */
+    public function getAnalyseSituationActivite()
+    {
+        return $this->analyseSituationActivite;
+    }
+
+    /**
+     * @param int $analyseSituationActivite
+     */
+    public function setAnalyseSituationActivite($analyseSituationActivite)
+    {
+        $this->analyseSituationActivite = $analyseSituationActivite;
+    }
 
     /**
      * @return UtilisateurSituations[]
@@ -38,6 +58,7 @@ class UtilisateursSituations
             $loginUtilisateur = $situation->getLogin()->getLogin();
 
             $utilisateurSituations = new UtilisateurSituations();
+            $utilisateurSituations->setAnalyseSituationActivite($this->analyseSituationActivite);
             $utilisateurSituations->setUtilisateur($situation->getLogin());
 
             while ($i < $count && $situations[$i]->getLogin()->getLogin() == $loginUtilisateur)
@@ -61,10 +82,37 @@ class UtilisateursSituations
             {
                 // Ajoute l'utilisateur sans situations
                 $utilisateurSituations = new UtilisateurSituations();
+                $utilisateurSituations->setAnalyseSituationActivite($this->analyseSituationActivite);
                 $utilisateurSituations->setUtilisateur($utilisateur);
                 $this->utilisateurs[] = $utilisateurSituations;
             }
         }
+    }
+
+    /**
+     * @return array
+     */
+    public function analyseUtilisateursSituations()
+    {
+        $cptSituations = 0;
+        $cptSansSituations = 0;
+        $cptSituationsIncompletes = 0;
+
+        foreach ($this->utilisateurs as $utilisateur)
+        {
+            $nbSituation = count($utilisateur->getSituations());
+            if ($nbSituation == 0) {
+                $cptSansSituations++;
+            }
+            else
+            {
+                $cptSituationsIncompletes += $utilisateur->countSituationsIncompletes();
+                $cptSituations += $nbSituation;
+            }
+        }
+
+        return array('nbSituations' => $cptSituations, 'nbUtilisateursSansSituation' => $cptSansSituations,
+                     'nbSituationsIncompletes' => $cptSituationsIncompletes);
     }
 
     /**

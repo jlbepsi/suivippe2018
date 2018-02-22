@@ -14,15 +14,46 @@
     <!-- /.row -->
     <div class="row">
 
+        <!-- stages -->
+        <div class="col-xl-3 col-lg-6">
+            <div class="card" style="width: 20rem;">
+                <div class="card-header text-white bg-primary">
+                    <h2 class="card-title">
+                        <i class="fa fa-list fa-2x"></i>&nbsp;
+                        <span id="nbStages" class="badge badge-pill badge-light">0</span>&nbsp;Stages
+                    </h2>
+                    <h5>
+                        <ul>
+                            <li><span id="nbStagesIncomplets" class="badge badge-pill badge-warning">0</span>&nbsp;incomplets</li>
+                            <li><span id="nbUtilisateursSansStage" class="badge badge-pill badge-danger">0</span>&nbsp;étudiant(s) sans stage</li>
+                        </ul>
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <div  class="card-text">
+                        <span id="loaderStages"><i class="fa fa-spinner fa-spin"></i>Traitement en cours</span>
+
+                    </div>
+                    <a id="btnStageListe" href="{{  path("prof_stage_index") }}" class="btn btn-outline-primary btn-block" style="display: none">Voir la liste</a>
+                </div>
+            </div>
+        </div>
+
         <!-- situations -->
         <div class="col-xl-3 col-lg-6">
             <div class="card" style="width: 20rem;">
                 <div class="card-header text-white bg-primary">
-                    <h4 class="card-title">
-                        <i class="fa fa-server"></i>&nbsp;
+                    <h2 class="card-title">
+                        <i class="fa fa-list fa-2x"></i>&nbsp;
                         <span id="nbSituations" class="badge badge-pill badge-light">0</span>&nbsp;Situations
-                        <br />dont&nbsp;<span id="nbCommentaires" class="badge badge-pill badge-success">0</span>&nbsp;commentées
-                    </h4>
+                    </h2>
+                    <h5>
+                        <ul>
+                            <li><span id="nbCommentaires" class="badge badge-pill badge-success">0</span>&nbsp;commentées</li>
+                            <li><span id="nbUtilisateursSansSituation" class="badge badge-pill badge-danger">0</span>&nbsp;étudiant(s) sans situation</li>
+                            <li><span id="nbSituationsIncompletes" class="badge badge-pill badge-warning">0</span>&nbsp;incomplète(s)</li>
+                        </ul>
+                    </h5>
                 </div>
                 <div class="card-body">
                     <div  class="card-text">

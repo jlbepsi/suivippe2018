@@ -4,14 +4,6 @@
     Liste des stages
 {% endblock %}
 
-{% block stylesheets %}
-    {% stylesheets
-        'bundles/app/bootstrap/css/bootstrap-datepicker.css'
-        filter='cssrewrite' %}
-        <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
-{% endblock %}
-
 {% block body %}
     <div class="row">
         <div class="col-lg-12">
@@ -84,13 +76,4 @@
         </tbody>
     </table>
 
-{% endblock %}
-
-{% block javascripts %}
-    {% javascripts
-        'bundles/app/bootstrap/js/bootstrap-datepicker.js'
-        'bundles/app/bootstrap/js/bootstrap-datepicker.fr.js'
-    %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
 {% endblock %}

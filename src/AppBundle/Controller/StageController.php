@@ -183,9 +183,15 @@ class StageController extends Controller
         // Typologies
         $typologies = $manager->loadTypologies();
 
+        $recommandations = null;
+        $nbStagesActivitesIncomplets = $stage->analyseActivites();
+        if ($nbStagesActivitesIncomplets > 0) {
+            $recommandations[] = "Un stage doit avoir au moins 4 activités pour chaque intitulé";
+        }
+
         return $this->render('stage/edit.html.twig', array('form' => $model->createView(),
                              'stage' => $stage, 'page' => $page, 'intitulesActivites' => $intitulesActivites,
-                             'typologies' => $typologies));
+                             'typologies' => $typologies, 'recommandations' => $recommandations));
     }
 
     /**

@@ -108,4 +108,17 @@ class UtilisateurStages
 
         return $recommandations;
     }
+
+    public function countStagesIncomplets()
+    {
+        $nbStagesActivitesIncomplets = 0;
+
+        if (count($this->stages) > 0) {
+            foreach ($this->stages as $stage) {
+                $nbStagesActivitesIncomplets += $stage->analyseActivites();
+            }
+        }
+
+        return $nbStagesActivitesIncomplets;
+    }
 }

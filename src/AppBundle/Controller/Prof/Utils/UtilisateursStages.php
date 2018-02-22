@@ -98,4 +98,30 @@ class UtilisateursStages
             }
         }
     }
+
+    /**
+     * @return array
+     */
+    public function analyseUtilisateursStages()
+    {
+        $cptStages = 0;
+        $cptSansStages = 0;
+        $cptStagesIncomplets = 0;
+
+        foreach ($this->utilisateurs as $utilisateur)
+        {
+            $nbStage = count($utilisateur->getStages());
+            if ($nbStage == 0) {
+                $cptSansStages++;
+            }
+            else
+            {
+                $cptStagesIncomplets += $utilisateur->countStagesIncomplets();
+                $cptStages += $nbStage;
+            }
+        }
+
+        return array('nbStages' => $cptStages, 'nbUtilisateursSansStage' => $cptSansStages,
+            'nbStagesIncomplets' => $cptStagesIncomplets);
+    }
 }

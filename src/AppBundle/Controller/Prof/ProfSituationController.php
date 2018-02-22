@@ -23,8 +23,9 @@ class ProfSituationController extends Controller
      */
     public function indexAction()
     {
-        // Obtention des situations
-        $utilisateursSituations = $this->getManager()->loadUtilisateursSituations();
+        $analyseSituationActivite = $this->getParameter('analyseSituationActivite');
+        // Obtention du manager puis des situations
+        $utilisateursSituations = $this->getManager()->loadUtilisateursSituations(intval($analyseSituationActivite));
 
         return $this->render('prof/situation/index.html.twig', array('utilisateursSituations' => $utilisateursSituations));
     }
@@ -61,11 +62,34 @@ class ProfSituationController extends Controller
      */
     public function countSituationAction()
     {
-        // Obtention du manager puis des films
+        // Obtention du manager puis des situations
         $count = $this->getManager()->countAllSituations();
 
         return new JsonResponse(array('count' => $count));
     }
+    
+    /**
+     * @Route("/prof/situation/analyse", name="prof_situation_analyse")
+     */
+    public function analyseSituationAction()
+    {
+        $analyseSituationActivite = $this->getParameter('analyseSituationActivite');
+        // Obtention du manager puis des situations
+        $utilisateursSituations = $this->getManager()->loadUtilisateursSituations(intval($analyseSituationActivite));
+
+        $analyse = $utilisateursSituations->analyseUtilisateursSituations();
+
+        // Commentaires
+        // Obtention de l'utilisateur connecté
+        $user = $this->getUser();
+        $countCommentaires = $this->getManager()->countCommentaires($user->getLogin());
+
+        return new JsonResponse(array('nbSituations' => $analyse['nbSituations'],
+                                      'nbUtilisateursSansSituation' => $analyse['nbUtilisateursSansSituation'],
+                                      'nbSituationsIncompletes' => $analyse['nbSituationsIncompletes'],
+                                      'nbCommentaires' => $countCommentaires));
+    }
+
 
     /*
      *
@@ -80,7 +104,7 @@ class ProfSituationController extends Controller
     {
         // Obtention de l'utilisateur connecté
         $user = $this->getUser();
-        // Obtention du manager puis des films
+        // Obtention du manager puis des situations
         $count = $this->getManager()->countCommentaires($user->getLogin());
 
         return new JsonResponse(array('count' => $count));

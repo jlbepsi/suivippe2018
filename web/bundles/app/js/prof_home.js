@@ -3,35 +3,40 @@ $(function () {
     // Document.ready -> link up remove event handler
 
     // Affichage des nombres de commentaires et de situations
-    $('#loaderCommentaires').show('slow', null);
     $('#loaderSituations').show('slow', null);
+    // Affichage pour les stages
+    $('#loaderStages').show('slow', null);
+
     // Stages
-    $.post("prof/situation/countcomment", null,
+    $.post("prof/stage/analyse", null,
         function (data) {
             // Successful requests get here
             // Update the page elements
-            var oNbCommentaires = $('#nbCommentaires');
-            oNbCommentaires.text(data.count);
-            if (data.count == 0) {
-                oNbCommentaires.attr("class", "badge badge-pill badge-danger");
-                //$('#btnStageAdd').show();
+            var oNbStages = $('#nbStages');
+            oNbStages.text(data.nbStages);
+            if (data.nbStages == 0) {
+                oNbStages.attr("class", "badge badge-pill badge-danger");
+            } else {
+                $('#nbUtilisateursSansStage').text(data.nbUtilisateursSansStage);
+                $('#nbStagesIncomplets').text(data.nbStagesIncomplets);
+                $('#btnStageListe').show();
             }
-            oNbCommentaires.show();
 
-            $('#loaderCommentaires').hide();
+            $('#loaderStages').hide();
         });
 
     // Situations
-    $.post("prof/situation/count", null,
+    $.post("prof/situation/analyse", null,
         function (data) {
             // Successful requests get here
             var oNbSituations = $('#nbSituations');
-            oNbSituations.text(data.count);
-            if (data.count == 0) {
+            oNbSituations.text(data.nbSituations);
+            if (data.nbSituations == 0) {
                 oNbSituations.attr("class", "badge badge-pill badge-danger");
-                //$('#btnSituationAdd').show();
-            }
-            else {
+            } else {
+                $('#nbCommentaires').text(data.nbCommentaires);
+                $('#nbUtilisateursSansSituation').text(data.nbUtilisateursSansSituation);
+                $('#nbSituationsIncompletes').text(data.nbSituationsIncompletes);
                 $('#btnSituationListe').show();
             }
             // Update the page elements

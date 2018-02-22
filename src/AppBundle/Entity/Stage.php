@@ -534,4 +534,29 @@ class Stage
         $info = array('idIntitule' => $stagesIntitule->getIdintitule(), 'nbActivite' => count($stagesIntitule->getIdactivite()));
         $this->arrayIntitulesActivites[] = $info;
     }
+
+    public function analyseActivites()
+    {
+        $nbStagesActivitesIncomplets = 0;
+        if ($this->arrayIntitulesActivites == null)
+        {
+            $nbStagesActivitesIncomplets++;
+        }
+        else
+        {
+            $nbIntitules = count($this->arrayIntitulesActivites);
+            if ($nbIntitules < 3)
+                $nbStagesActivitesIncomplets++;
+            else {
+                foreach ($this->arrayIntitulesActivites as $intitulesActivite) {
+                    if ($intitulesActivite["nbActivite"] < 4) {
+                        $nbStagesActivitesIncomplets++;
+                        break;
+                    }
+                }
+            }
+        }
+
+        return $nbStagesActivitesIncomplets;
+    }
 }

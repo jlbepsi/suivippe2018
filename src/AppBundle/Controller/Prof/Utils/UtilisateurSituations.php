@@ -22,6 +22,26 @@ class UtilisateurSituations
      * @var \AppBundle\Entity\Utilisateur
      */
     private $utilisateur;
+    /**
+     * @var integer
+     */
+    private $analyseSituationActivite;
+
+    /**
+     * @return int
+     */
+    public function getAnalyseSituationActivite()
+    {
+        return $this->analyseSituationActivite;
+    }
+
+    /**
+     * @param int $analyseSituationActivite
+     */
+    public function setAnalyseSituationActivite($analyseSituationActivite)
+    {
+        $this->analyseSituationActivite = $analyseSituationActivite;
+    }
 
     /**
      * @return Utilisateur
@@ -70,6 +90,8 @@ class UtilisateurSituations
         $oss = array();
         $services = array();
         $activites = array();
+
+        $analyseSituationActivite = $this->analyseSituationActivite;
 
         $nbE4 = 0;
         $id = 0;
@@ -143,8 +165,8 @@ class UtilisateurSituations
                 $recommandations[] = "Vous devez avoir 2 situations E4";
             // Activités
             foreach ($activites as $activite) {
-                if ($activite < 5) {
-                    $recommandations[] = "Une situation doit avoir 5 activités minimum";
+                if ($activite < $analyseSituationActivite) {
+                    $recommandations[] = "Une situation doit avoir ". $analyseSituationActivite .   " activités minimum";
                     break;
                 }
             }
@@ -167,5 +189,38 @@ class UtilisateurSituations
         }
 
         return $recommandations;
+    }
+
+    public function countSituationsIncompletes()
+    {
+        $nbSituationsActivitesIncompletes = 0;
+
+        $nbE4ToFind = 2;
+        if (count($this->situations) > 0) {
+            $nbE4 = 0;
+            foreach ($this->situations as $situation) {
+                // Situation E4
+                if ($situation->getRefe4())
+                    $nbE4ToFind--;
+                // Nombre d'activité
+                if (count($situation->getIdactivite()) < 5) {
+                    $nbSituationsActivitesIncompletes++;
+                }
+            }
+
+            // Situation E4
+            if ($this->getUtilisateur()->getClasse() == 'B1') {
+                // Pas de contrainte
+                $nbE4ToFind = 0;
+            }
+        }
+
+        if ($nbSituationsActivitesIncompletes < $nbE4ToFind)
+            return $nbE4ToFind;
+        // Trop de situation E4
+        if ($nbSituationsActivitesIncompletes == 0 && $nbE4ToFind < 0)
+            $nbSituationsActivitesIncompletes = 1;
+
+        return $nbSituationsActivitesIncompletes;
     }
 }
