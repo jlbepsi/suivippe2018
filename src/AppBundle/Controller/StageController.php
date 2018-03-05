@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Form\TemplateProcessorImage;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
@@ -9,7 +10,7 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
-use PhpOffice\PhpWord\TemplateProcessor;
+//use PhpOffice\PhpWord\TemplateProcessor;
 
 use AppBundle\Entity\Stageintitule;
 use AppBundle\Manager\ActiviteManager;
@@ -155,7 +156,7 @@ class StageController extends Controller
                     // Generate a unique name for the file before saving it
                     $fileName = 'logo'. $stage->getId() . '.' . $file->guessExtension();
 
-                    // Move the file to the directory where brochures are stored
+                    // Move the file to the directory where images are stored
                     $file->move(
                         $this->getParameter('entrepriselogo_directory'),
                         $fileName
@@ -469,7 +470,7 @@ class StageController extends Controller
         $path = $this->getParameter('kernel.root_dir');
         $path .= "/Resources/word/";
         $filename    = 'attestation-stage-2018.docx';
-        $templateProcessor = new TemplateProcessor($path . $filename);
+        $templateProcessor = new TemplateProcessorImage($path . $filename);
 
         // On charge le valeurs dans le document
         /** VALEURS A RECUPERER **/
@@ -488,6 +489,7 @@ class StageController extends Controller
         $templateProcessor->setValue('userMail', $userMail);
         $templateProcessor->setValue('userParcours', $userParcours);
 
+        // Entreprise
         $entrepriseNom = $stage->getEntreprisenom();
         $entrepriseAdresse = $stage->getEntrepriseadresse();
 
@@ -495,6 +497,14 @@ class StageController extends Controller
         $stageDateFin = $stage->getDatefin();
         $stageDuree = $stage->getDuree();
         $stageMontant = $stage->getMontant();
+        /* Image
+        $imageName = $stage->getEntrepriselogo();
+        if ($imageName != null && !empty($imageName))
+        {
+            $imagePath = $this->getParameter('entrepriselogo_directory');
+            $templateProcessor->setImage('entrepriseLogo', $imagePath . DIRECTORY_SEPARATOR . $imageName,
+                                        $imageName, 100, 100);
+        }*/
         $templateProcessor->setValue('entrepriseNom', $entrepriseNom);
         $templateProcessor->setValue('entrepriseAdresse', $entrepriseAdresse);
         $templateProcessor->setValue('stageDateDebut', $stageDateDebut->format("d/m/Y"));

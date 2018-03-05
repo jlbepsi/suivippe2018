@@ -84,7 +84,7 @@
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane {{ page==1 ? 'active' : '' }}" id="description">
 
-            <form action="{{ path('stage_edit', {'id':stage.id}) }}" method="post">
+            <form action="{{ path('stage_edit', {'id':stage.id}) }}" method="post" enctype="multipart/form-data">
                 {{ form_errors(form) }}
                 {{ form_row(form._token) }}
 
