@@ -21,13 +21,24 @@ class ProfSituationController extends Controller
     /**
      * @Route("/prof/situation", name="prof_situation_index")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
         $analyseSituationActivite = $this->getParameter('analyseSituationActivite');
-        // Obtention du manager puis des situations
-        $utilisateursSituations = $this->getManager()->loadUtilisateursSituations(intval($analyseSituationActivite));
 
-        return $this->render('prof/situation/index.html.twig', array('utilisateursSituations' => $utilisateursSituations));
+        $classe = null;
+        if ($request->getMethod() == 'POST') {
+
+            // Récupération des infos
+            $classe = $request->request->get('classeSearch');
+            if ($classe == 'Toutes')
+                $classe = null;
+        }
+
+        // Obtention du manager puis des situations
+        $utilisateursSituations = $this->getManager()->loadUtilisateursSituations(intval($analyseSituationActivite), $classe);
+
+        return $this->render('prof/situation/index.html.twig',
+            array('utilisateursSituations' => $utilisateursSituations, 'classe' => $classe));
     }
 
     /**

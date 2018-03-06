@@ -47,7 +47,7 @@ class SituationManager
      * @param $analyseSituationActivite integer
      * @return UtilisateursSituations
      */
-    public function loadUtilisateursSituations($analyseSituationActivite)
+    public function loadUtilisateursSituations($analyseSituationActivite, $classe = null)
     {
         /**
          *
@@ -57,13 +57,35 @@ class SituationManager
 
         $utilisateursSituations = new UtilisateursSituations();
         $utilisateursSituations->setAnalyseSituationActivite($analyseSituationActivite);
+
         // On charge toutes les situations
-        $situations = $this->repository->findAll();
+        if ($classe != null)
+        {
+            $query = $this->getEntityManager()->createQuery(
+                'SELECT si
+                    FROM AppBundle:Situation si, AppBundle:Utilisateur us
+                    WHERE si.login = us
+                      AND us.classe = :pClasse
+                    ORDER BY us.nom, us.prenom'
+            )->setParameter('pClasse', $classe);
+        }
+        else
+        {
+
+            $query = $this->getEntityManager()->createQuery(
+                'SELECT si
+                    FROM AppBundle:Situation si, AppBundle:Utilisateur us
+                    WHERE si.login = us
+                    ORDER BY us.nom, us.prenom'
+            );
+        }
+        $situations = $query->getResult();
+
         $utilisateursSituations->setSituations($situations);
 
         // On charge tous les utilisateurs qui n'ont pas de situations
         $repositoryUtilisateur = $this->entityManager->getRepository('AppBundle:Utilisateur');
-        $utilisateurs = $repositoryUtilisateur->findEtudiants();
+        $utilisateurs = $repositoryUtilisateur->findEtudiants($classe);
         $utilisateursSituations->setUtilisateursSansSituation($utilisateurs);
 
         return $utilisateursSituations;
@@ -113,6 +135,12 @@ class SituationManager
             ->getSingleScalarResult();
     }
 
+    /**
+     * @param $login string
+     * @return integer
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
     public function countSituations($login)
     {
         $qb = $this->repository->createQueryBuilder('s');

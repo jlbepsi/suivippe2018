@@ -19,12 +19,22 @@ class ProfStageController extends Controller
     /**
      * @Route("/prof/stage", name="prof_stage_index")
      */
-    public function indexAction()
+    public function indexAction(Request $request)
     {
-        // Obtention des situations
-        $utilisateursStages = $this->getManager()->loadUtilisateursStages();
+        $classe = null;
+        if ($request->getMethod() == 'POST') {
 
-        return $this->render('prof/stage/index.html.twig', array('utilisateursStages' => $utilisateursStages));
+            // Récupération des infos
+            $classe = $request->request->get('classeSearch');
+            if ($classe == 'Toutes')
+                $classe = null;
+        }
+
+        // Obtention des situations
+        $utilisateursStages = $this->getManager()->loadUtilisateursStages($classe);
+
+        return $this->render('prof/stage/index.html.twig',
+            array('utilisateursStages' => $utilisateursStages, 'classe' => $classe));
     }
 
     /**

@@ -51,6 +51,10 @@ class StageManager
         return $this->repositoryStageIntituleActivite;
     }
 
+    public function getEntityManager() {
+        return $this->entityManager;
+    }
+
     /**
      * @return \AppBundle\Entity\Stage[]
      */
@@ -315,7 +319,7 @@ class StageManager
     /**
      * @return UtilisateursStages
      */
-    public function loadUtilisateursStages()
+    public function loadUtilisateursStages($classe = null)
     {
         /**
          *
@@ -325,7 +329,29 @@ class StageManager
 
         $utilisateursStages = new UtilisateursStages();
         // On charge toutes les stages
-        $stages = $this->loadAllStages();
+        //$stages = $this->loadAllStages();
+        if ($classe != null)
+        {
+            $query = $this->getEntityManager()->createQuery(
+                'SELECT st
+                    FROM AppBundle:Stage st, AppBundle:Utilisateur us
+                    WHERE st.login = us
+                      AND us.classe = :pClasse
+                    ORDER BY us.nom, us.prenom'
+            )->setParameter('pClasse', $classe);
+        }
+        else
+        {
+
+            $query = $this->getEntityManager()->createQuery(
+                'SELECT st
+                    FROM AppBundle:Stage st, AppBundle:Utilisateur us
+                    WHERE st.login = us
+                    ORDER BY us.nom, us.prenom'
+            );
+        }
+        $stages = $query->getResult();
+
         $utilisateursStages->setStages($stages);
         // On charge toutes les intitulés de stage
         $stagesIntitules = $this->loadStagesIntitules();
@@ -336,7 +362,7 @@ class StageManager
 
         // On charge tous les utilisateurs qui n'ont pas de situations
         $repositoryUtilisateur = $this->entityManager->getRepository('AppBundle:Utilisateur');
-        $utilisateurs = $repositoryUtilisateur->findEtudiants();
+        $utilisateurs = $repositoryUtilisateur->findEtudiants($classe);
         $utilisateursStages->setUtilisateursSansStage($utilisateurs);
 
         return $utilisateursStages;

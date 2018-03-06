@@ -12,11 +12,20 @@ use Doctrine\ORM\EntityRepository;
  */
 class UtilisateurRepository extends EntityRepository
 {
-    public function findEtudiants()
+    public function findEtudiants($classe = null)
     {
-        $query = $this->createQueryBuilder('u')
-            ->where("u.classe ='B1' OR u.classe ='B2'")
-            ->getQuery();
+        if ($classe != null)
+        {
+            $query = $this->createQueryBuilder('u')
+                ->where("u.classe = :pClasse")
+                ->setParameter(':pClasse', $classe)
+                ->getQuery();
+        }
+        else {
+            $query = $this->createQueryBuilder('u')
+                ->where("u.classe ='B1' OR u.classe ='B2'")
+                ->getQuery();
+        }
 
         return $query->getResult();
     }

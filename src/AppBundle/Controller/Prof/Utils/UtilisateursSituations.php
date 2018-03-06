@@ -87,6 +87,12 @@ class UtilisateursSituations
                 $this->utilisateurs[] = $utilisateurSituations;
             }
         }
+        /*// Tri sur le nom puis prénom
+        usort($this->utilisateurs, function($e1, $e2)
+        {
+            return ($e1->getUtilisateur()->getNom() . ' ' . $e1->getUtilisateur()->getPrenom() >
+                    $e2->getUtilisateur()->getNom() . ' ' . $e1->getUtilisateur()->getPrenom());
+        });*/
     }
 
     /**

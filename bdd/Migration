@@ -1,0 +1,40 @@
+Migration de portefeuille vers suivippe2017
+
+
+
+-- ETUDIANT
+INSERT INTO suivippe2017.utilisateur(login,
+                            password,
+                            type,
+                            classe,
+                            nom,
+                            prenom,
+                            mail,
+                            roles,
+                            numParcours,
+                            salt)
+SELECT SUBSTR(mel, 1, LOCATE('@', mel)-1), mdp, 1, 'B1', nom, prenom, mel, 'ROLE_USER', (numGroupe -1),  ''
+FROM portefeuille.port_etudiant
+
+
+-- SITUATION
+INSERT INTO situation (login, libelle, descriptif, datedebut, datefin, codeCadre, codeLocalisation, port_ref)
+SELECT SUBSTR(mel, 1, LOCATE('@', mel)-1), libcourt, descriptif,datedebut, datefin,  codeCadre, codeLocalisation, ref
+FROM portefeuille.port_situation si, portefeuille.port_etudiant et
+WHERE si.numEtudiant = et.num
+
+
+-- TYPOLOGIE
+INSERT INTO suivippe2017.situationtypo(reference,code)
+SELECT suivippe2017si.reference, esttypo.codeTypologie
+FROM portefeuille.port_esttypo esttypo, suivippe2017.situation suivippe2017si
+WHERE suivippe2017si.port_ref = esttypo.refSituation
+
+
+
+
+-- ACTIVITES
+INSERT INTO suivippe2017.activitecitee(idActivite,refSituation)
+SELECT idActivite, suivippe2017si.reference
+FROM portefeuille.port_activitecitee ac, suivippe2017.situation suivippe2017si
+WHERE suivippe2017si.port_ref = ac.refSituation

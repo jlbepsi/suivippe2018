@@ -12,6 +12,25 @@
         <!-- /.col-lg-12 -->
     </div>
 
+    <form action="" method="post" id="formRecherche">
+        <div class="form-inline">
+            <label for="classeSearch">Classe: </label>
+            <select id="classeSearch" name="classeSearch" class="form-control">
+                <option value='Toutes' {% if classe=='Toutes' %}selected{% endif %} >Toutes</option>
+                <option value='B1' {% if classe=='B1' %}selected{% endif %} >B1</option>
+                <option value='B2' {% if classe=='B2' %}selected{% endif %} >B2</option>
+            </select>
+
+            <div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Recherche" class="btn btn-default" />
+                </div>
+            </div>
+        </div>
+    </form>
+    <br />
+
+
     <table class="table table-condensed table-bordered table-striped">
         <thead>
         <tr>
