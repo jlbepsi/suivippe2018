@@ -5,11 +5,7 @@
 {% endblock %}
 
 {% block stylesheets %}
-    {% stylesheets
-    'bundles/app/bootstrap/css/bootstrap-datepicker.css'
-    filter='cssrewrite' %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
+    <link rel="stylesheet" href="{{ asset('bundles/app/bootstrap/css/bootstrap-datepicker.css') }}" />
 {% endblock %}
 
 {% block body %}
@@ -46,18 +42,25 @@
     {% if recommandations %}
     <div class="row">
         <div class="alert alert-danger alert-dismissible fade show col-md-12" role="alert">
-            <h4 class="alert-heading">Corrections à apporter</h4>
+            <a data-toggle="collapse" href="#collapseErrors" role="button" aria-expanded="false" aria-controls="collapseExample">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+                Afficher les corrections à apporter
+            </a>
+
             <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                 <span aria-hidden="true">&times;</span>
             </button>
-            <hr>
-            <p>Vous devez corriger les éléments suivants:
-            <ul>
-                {% for recommandations in recommandations %}
-                    <li>{{ recommandations }} </li>
-                {% endfor %}
-            </ul>
-            </p>
+
+            <div class="collapse" id="collapseErrors">
+                <hr>
+                <p>Vous devez corriger les éléments suivants:
+                <ul>
+                    {% for recommandations in recommandations %}
+                        <li>{{ recommandations }} </li>
+                    {% endfor %}
+                </ul>
+                </p>
+            </div>
         </div>
     </div>
     {%  endif %}

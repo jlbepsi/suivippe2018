@@ -20,12 +20,18 @@
     </p>
 
     {% if recommandations %}
-        <div class="row">
-            <div class="alert alert-danger alert-dismissible fade show col-md-12" role="alert">
-                <h4 class="alert-heading">Corrections à apporter</h4>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+    <div class="row">
+        <div class="alert alert-danger alert-dismissible fade show col-md-12" role="alert">
+            <a data-toggle="collapse" href="#collapseErrors" role="button" aria-expanded="false" aria-controls="collapseExample">
+                <i class="fa fa-plus" aria-hidden="true"></i>
+                Afficher les corrections à apporter
+            </a>
+
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+
+            <div class="collapse" id="collapseErrors">
                 <hr>
                 <p>Vous devez corriger les éléments suivants:
                 <ul>
@@ -36,6 +42,7 @@
                 </p>
             </div>
         </div>
+    </div>
     {%  endif %}
 
     <!-- Nav tabs -->

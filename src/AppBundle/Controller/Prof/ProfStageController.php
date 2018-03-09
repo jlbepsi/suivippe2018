@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Prof;
 
+use AppBundle\Controller\Prof\Utils\UtilisateurStages;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
@@ -46,12 +47,9 @@ class ProfStageController extends Controller
         // Obtention des activités
         $intitulesActivites = $manager->loadStageIntitules($id);
 
-
-        $recommandations = null;
-        $nbStagesActivitesIncomplets = $stage->analyseActivites();
-        if ($nbStagesActivitesIncomplets > 0) {
-            $recommandations[] = "Un stage doit avoir au moins 4 activités pour chaque intitulé";
-        }
+        $utilisateurStages = new UtilisateurStages();
+        $utilisateurStages->addStage($stage);
+        $recommandations = $utilisateurStages->verifierStage();
 
         return $this->render('prof/stage/edit.html.twig', array('stage' => $stage, 'recommandations' => $recommandations,
                     'intitulesActivites' => $intitulesActivites, 'typologies' => $typologies));

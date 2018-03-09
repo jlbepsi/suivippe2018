@@ -13,6 +13,19 @@ use Doctrine\ORM\EntityRepository;
 class StageRepository extends EntityRepository
 {
 
+    public function loadStage($login)
+    {
+        $qb = $this->createQueryBuilder('s');
+        $qb->select('s')
+            ->where('s.login=:userLogin')
+            ->orderBy('s.annee')->addOrderBy('s.libellecourt');
+
+        return $qb
+            ->getQuery()
+            ->setParameter(":userLogin", $login)
+            ->getResult();
+    }
+
     public function countStages($login)
     {
         $qb = $this->createQueryBuilder('s');

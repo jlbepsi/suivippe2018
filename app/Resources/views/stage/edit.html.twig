@@ -212,6 +212,8 @@
                             <a class="btn btn-danger btn-sm" href="#" id="deleteIntituleActivite" name="deleteIntituleActivite" title="Supprimer l'intitulé"><i class="fa fa-trash" aria-hidden="true"></i>&nbsp;Supprimer</a>
                          </td>
                     </tr>
+                    {% else %}
+                        <td id="aucunItitule" colspan="3">Aucun intitulé (<b>votre stage n'apparaitra pas dans votre tableau de synthèse</b>)</td>
                 {% endfor %}
                 </tbody>
             </table>

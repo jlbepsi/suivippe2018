@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Controller\Prof\Utils\UtilisateurStages;
 use AppBundle\Form\TemplateProcessorImage;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
@@ -184,11 +185,9 @@ class StageController extends Controller
         // Typologies
         $typologies = $manager->loadTypologies();
 
-        $recommandations = null;
-        $nbStagesActivitesIncomplets = $stage->analyseActivites();
-        if ($nbStagesActivitesIncomplets > 0) {
-            $recommandations[] = "Un stage doit avoir au moins 4 activités pour chaque intitulé";
-        }
+        $utilisateurStages = new UtilisateurStages();
+        $utilisateurStages->addStage($stage);
+        $recommandations = $utilisateurStages->verifierStage();
 
         return $this->render('stage/edit.html.twig', array('form' => $model->createView(),
                              'stage' => $stage, 'page' => $page, 'intitulesActivites' => $intitulesActivites,

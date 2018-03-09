@@ -60,12 +60,13 @@ class StageManager
     }
 
     /**
-     * @param $login
+     * @param $login string
      * @return \AppBundle\Entity\Stage[]
      */
     public function loadStages($login)
     {
-        return $this->repository->findBy(array("login" => $login));
+        //return $this->repository->findBy(array("login" => $login));
+        return $this->repository->loadStage($login);
     }
 
     /**

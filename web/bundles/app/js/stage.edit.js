@@ -162,14 +162,20 @@ $(function () {
                     // Attache l'évènement onClick au dernier élément ajouté
                     $('#listeActivites > tbody > tr:last #deleteIntituleActivite').bind('click', deleteIntituleActivite);
 
+                    // On enlève la ligne indiquant "aucun intitulé"
+                    var oTD = $("#aucunItitule");
+                    if (oTD != "undefined") {
+                        oTD.hide();
+                    }
+
                 }
                 else {
                     divMessage.attr("class", 'label label-danger');
                     $('#btnNewIntituleModal').attr("disabled", false);
+                    divMessage
+                        .text(data.message)
+                        .show('slow', null).delay(6000).hide('slow');
                 }
-                divMessage
-                    .text(data.message)
-                    .show('slow', null).delay(6000).hide('slow');
             },
             error:function(){
                 alert("Erreur d'accès à la méthode de suppression");

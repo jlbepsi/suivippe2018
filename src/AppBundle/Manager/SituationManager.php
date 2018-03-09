@@ -183,12 +183,15 @@ class SituationManager
     /**
      * Remove Situatione4 entity
      *
-     * @param Situatione4 $situatione4
+     * @param Situatione4|null $situatione4
      */
     public function removeSituationE4(Situatione4 $situatione4)
     {
-        $this->entityManager->remove($situatione4);
-        $this->entityManager->flush();
+        if ($situatione4)
+        {
+            $this->entityManager->remove($situatione4);
+            $this->entityManager->flush();
+        }
     }
 
 

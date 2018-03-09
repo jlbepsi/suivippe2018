@@ -191,14 +191,18 @@ class SituationController extends Controller
                     $manager->saveSituationE4($situationE4);
 
                     $situation->setRefe4($situationE4);
+                    // Validation de la situation
+                    $manager->saveSituation($situation);
                 }
                 else
                 {
+                    $situation->setRefe4(null);
+                    // Validation de la situation
+                    $manager->saveSituation($situation);
                     // La situation E4 doit être supprimée si elle existe
-                    $manager->removeSituationE4($situation->getRefe4());
+                    if ($situation->getRefe4())
+                        $manager->removeSituationE4($situation->getRefe4());
                 }
-                // Validation de la situation
-                $manager->saveSituation($situation);
             }
         }
 
@@ -242,7 +246,8 @@ class SituationController extends Controller
                 // Suppression du film
                 try {
                     // La situation E4 doit être supprimée si elle existe
-                    $manager->removeSituationE4($situation->getRefe4());
+                    if ($situation->getRefe4())
+                        $manager->removeSituationE4($situation->getRefe4());
                     $manager->removeSituation($situation);
                 } catch (\Exception $e) {
                     $message = sprintf("Vous ne pouvez pas supprimer la situation: %s",

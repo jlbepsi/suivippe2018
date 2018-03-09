@@ -103,7 +103,7 @@ class UtilisateurStages
                 }
             }
             if ($stageVide)
-                array_unshift($recommandations, "Un stage doit avoir des intitulés et activités");
+                array_unshift($recommandations, "Un stage doit avoir au moins 3 intitulés et  4 activités pour chaque intitulé");
         }
 
         return $recommandations;
