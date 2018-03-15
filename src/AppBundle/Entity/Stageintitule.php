@@ -142,7 +142,11 @@ class Stageintitule
      */
     public function addIdactivite(\AppBundle\Entity\Activite $idactivite)
     {
-        $this->idactivite[] = $idactivite;
+        //$this->idactivite[] = $idactivite;
+        if (!$this->idactivite->contains($idactivite)) {
+            $this->idactivite->add($idactivite);
+        }
+
 
         return $this;
     }

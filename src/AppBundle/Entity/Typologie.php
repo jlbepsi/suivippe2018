@@ -136,7 +136,10 @@ class Typologie
      */
     public function addReference(\AppBundle\Entity\Situation $reference)
     {
-        $this->reference[] = $reference;
+        //$this->reference[] = $reference;
+        if (!$this->reference->contains($reference)) {
+            $this->reference->add($reference);
+        }
 
         return $this;
     }
@@ -170,7 +173,10 @@ class Typologie
      */
     public function addIdstage(\AppBundle\Entity\Stage $idstage)
     {
-        $this->idstage[] = $idstage;
+        //$this->idstage[] = $idstage;
+        if (!$this->idstage->contains($idstage)) {
+            $this->idstage->add($idstage);
+        }
 
         return $this;
     }

@@ -115,7 +115,11 @@ class Processus
      */
     public function addIdparcour(\AppBundle\Entity\Parcours $idparcours)
     {
-        $this->idparcours[] = $idparcours;
+        //$this->idparcours[] = $idparcours;
+        if (!$this->idparcours->contains($idparcours)) {
+            $this->idparcours->add($idparcours);
+        }
+
 
         return $this;
     }

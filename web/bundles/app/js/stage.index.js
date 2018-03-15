@@ -9,22 +9,28 @@ $(function () {
         var oTD = oDiv.find('#libcourt');
         var libelle = oTD.html();
 
-        if (id != '' && confirm("Voulez-vous supprimer le stage '" + libelle + "' ? ")) {
+        if (id != '' && confirm("La suppression du stage '" + libelle + "' supprimera aussi les initulés et activités.\nConfirmer la suppression ?")) {
             $('#loader').show('slow', null);
             // Perform the ajax post
             $.post("/stage/delete", { "idStage": id },
                 function (data) {
                     // Successful requests get here
                     // Update the page elements
-                    if (data.Status == 1) {
+                    if (data.status == 1) {
                         $('#stage' + data.id).fadeOut('slow');
-                        oDiv.parent().remove();
                         $('#update-message').attr("class", 'label label-success');
+
+                        // Si le message "impossible d'ajouter des stages est présent, on l'enlève.
+                        var oMessage = $('#maxStage');
+                        if (oMessage.length) {
+                            oMessage.hide();
+                        }
+
                     }
                     else
                         $('#update-message').attr("class", 'label label-danger');
                     $('#loader').hide();
-                    $('#update-message').text(data.Message);
+                    $('#update-message').text(data.message);
                     $('#update-message').show('slow', null).delay(3000).hide('slow');
                 }
             );

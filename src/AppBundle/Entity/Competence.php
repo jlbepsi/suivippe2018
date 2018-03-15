@@ -36,7 +36,7 @@ class Competence
     private $libelle;
 
     /**
-     * @var \Activite
+     * @var \AppBundle\Entity\Activite
      *
      * @ORM\ManyToOne(targetEntity="Activite")
      * @ORM\JoinColumns({

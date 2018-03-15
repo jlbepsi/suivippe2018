@@ -73,7 +73,7 @@ class Stage
     /**
      * @var float
      *
-     * @ORM\Column(name="montant", type="float", precision=10, scale=0, nullable=false)
+     * @ORM\Column(name="montant", type="float", precision=10, scale=0, nullable=true)
      */
     private $montant;
 
@@ -441,7 +441,10 @@ class Stage
      */
     public function addCode(\AppBundle\Entity\Typologie $code)
     {
-        $this->code[] = $code;
+        //$this->code[] = $code;
+        if (!$this->code->contains($code)) {
+            $this->code->add($code);
+        }
 
         return $this;
     }

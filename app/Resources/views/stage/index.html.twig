@@ -12,9 +12,15 @@
         <!-- /.col-lg-12 -->
     </div>
 
-    <p>
-        <a class="btn btn-primary btn-sm" href="{{  path("stage_add") }}">Nouveau stage</a>
-    </p>
+    {%  if arrayStagesAnnees["stage1"] or arrayStagesAnnees["stage2"] %}
+        <p>
+            <a class="btn btn-primary btn-sm" href="{{  path("stage_add") }}">Nouveau stage</a>
+        </p>
+    {% else %}
+        <div id="maxStage" class="alert alert-danger alert-dismissible fade show col-md-12" role="alert">
+            Vous ne pouvez plus ajouter de stage (maximum de 2 stages par année)
+        </div>
+    {%  endif %}
 
     <div id="update-message"></div>
 

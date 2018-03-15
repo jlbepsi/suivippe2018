@@ -117,8 +117,13 @@ class StageManager
      */
     public function removeStage(Stage $stage)
     {
-        $this->entityManager->remove($stage);
-        $this->entityManager->flush();
+        /*$this->entityManager->remove($stage);
+        $this->entityManager->flush();*/
+        $stmt = $this->entityManager
+            ->getConnection()
+            ->prepare('CALL deleteStage (:idstage);');
+        $stmt->bindValue('idstage', $stage->getId());
+        $stmt->execute();
     }
 
     /**

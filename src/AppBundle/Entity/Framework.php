@@ -28,12 +28,26 @@ class Framework
      */
     private $libelle;
 
+    /**
+     * @var \Doctrine\Common\Collections\Collection
+     *
+     * @ORM\ManyToMany(targetEntity="Langage", mappedBy="idframework")
+     */
+    private $idlangage;
+
+    /**
+     * Constructor
+     */
+    public function __construct()
+    {
+        $this->idlangage = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
 
     /**
      * Get id
      *
-     * @return integer 
+     * @return integer
      */
     public function getId()
     {
@@ -44,6 +58,7 @@ class Framework
      * Set libelle
      *
      * @param string $libelle
+     *
      * @return Framework
      */
     public function setLibelle($libelle)
@@ -56,10 +71,47 @@ class Framework
     /**
      * Get libelle
      *
-     * @return string 
+     * @return string
      */
     public function getLibelle()
     {
         return $this->libelle;
+    }
+
+    /**
+     * Add idlangage
+     *
+     * @param \AppBundle\Entity\Langage $idlangage
+     *
+     * @return Framework
+     */
+    public function addIdlangage(\AppBundle\Entity\Langage $idlangage)
+    {
+        //$this->idlangage[] = $idlangage;
+        if (!$this->idlangage->contains($idlangage)) {
+            $this->idlangage->add($idlangage);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Remove idlangage
+     *
+     * @param \AppBundle\Entity\Langage $idlangage
+     */
+    public function removeIdlangage(\AppBundle\Entity\Langage $idlangage)
+    {
+        $this->idlangage->removeElement($idlangage);
+    }
+
+    /**
+     * Get idlangage
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getIdlangage()
+    {
+        return $this->idlangage;
     }
 }

@@ -168,6 +168,8 @@ class SituationController extends Controller
                 $mandatory = $request->request->get('mandatory');
                 $manager->saveTypologies($situation, $mandatory);
 
+                // Obtention de la situaion E4 actuelle
+                $currentRefE4 = $situation->getRefe4();
                 // Situation E4 ?
                 $situationE4Active = $request->request->get('situationE4');
                 if ($situationE4Active == "on")
@@ -178,30 +180,36 @@ class SituationController extends Controller
                     $contexteE4 = $request->request->get('e4_contexte');
                     $realisationE4 = $request->request->get('e4_realisation');
 
-                    $situationE4 = new Situatione4();
-                    $situationE4->setReferencee4($situation->getReference());
-                    $situationE4->setCompetenceapplication($optionsE4);
-                    $situationE4->setCompetencesgbd($sgdbE4=="on" ? 1 : 0);
-                    $situationE4->setEquipe($equipeE4);
-                    $situationE4->setContexte($contexteE4);
-                    $situationE4->setRealisation($realisationE4);
-                    $situationE4->setIntitule($situation->getLibelle());
+                    // On vérifie si la situation E4 existe déjà
+                    if ($currentRefE4 == null) {
+                        $currentRefE4 = new Situatione4();
+                        $currentRefE4->setReferencee4($situation->getReference());
+                        $situation->setRefe4($currentRefE4);
+                    }
+                    $currentRefE4->setCompetenceapplication($optionsE4);
+                    $currentRefE4->setCompetencesgbd($sgdbE4 == "on" ? 1 : 0);
+                    $currentRefE4->setEquipe($equipeE4);
+                    $currentRefE4->setContexte($contexteE4);
+                    $currentRefE4->setRealisation($realisationE4);
+                    $currentRefE4->setIntitule($situation->getLibelle());
 
                     // Validation de l'entité
-                    $manager->saveSituationE4($situationE4);
+                    $manager->saveSituationE4($currentRefE4);
 
-                    $situation->setRefe4($situationE4);
                     // Validation de la situation
                     $manager->saveSituation($situation);
                 }
                 else
                 {
-                    $situation->setRefe4(null);
-                    // Validation de la situation
-                    $manager->saveSituation($situation);
-                    // La situation E4 doit être supprimée si elle existe
-                    if ($situation->getRefe4())
-                        $manager->removeSituationE4($situation->getRefe4());
+                    if ($currentRefE4 != null)
+                    {
+                        // Sil il existait une référence E4 on la supprime
+                        $situation->setRefe4(null);
+                        // Validation de la situation
+                        $manager->saveSituation($situation);
+                        // La situation E4 doit être supprimée
+                        $manager->removeSituationE4($currentRefE4);
+                    }
                 }
             }
         }
@@ -214,6 +222,8 @@ class SituationController extends Controller
         $commentaires = $manager->loadCommentaires($id);
         // Obtention du parcours
         $idParcours = $situation->getLogin()->getNumparcours()->getId();
+        // Obtention des frameworks
+        $listeframework = $manager->loadFramework();
 
         $recommandations = null;
         $analyseSituationActivite = $this->getParameter('analyseSituationActivite');
@@ -223,6 +233,7 @@ class SituationController extends Controller
         return $this->render('situation/edit.html.twig', array('form' => $model->createView(),
                                 'situation' => $situation, 'typologies' => $typologies,
                                 'commentaires' => $commentaires, 'recommandations' => $recommandations,
+                                'listeframework' => $listeframework,
                                 'activites' => $activites,'idParcours' => $idParcours));
     }
 
@@ -314,11 +325,9 @@ class SituationController extends Controller
      */
     public function removeActiviteAction(Request $request)
     {
-        $id = 0;
+        $idActivite = 0;
         $status = -1;
 
-        // Obtention de l'objet "request"
-        //$request = $this->get('request');
         // Si l'utilisateur soumet le formulaire
         if ($request->getMethod() == 'POST')
         {
@@ -331,24 +340,23 @@ class SituationController extends Controller
             // Obtention de l'utilisateur connecté
             $user = $this->getUser();
             // Recherche de la situation
-            if ($situation = $manager->loadSituation($id, $user->getLogin()))
+            if ($situation = $manager->loadSituation($reference, $user->getLogin()))
             {
-                $status = 1;
                 // Ajout de l'activité
                 try
                 {
                     $manager->removeSituationActivite($situation, $idActivite);
-                    $id = $idActivite;
+                    $status = 1;
                 }
                 catch (\Exception $e)
                 {
-                    $status = -1;
+                    $status = -1; // Pour être sûr
                 }
             }
 
         }
 
         // Retour du résultat en Json
-        return new JsonResponse(array('status' => $status, 'id' => $id));
+        return new JsonResponse(array('status' => $status, 'id' => $idActivite));
     }
 }

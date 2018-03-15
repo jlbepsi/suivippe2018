@@ -370,4 +370,15 @@ class SituationManager
         $this->entityManager->remove($commentaire);
         $this->entityManager->flush();
     }
+
+    /*
+     *
+     * FRAMEWORK
+     *
+     */
+    public function loadFramework()
+    {
+        $repository = $this->entityManager->getRepository('AppBundle:Framework');
+        return $repository->findAll();
+    }
 }

@@ -36,7 +36,7 @@ class Domaine
     private $libelle;
 
     /**
-     * @var \Processus
+     * @var \AppBundle\Entity\Processus
      *
      * @ORM\ManyToOne(targetEntity="Processus")
      * @ORM\JoinColumns({

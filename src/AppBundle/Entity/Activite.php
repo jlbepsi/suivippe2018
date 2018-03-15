@@ -43,7 +43,7 @@ class Activite
     private $libelle;
 
     /**
-     * @var \Domaine
+     * @var \AppBundle\Entity\Domaine
      *
      * @ORM\ManyToOne(targetEntity="Domaine")
      * @ORM\JoinColumns({
@@ -215,7 +215,10 @@ class Activite
      */
     public function addRefsituation(\AppBundle\Entity\Situation $refsituation)
     {
-        $this->refsituation[] = $refsituation;
+        //$this->refsituation[] = $refsituation;
+        if (!$this->refsituation->contains($refsituation)) {
+            $this->refsituation->add($refsituation);
+        }
 
         return $this;
     }

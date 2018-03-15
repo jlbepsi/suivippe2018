@@ -40,8 +40,10 @@ class StageController extends Controller
         $user = $this->getUser();
         // Obtention des stages
         $stages = $this->getManager()->loadStages($user->getLogin());
+        // Nombre de stages par année
+        $arrayStagesAnnees = $this->getNbStagesMax($user->getLogin());
 
-        return $this->render('stage/index.html.twig', array("arrayStages" => $stages));
+        return $this->render('stage/index.html.twig', array("arrayStages" => $stages, 'arrayStagesAnnees' => $arrayStagesAnnees));
     }
 
     /**
@@ -69,8 +71,12 @@ class StageController extends Controller
         // Obtention du manager
         $manager = $this->getManager();
 
+        $user = $this->getUser();
+
         // Typologies
         $typologies = $manager->loadTypologies();
+        // Nombre de stages par année
+        $arrayStagesAnnees = $this->getNbStagesMax($user->getLogin());
 
         // Si l'utilisateur soumet le formulaire
         if ($request->getMethod() == 'POST')
@@ -81,7 +87,7 @@ class StageController extends Controller
             if ($model->isValid())
             {
                 // Le login est celui de l'utilisateur connecté
-                $stage->setLogin($this->getUser());
+                $stage->setLogin($user);
                 // La date de modification
                 $stage->setDatemodif(new \DateTime('now'));
 
@@ -112,11 +118,13 @@ class StageController extends Controller
                 $manager->saveStage($stage);
 
                 return $this->redirectToRoute('stage_edit', array('id' => $stage->getId(),
+                    'arrayStagesAnnees' => $arrayStagesAnnees,
                     'typologies' => $typologies));
             }
         }
 
         return $this->render('stage/add.html.twig', array('form' => $model->createView(),
+                                'arrayStagesAnnees' => $arrayStagesAnnees,
                                 'typologies' => $typologies));
     }
 
@@ -135,6 +143,8 @@ class StageController extends Controller
             return $this->render("TwigBundle/views/Exception/error404.html.twig");
         }
 
+        $arrayStagesAnnees = $this->getNbStagesMax($user->getLogin());
+
         // Création du modèle du formulaire
         $model = $this->get('form.factory')->create(StageType::class, $stage);
         // Obtention du manager
@@ -152,6 +162,9 @@ class StageController extends Controller
             if ($model->isValid())
             {
                 // Obtention du fichier
+                /*
+                 * La génération du document Word avec l'image ne fonctionne pas
+                 *
                 $file = $stage->getEntrepriseLogo();
                 if ($file) {
                     // Generate a unique name for the file before saving it
@@ -169,7 +182,7 @@ class StageController extends Controller
                 }
                 else {
                     $stage->setEntrepriseLogo($originalFileName);
-                }
+                }*/
 
                 // Obtention des situations obligatoires: Typologie
                 $mandatory = $request->request->get('mandatory');
@@ -186,11 +199,15 @@ class StageController extends Controller
         $typologies = $manager->loadTypologies();
 
         $utilisateurStages = new UtilisateurStages();
+        foreach ($intitulesActivites as $stagesIntitule) {
+            $stage->addIntitulesActivites($stagesIntitule);
+        }
         $utilisateurStages->addStage($stage);
         $recommandations = $utilisateurStages->verifierStage();
 
         return $this->render('stage/edit.html.twig', array('form' => $model->createView(),
                              'stage' => $stage, 'page' => $page, 'intitulesActivites' => $intitulesActivites,
+                             'arrayStagesAnnees' => $arrayStagesAnnees,
                              'typologies' => $typologies, 'recommandations' => $recommandations));
     }
 
@@ -203,7 +220,6 @@ class StageController extends Controller
         $idStage = $request->request->get('idStage');
 
         if ($request->getMethod() == 'POST') {
-
             // Obtention du manager
             $manager = $this->getManager();
             // Obtention de l'utilisateur connecté
@@ -221,7 +237,7 @@ class StageController extends Controller
                     $status = -1;
                 }
             } else {
-                $message = "L'intitulé n'existe pas";
+                $message = "Le stage n'existe pas";
                 $status = -1;
             }
         }
@@ -351,7 +367,10 @@ class StageController extends Controller
             return $this->render("TwigBundle/views/Exception/error404.html.twig");
         }
         // Recherche de l'intitule de ce stage
-        $intitule = $manager->loadStageIntitule($id, $idintitule);
+        if (!$intitule = $manager->loadStageIntitule($id, $idintitule))
+        {
+            return $this->render("TwigBundle/views/Exception/error404.html.twig");
+        }
         // Obtention de toutes les activités
         $activites = $this->getActiviteManager()->loadActivites();
 
@@ -535,4 +554,24 @@ class StageController extends Controller
         return new WordResponse($templateProcessor, "attestation-stage-".$userNom . "-".$dateDuJour->format("Ymd").".docx");
     }
 
+    private function getNbStagesMax($login)
+    {
+
+        $arrayStagesAnnees = array('stage1' => true, 'stage2' => true);
+        $stage1 = 0;
+        $stage2 = 0;
+        // Obtention des stages
+        $stages = $this->getManager()->loadStages($login);
+        foreach ($stages as $stage)
+        {
+            if ($stage->getAnnee() == 1)
+                $stage1 += 1;
+            else
+                $stage2 += 1;
+        }
+
+        $arrayStagesAnnees['stage1'] = ($stage1 < 2);
+        $arrayStagesAnnees['stage2'] = ($stage2 < 2);
+        return $arrayStagesAnnees;
+    }
 }

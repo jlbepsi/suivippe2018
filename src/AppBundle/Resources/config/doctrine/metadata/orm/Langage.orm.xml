@@ -9,5 +9,15 @@
         <option name="fixed"/>
       </options>
     </field>
+    <many-to-many field="idframework" target-entity="Framework" inversed-by="idlangage" fetch="LAZY">
+      <join-table name="langageframework">
+        <join-columns>
+          <join-column name="idlangage" referenced-column-name="id"/>
+        </join-columns>
+        <inverse-join-columns>
+          <join-column name="idframework" referenced-column-name="id"/>
+        </inverse-join-columns>
+      </join-table>
+    </many-to-many>
   </entity>
 </doctrine-mapping>

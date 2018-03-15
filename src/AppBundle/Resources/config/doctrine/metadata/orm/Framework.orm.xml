@@ -9,5 +9,6 @@
         <option name="fixed"/>
       </options>
     </field>
+    <many-to-many field="idlangage" target-entity="Langage" mapped-by="idframework" fetch="LAZY"/>
   </entity>
 </doctrine-mapping>

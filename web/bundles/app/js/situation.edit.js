@@ -2,6 +2,32 @@
 $(function () {
 // Document.ready -> link up remove event handler
 
+    // Gestion des framework d'après le langage
+    function loadFramework(idLangage) {
+        // Le select des fw
+        var oSelectFW = $('#appbundle_situation_codeframework');
+        // On vide la liste
+        oSelectFW.empty();
+
+        // On remplie la liste avec les fw associés au langage
+        for(var i=0;i<langageFramework.length;i++) {
+            var obj = langageFramework[i];
+            if (obj.idlangage == idLangage) {
+                oSelectFW.append($("<option/>", {
+                    value: obj.id, text: obj.libelle
+                }));
+            }
+        }
+    }
+    $('#appbundle_situation_codelangage').change(function () {
+        var idLangage = $(this).val();
+        loadFramework(idLangage);
+    })
+
+    // Au démarrage on affecte les framework
+    var idLangage = $('#appbundle_situation_codelangage').val();
+    loadFramework(idLangage);
+
     /*******************************
      **
      ** Gestion des dates avec DatTimePicker

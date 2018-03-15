@@ -91,10 +91,21 @@
                 <div class="form-row">
                     <div class="form-group col-md-2">
                         <label for="stage_annee">Stage: </label>
+                        {%  if arrayStagesAnnees["stage1"] or arrayStagesAnnees["stage2"] %}
                         <select id="stage_annee" name="appbundle_stage[annee]" class="form-control">
+                            {%  if arrayStagesAnnees["stage1"] %}
                             <option value="1" {{ stage.annee==1 ? 'selected="selected"' : '' }} >Stage 1ère année</option>
+                            {%  endif %}
+                            {%  if arrayStagesAnnees["stage2"] %}
                             <option value="2" {{ stage.annee==2 ? 'selected="selected"' : '' }} >Stage 2ème année</option>
+                            {%  endif %}
                         </select>
+                        {% else %}
+                            <select id="stage_annee" name="appbundle_stage[annee]" class="form-control" disabled>
+                                <option value="1" {{ stage.annee==1 ? 'selected="selected"' : '' }} >Stage 1ère année</option>
+                                <option value="2" {{ stage.annee==2 ? 'selected="selected"' : '' }} >Stage 2ème année</option>
+                            </select>
+                        {%  endif %}
                     </div>
                     <div class="form-group col-md-10">
                         <label for="stage_libelleCourt">Libellé court: </label>
@@ -136,6 +147,7 @@
                     </div>
                 </div>
 
+                <!--
                 <div class="form-row">
                     <div class="form-group col-md-4">
                         <label for="entrepriseLogoPreview">Logo</label>
@@ -152,6 +164,7 @@
                         <input type="file" class="form-control-file" id="stage_entrepriseLogo" name="appbundle_stage[entrepriseLogo]"/>
                     </div>
                 </div>
+                -->
 
                 <div class="form-row">
                     <div class="form-group col-md-12">

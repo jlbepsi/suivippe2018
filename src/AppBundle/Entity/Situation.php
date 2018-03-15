@@ -486,7 +486,11 @@ class Situation
      */
     public function addIdactivite(\AppBundle\Entity\Activite $idactivite)
     {
-        $this->idactivite[] = $idactivite;
+        //$this->idactivite[] = $idactivite;
+        if (!$this->idactivite->contains($idactivite)) {
+            $this->idactivite->add($idactivite);
+        }
+
 
         return $this;
     }
@@ -530,7 +534,11 @@ class Situation
      */
     public function addCode(\AppBundle\Entity\Typologie $code)
     {
-        $this->code[] = $code;
+        //$this->code[] = $code;
+        if (!$this->code->contains($code)) {
+            $this->code->add($code);
+        }
+
 
         return $this;
     }

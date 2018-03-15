@@ -95,7 +95,7 @@
                     </div>
                     <div class="form-group col-md-8">
                         <label for="appbundle_situation_codeframework">Framework: </label>
-                        {{ form_widget(form.codeframework) }}
+                        <select id="appbundle_situation_codeframework" name="appbundle_situation[codeframework]" class="form-control"></select>
                     </div>
                 </div>
                 {% else %}  <!-- Parcours non défini -->
@@ -139,7 +139,7 @@
                             </div>
                             <div class="form-group col-md-8">
                                 <label class="control-label required" for="appbundle_situation_codeframework">Framework: </label>
-                                {{ form_widget(form.codeframework) }}
+                                <select id="appbundle_situation_codeframework" name="appbundle_situation[codeframework]" class="form-control"></select>
                             </div>
                         </div>
                     </div>
@@ -269,8 +269,8 @@
                             <td>{{ activite.nomenclature }}</td>
                             <td>{{ activite.libelle }}</td>
                             <td>
-                                <a class="btn btn-danger btn-sm" style="display: {%  if isPresent %}inline{% else%}none{% endif %}" href="#" name="deleteSituationActivite" id="deleteSituationActivite" title="Retirer l'activité"><i class="fa fa-minus" aria-hidden="true"></i>&nbsp;Retirer</a>
-                                <a class="btn btn-primary btn-sm" style="display: {%  if isPresent %}none{% else%}inline{% endif %}" href="#" name="addSituationActivite" id="addSituationActivite" title="Ajouter l'activité"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Ajouter</a>
+                                <a class="btn btn-danger btn-sm" style="display: {%  if isPresent %}inline{% else%}none{% endif %}" name="deleteSituationActivite" id="deleteSituationActivite" title="Retirer l'activité"><i class="fa fa-minus" aria-hidden="true"></i>&nbsp;Retirer</a>
+                                <a class="btn btn-primary btn-sm" style="display: {%  if isPresent %}none{% else%}inline{% endif %}" name="addSituationActivite" id="addSituationActivite" title="Ajouter l'activité"><i class="fa fa-plus" aria-hidden="true"></i>&nbsp;Ajouter</a>
                             </td>
                         </tr>
                     {% endif %}
@@ -305,6 +305,19 @@
 
     <input type="hidden" id="situationReference" value="{{ situation.reference }}" />
 
+    <p style="display: none" id="listeFrameworkJSON">[{% for fw in listeframework %}
+        {% for la in fw.idlangage %}{"id":"{{ fw.id  }}","libelle":"{{ fw.libelle }}", "idlangage":"{{ la.id }}"},{% endfor %}
+        {% endfor %}]</p>
+
+    <script type="application/javascript">
+        var langageFramework = [
+            {% for fw in listeframework %}
+                {% for la in fw.idlangage %}
+                    {"id":"{{ fw.id  }}","libelle":"{{ fw.libelle }}", "idlangage":"{{ la.id }}"},
+                {% endfor %}
+            {% endfor %}
+        ];
+    </script>
 
 {% endblock %}
 
