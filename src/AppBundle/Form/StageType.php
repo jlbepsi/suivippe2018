@@ -23,8 +23,10 @@ class StageType extends AbstractType
             ->add('annee', 'Symfony\Component\Form\Extension\Core\Type\NumberType', array('label' => 'Année: '));
 
         $builder->add('libelleCourt', 'Symfony\Component\Form\Extension\Core\Type\TextType', array('label' => 'Libellé court: '));
-        $builder->add('datedebut', 'Symfony\Component\Form\Extension\Core\Type\DateType', array('widget' => 'single_text', 'format' => 'dd/MM/yyyy'));
-        $builder->add('datefin', 'Symfony\Component\Form\Extension\Core\Type\DateType', array('widget' => 'single_text', 'format' => 'dd/MM/yyyy'));
+        $builder->add('datedebut', 'Symfony\Component\Form\Extension\Core\Type\DateType',
+            array('widget' => 'single_text', 'format' => 'dd/MM/yyyy', 'error_bubbling' => true));
+        $builder->add('datefin', 'Symfony\Component\Form\Extension\Core\Type\DateType',
+            array('widget' => 'single_text', 'format' => 'dd/MM/yyyy', 'error_bubbling' => true));
         $builder->add('descriptif', 'Symfony\Component\Form\Extension\Core\Type\TextareaType', array('label' => 'Descriptif: '));
         $builder->add('entrepriseNom', 'Symfony\Component\Form\Extension\Core\Type\TextType', array('label' => 'Nom de l\'entreprise: '));
         $builder->add('entrepriseAdresse', 'Symfony\Component\Form\Extension\Core\Type\TextareaType', array('label' => 'Adresse de l\'entreprise: '));

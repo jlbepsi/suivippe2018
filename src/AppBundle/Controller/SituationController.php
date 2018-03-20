@@ -132,9 +132,12 @@ class SituationController extends Controller
         $typologies = $manager->loadTypologies();
         // Obtention du parcours
         $idParcours = $user->getNumparcours()->getId();
+        // Obtention des frameworks
+        $listeframework = $manager->loadFramework();
 
         return $this->render('situation/add.html.twig', array('form' => $model->createView(),
                                 'situation' => $situation, 'typologies' => $typologies,
+                                'listeframework' => $listeframework,
                                 'idParcours' => $idParcours));
     }
 
@@ -164,6 +167,23 @@ class SituationController extends Controller
             // Validation du modèle
             if ($model->isValid())
             {
+                // Obtention du parcours
+                $radioParcours = $request->request->get('radioParcours');
+                if ($radioParcours != null)
+                {
+                    if ($radioParcours == 1) // SISR
+                    {
+                        $situation->setCodeframework(null);
+                        $situation->setCodelangage(null);
+                    }
+                    else // SLAM
+                    {
+                        $situation->setCodeos(null);
+                        $situation->setCodeservice(null);
+                    }
+
+                }
+
                 // Obtention des situations obligatoires: Typologie
                 $mandatory = $request->request->get('mandatory');
                 $manager->saveTypologies($situation, $mandatory);
@@ -201,7 +221,12 @@ class SituationController extends Controller
                 }
                 else
                 {
-                    if ($currentRefE4 != null)
+                    if ($currentRefE4 == null)
+                    {
+                        // Validation de la situation
+                        $manager->saveSituation($situation);
+                    }
+                    else
                     {
                         // Sil il existait une référence E4 on la supprime
                         $situation->setRefe4(null);

@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+    {% extends 'base.html.twig' %}
 
 {% block title %}
     Ajout d'une situation
@@ -44,7 +44,7 @@
                     {{ form_widget(form.codeos) }}
                 </div>
                 <div class="form-group col-md-8">
-                    <label for="situation_codeframework">Service: </label>
+                    <label for="situation_codeservice">Service: </label>
                     {{ form_widget(form.codeservice) }}
                 </div>
             </div>
@@ -56,7 +56,7 @@
                 </div>
                 <div class="form-group col-md-8">
                     <label class="control-label required" for="situation_codeframework">Framework: </label>
-                    {{ form_widget(form.codeframework) }}
+                    <select id="appbundle_situation_codeframework" name="appbundle_situation[codeframework]" class="form-control"></select>
                 </div>
             </div>
             {% else %}  <!-- Parcours non défini -->
@@ -78,7 +78,7 @@
                             {{ form_widget(form.codeos) }}
                         </div>
                         <div class="form-group col-md-8">
-                            <label for="situation_codeframework">Service: </label>
+                            <label for="situation_codeservice">Service: </label>
                             {{ form_widget(form.codeservice) }}
                         </div>
                     </div>
@@ -92,7 +92,7 @@
                         </div>
                         <div class="form-group col-md-8">
                             <label class="control-label required" for="situation_codeframework">Framework: </label>
-                            {{ form_widget(form.codeframework) }}
+                            <select id="appbundle_situation_codeframework" name="appbundle_situation[codeframework]" class="form-control"></select>
                         </div>
                     </div>
                 </div>
@@ -131,6 +131,16 @@
             <input type="submit" id="submit" name="submit" class="btn btn-success" value="Valider" />
         </form>
     </div>
+
+    <script type="application/javascript">
+        var langageFramework = [
+            {% for fw in listeframework %}
+            {% for la in fw.idlangage %}
+            {"id":"{{ fw.id  }}","libelle":"{{ fw.libelle }}", "idlangage":"{{ la.id }}"},
+            {% endfor %}
+            {% endfor %}
+        ];
+    </script>
 {% endblock %}
 
 {% block javascripts %}

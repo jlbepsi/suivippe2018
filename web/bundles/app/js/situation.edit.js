@@ -25,8 +25,11 @@ $(function () {
     })
 
     // Au démarrage on affecte les framework
-    var idLangage = $('#appbundle_situation_codelangage').val();
-    loadFramework(idLangage);
+    var oCodeLangage = $('#appbundle_situation_codelangage');
+    if (oCodeLangage.length) {
+        var idLangage = oCodeLangage.val();
+        loadFramework(idLangage);
+    }
 
     /*******************************
      **
@@ -47,6 +50,9 @@ $(function () {
         autoclose: true,
         todayHighlight: true
     });
+
+    // Mise à jour de la durée
+    dateChange();
 
     function dateChange() {
         // var dateTest = new Date(2017, 10, 30);

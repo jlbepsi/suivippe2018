@@ -3,6 +3,7 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use AppBundle\Validator\Constraints as AppConstraints;
 
 /**
  * Stage
@@ -81,6 +82,7 @@ class Stage
      * @var \DateTime
      *
      * @ORM\Column(name="dateDebut", type="date", nullable=false)
+     * @AppConstraints\StageDatesValidator
      */
     private $datedebut;
 
@@ -88,6 +90,7 @@ class Stage
      * @var \DateTime
      *
      * @ORM\Column(name="dateFin", type="date", nullable=false)
+     * @AppConstraints\StageDates
      */
     private $datefin;
 

@@ -22,6 +22,9 @@ $(function () {
         todayHighlight: true
     });
 
+    // Mise à jour de la durée
+    dateChange();
+
     function dateChange() {
         // var dateTest = new Date(2017, 10, 30);
 

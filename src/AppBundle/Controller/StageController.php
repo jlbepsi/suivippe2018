@@ -76,7 +76,7 @@ class StageController extends Controller
         // Typologies
         $typologies = $manager->loadTypologies();
         // Nombre de stages par année
-        $arrayStagesAnnees = $this->getNbStagesMax($user->getLogin());
+        $arrayStagesAnnees = $this->getNbStagesMax($user->getLogin(), $user->getClasse());
 
         // Si l'utilisateur soumet le formulaire
         if ($request->getMethod() == 'POST')
@@ -554,7 +554,7 @@ class StageController extends Controller
         return new WordResponse($templateProcessor, "attestation-stage-".$userNom . "-".$dateDuJour->format("Ymd").".docx");
     }
 
-    private function getNbStagesMax($login)
+    private function getNbStagesMax($login, $classe = null)
     {
 
         $arrayStagesAnnees = array('stage1' => true, 'stage2' => true);
@@ -572,6 +572,11 @@ class StageController extends Controller
 
         $arrayStagesAnnees['stage1'] = ($stage1 < 2);
         $arrayStagesAnnees['stage2'] = ($stage2 < 2);
+        if ($classe == "B1")
+        {
+            // Un B1 ne peut pas créer de stage de 2ème année
+            $arrayStagesAnnees['stage2'] = false;
+        }
         return $arrayStagesAnnees;
     }
 }
