@@ -75,7 +75,7 @@ class ProfStageController extends Controller
 
         $analyse = $utilisateursStages->analyseUtilisateursStages();
 
-        return new JsonResponse(array('nbStages' => $analyse['nbStages'],
+        return new JsonResponse(array('nbUtilisateurs' => $analyse['nbUtilisateurs'], 'nbStages' => $analyse['nbStages'],
             'nbUtilisateursSansStage' => $analyse['nbUtilisateursSansStage'],
             'nbStagesIncomplets' => $analyse['nbStagesIncomplets']));
     }

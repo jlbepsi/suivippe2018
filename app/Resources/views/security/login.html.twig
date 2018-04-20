@@ -4,13 +4,9 @@
     <meta charset="UTF-8" />
     <title>Connexion</title>
 
-    {% stylesheets
-    'bundles/app/bootstrap/css/bootstrap.css'
-    'bundles/app/font-awesome/css/font-awesome.css'
-    'bundles/app/css/sb-admin-4.css'
-    filter='cssrewrite' %}
-    <link rel="stylesheet" href="{{ asset_url }}" />
-    {% endstylesheets %}
+    <link rel="stylesheet" href="{{ asset('bundles/app/bootstrap/css/bootstrap.css') }}" />
+    <link rel="stylesheet" href="{{ asset('bundles/app/font-awesome/css/font-awesome.css') }}" />
+    <link rel="stylesheet" href="{{ asset('bundles/app/css/sb-admin-4.css') }}" />
 
     <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
 </head>
@@ -50,12 +46,8 @@
 
 </div>
 
-{% javascripts
-'bundles/app/js/jquery-3.2.1.js'
-'bundles/app/bootstrap/js/bootstrap.min.js'
-%}
-<script type="text/javascript" src="{{ asset_url }}"></script>
-{% endjavascripts %}
+<script src="{{ asset('bundles/app/js/jquery-3.2.1.js') }}"></script>
+<script src="{{ asset('bundles/app/bootstrap/js/bootstrap.min.js') }}"></script>
 
 </body>
 </html>
