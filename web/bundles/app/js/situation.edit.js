@@ -212,8 +212,10 @@ $(function () {
 
     // Bouton collapse
     $('.collapse').on('shown.bs.collapse', function(){
-        $(this).parent().find(".glyphicon-plus").removeClass("glyphicon-plus").addClass("glyphicon-minus");
+	var div = $(this).parent();
+        var iObj = div.find(".fa fa-plus");
+	iObj.removeClass("fa fa-plus").addClass("fa fa-minus");
     }).on('hidden.bs.collapse', function(){
-        $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-plus");
+        $(this).parent().find(".fa fa-minus").removeClass("fa fa-minus").addClass("fa fa-plus");
     });
 });

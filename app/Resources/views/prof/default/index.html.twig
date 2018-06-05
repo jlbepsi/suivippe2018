@@ -4,6 +4,7 @@
     Tableau de bord
 {% endblock %}
 
+
 {% block body %}
     <div class="row">
         <div class="col-lg-12">
@@ -13,66 +14,64 @@
     </div>
     <!-- /.row -->
     <div class="row">
+        <div class="col-xl-12 col-lg-12">
+        <h3>23 étudiants</h3>
+        </div>
 
-        <!-- stages -->
-        <div class="col-xl-3 col-lg-6">
+        <!-- stages  -->
+        <div class="col-xl-6 col-lg-12">
             <div class="card" style="width: 20rem;">
                 <div class="card-header text-white bg-primary">
                     <h2 class="card-title">
-                        <i class="fa fa-list fa-2x"></i>&nbsp;
+                        <i class="fa fa-list"></i>&nbsp;
                         <span id="nbStages" class="badge badge-pill badge-light">0</span>&nbsp;Stages
                     </h2>
-                    <h5>
-                        <ul>
-                            <li><span id="nbStagesIncomplets" class="badge badge-pill badge-warning">0</span>&nbsp;incomplets</li>
-                            <li><span id="nbUtilisateursSansStage" class="badge badge-pill badge-danger">0</span>&nbsp;étudiant(s) sans stage</li>
-                        </ul>
-                    </h5>
                 </div>
                 <div class="card-body">
                     <div  class="card-text">
                         <span id="loaderStages"><i class="fa fa-spinner fa-spin"></i>Traitement en cours</span>
-
+                        <div class="row">
+                                <canvas id="chartjs-stageEtudiant" class="chartjs" ></canvas>
+                        </div>
+                        <div class="row">
+                                <canvas id="chartjs-stage" class="chartjs" ></canvas>
+                        </div>
                     </div>
+                    <br />
                     <a id="btnStageListe" href="{{  path("prof_stage_index") }}" class="btn btn-outline-primary btn-block" style="display: none">Voir la liste</a>
                 </div>
             </div>
         </div>
 
         <!-- situations -->
-        <div class="col-xl-3 col-lg-6">
+        <div class="col-xl-6 col-lg-12">
             <div class="card" style="width: 20rem;">
                 <div class="card-header text-white bg-primary">
                     <h2 class="card-title">
-                        <i class="fa fa-list fa-2x"></i>&nbsp;
+                        <i class="fa fa-list"></i>&nbsp;
                         <span id="nbSituations" class="badge badge-pill badge-light">0</span>&nbsp;Situations
                     </h2>
-                    <h5>
-                        <ul>
-                            <li><span id="nbCommentaires" class="badge badge-pill badge-success">0</span>&nbsp;commentées</li>
-                            <li><span id="nbUtilisateursSansSituation" class="badge badge-pill badge-danger">0</span>&nbsp;étudiant(s) sans situation</li>
-                            <li><span id="nbSituationsIncompletes" class="badge badge-pill badge-warning">0</span>&nbsp;incomplète(s)</li>
-                        </ul>
-                    </h5>
                 </div>
                 <div class="card-body">
                     <div  class="card-text">
                         <span id="loaderSituations"><i class="fa fa-spinner fa-spin"></i>Traitement en cours</span>
-
+                        <div class="row">
+                            <canvas id="chartjs-situationEtudiant" class="chartjs" ></canvas>
+                        </div>
+                        <div class="row">
+                            <canvas id="chartjs-situation" class="chartjs" ></canvas>
+                        </div>
                     </div>
+                    <br />
                     <a id="btnSituationListe" href="{{  path("prof_situation_index") }}" class="btn btn-outline-primary btn-block" style="display: none">Voir la liste</a>
                 </div>
             </div>
         </div>
-
     </div>
     <!-- /.row -->
 {% endblock %}
 
 {% block javascripts %}
-    {% javascripts
-        'bundles/app/js/prof_home.js'
-    %}
-        <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
+    <script src="{{ asset('bundles/app/js/Chart.min.js') }}"></script>
+    <script src="{{ asset('bundles/app/js/prof_home.js') }}"></script>
 {% endblock %}

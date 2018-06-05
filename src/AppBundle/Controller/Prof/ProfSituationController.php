@@ -95,10 +95,10 @@ class ProfSituationController extends Controller
         $user = $this->getUser();
         $countCommentaires = $this->getManager()->countCommentaires($user->getUsername());
 
-        return new JsonResponse(array('nbSituations' => $analyse['nbSituations'],
-                                      'nbUtilisateursSansSituation' => $analyse['nbUtilisateursSansSituation'],
-                                      'nbSituationsIncompletes' => $analyse['nbSituationsIncompletes'],
-                                      'nbCommentaires' => $countCommentaires));
+        return new JsonResponse(array('nbUtilisateurs' => $analyse['nbUtilisateurs'], 'nbSituations' => $analyse['nbSituations'],
+            'nbUtilisateursSansSituation' => $analyse['nbUtilisateursSansSituation'],
+            'nbSituationsIncompletes' => $analyse['nbSituationsIncompletes'],
+            'nbCommentaires' => intval($countCommentaires)));
     }
 
 

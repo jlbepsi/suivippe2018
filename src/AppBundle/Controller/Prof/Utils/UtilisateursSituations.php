@@ -100,12 +100,15 @@ class UtilisateursSituations
      */
     public function analyseUtilisateursSituations()
     {
+        $cptUtilisateurs = 0;
         $cptSituations = 0;
         $cptSansSituations = 0;
         $cptSituationsIncompletes = 0;
 
         foreach ($this->utilisateurs as $utilisateur)
         {
+            $cptUtilisateurs++;
+
             $nbSituation = count($utilisateur->getSituations());
             if ($nbSituation == 0) {
                 $cptSansSituations++;
@@ -117,7 +120,7 @@ class UtilisateursSituations
             }
         }
 
-        return array('nbSituations' => $cptSituations, 'nbUtilisateursSansSituation' => $cptSansSituations,
+        return array('nbUtilisateurs' => $cptUtilisateurs, 'nbSituations' => $cptSituations, 'nbUtilisateursSansSituation' => $cptSansSituations,
                      'nbSituationsIncompletes' => $cptSituationsIncompletes);
     }
 

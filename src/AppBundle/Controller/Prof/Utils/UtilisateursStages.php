@@ -110,12 +110,15 @@ class UtilisateursStages
      */
     public function analyseUtilisateursStages()
     {
+        $cptUtilisateurs = 0;
         $cptStages = 0;
         $cptSansStages = 0;
         $cptStagesIncomplets = 0;
 
         foreach ($this->utilisateurs as $utilisateur)
         {
+            $cptUtilisateurs++;
+
             $nbStage = count($utilisateur->getStages());
             if ($nbStage == 0) {
                 $cptSansStages++;
@@ -127,7 +130,7 @@ class UtilisateursStages
             }
         }
 
-        return array('nbStages' => $cptStages, 'nbUtilisateursSansStage' => $cptSansStages,
+        return array('nbUtilisateurs' => $cptUtilisateurs, 'nbStages' => $cptStages, 'nbUtilisateursSansStage' => $cptSansStages,
             'nbStagesIncomplets' => $cptStagesIncomplets);
     }
 }
