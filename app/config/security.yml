@@ -1,22 +1,19 @@
 # To get started with security, check out the documentation:
 # http://symfony.com/doc/current/security.html
 security:
-    encoders:
-        AppBundle\Entity\Utilisateur:
-            algorithm: sha512
-            encode_as_base64: false
-            iterations: 1
-
     role_hierarchy:
         ROLE_PROF:     ROLE_USER
         ROLE_ADMIN:       ROLE_USER
         ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
     providers:
-        internal_provider:
-            entity:
-                class: AppBundle:Utilisateur
-                property: login
+        ldap_provider:
+            ldap:
+                service: Symfony\Component\Ldap\Ldap
+                base_dn: 'OU=Pedago,OU=Utilisateurs,DC=montpellier,DC=epsi,DC=fr'
+                search_dn: "CN=ADmaintain,OU=Administratif,DC=montpellier,DC=epsi,DC=fr"
+                search_password: 'citK19c3'
+                default_roles: ROLE_USER
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -26,11 +23,14 @@ security:
 
         main:
             anonymous: ~
-            provider: internal_provider
-            form_login:
+
+            form_login_ldap:
+            #http_basic_ldap:
                 login_path: login
                 check_path: login
                 success_handler: redirect.after.login
+                service: Symfony\Component\Ldap\Ldap
+                dn_string: 'MONTPELLIER\{username}'
             logout:
                 path:   /logout
                 target: /

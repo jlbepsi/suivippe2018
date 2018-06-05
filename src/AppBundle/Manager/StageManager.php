@@ -93,10 +93,10 @@ class StageManager
     }
 
     /**
-     * @param \AppBundle\Entity\Utilisateur $login
+     * @param string $login
      * @return integer
      */
-    public function countStages(Utilisateur $login)
+    public function countStages($login)
     {
         return $this->repository->countStages($login);
     }

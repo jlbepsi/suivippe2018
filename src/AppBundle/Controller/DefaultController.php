@@ -35,7 +35,7 @@ class DefaultController extends Controller
         // Recherche du film
         if (!$utilisateur = $manager->loadUser($user->getLogin()))
         {
-            return $this->render("TwigBundle/views/Exception/error404.html.twig");
+            return $this->render("Exception/error404.html.twig");
         }
 
         $erreur = "";

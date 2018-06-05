@@ -1,0 +1,11 @@
+{# app/Resources/TwigBundle/views/Exception/error500.html.twig #}
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Le serveur a rencontré un problème inattendu</h1>
+
+    <p>
+        Le serveur a rencontré un problème inattendu ou est indisponible pour le moment. <a href="{{ path('homepage') }}">Allez à la page d'accueil</a>
+        ou contacter votre administrateur réseau : <a href="mailto:admin.reseau@montpellier-epsi.fr">admin.reseau@montpellier-epsi.fr</a>
+    </p>
+{% endblock %}

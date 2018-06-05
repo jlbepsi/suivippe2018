@@ -39,11 +39,11 @@ class SituationController extends Controller
             $form->handleRequest($request);
 
             // L'utilisateur utilise le formulaire recherche
-            $situations = $this->getManager()->loadSituationsWhere($form->getData(), $user->getLogin());
+            $situations = $this->getManager()->loadSituationsWhere($form->getData(), $user->getUsername());
         }
         else {
             // Obtention des situations
-            $situations = $this->getManager()->loadSituations($user->getLogin());
+            $situations = $this->getManager()->loadSituations($user->getUsername());
         }
         // Obtention du parcours
         $idParcours = $user->getNumparcours()->getId();
@@ -71,7 +71,7 @@ class SituationController extends Controller
         // Obtention de l'utilisateur connecté
         $user = $this->getUser();
         // Obtention du manager puis des films
-        $count = $this->getManager()->countSituations($user->getLogin());
+        $count = $this->getManager()->countSituations($user->getUsername());
 
         return new JsonResponse(array('count' => $count));
     }
@@ -151,9 +151,9 @@ class SituationController extends Controller
         // Obtention de l'utilisateur connecté
         $user = $this->getUser();
         // Recherche de la situation
-        if (!$situation = $manager->loadSituation($id, $user->getLogin()))
+        if (!$situation = $manager->loadSituation($id, $user->getUsername()))
         {
-            return $this->render("TwigBundle/views/Exception/error404.html.twig");
+            return $this->render("Exception/error404.html.twig");
         }
 
         // Création du modèle du formulaire
@@ -276,7 +276,7 @@ class SituationController extends Controller
             // Obtention de l'utilisateur connecté
             $user = $this->getUser();
             // Recherche de la situation
-            if ($situation = $manager->loadSituation($refSituation, $user->getLogin())) {
+            if ($situation = $manager->loadSituation($refSituation, $user->getUsername())) {
                 $message = "La situation a été supprimé";
                 $status = 1;
                 // Suppression du film
@@ -325,7 +325,7 @@ class SituationController extends Controller
             // Obtention de l'utilisateur connecté
             $user = $this->getUser();
             // Recherche de la situation
-            if ($situation = $manager->loadSituation($reference, $user->getLogin())) {
+            if ($situation = $manager->loadSituation($reference, $user->getUsername())) {
                 $status = 1;
                 // Ajout de l'activité
                 try
@@ -365,7 +365,7 @@ class SituationController extends Controller
             // Obtention de l'utilisateur connecté
             $user = $this->getUser();
             // Recherche de la situation
-            if ($situation = $manager->loadSituation($reference, $user->getLogin()))
+            if ($situation = $manager->loadSituation($reference, $user->getUsername()))
             {
                 // Ajout de l'activité
                 try

@@ -50,7 +50,7 @@ class ProfStageController extends Controller
         // Recherche du film
         if (!$stage = $manager->loadSingleStage($id))
         {
-            return $this->render("TwigBundle/views/Exception/error404.html.twig");
+            return $this->render("Exception/error404.html.twig");
         }
 
         $typologies = $manager->loadTypologies();

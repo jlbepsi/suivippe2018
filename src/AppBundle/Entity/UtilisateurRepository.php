@@ -19,11 +19,13 @@ class UtilisateurRepository extends EntityRepository
             $query = $this->createQueryBuilder('u')
                 ->where("u.classe = :pClasse")
                 ->setParameter(':pClasse', $classe)
+                ->add('orderBy','u.nom ASC, u.prenom ASC')
                 ->getQuery();
         }
         else {
             $query = $this->createQueryBuilder('u')
                 ->where("u.classe ='B1' OR u.classe ='B2'")
+                ->add('orderBy','u.nom ASC, u.prenom ASC')
                 ->getQuery();
         }
 

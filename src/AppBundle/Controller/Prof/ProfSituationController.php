@@ -53,7 +53,7 @@ class ProfSituationController extends Controller
         // Recherche de la situation
         if (!$situation = $manager->loadSingleSituation($id))
         {
-            return $this->render("TwigBundle/views/Exception/error404.html.twig");
+            return $this->render("Exception/error404.html.twig");
         }
 
         // Commentaires
@@ -93,7 +93,7 @@ class ProfSituationController extends Controller
         // Commentaires
         // Obtention de l'utilisateur connecté
         $user = $this->getUser();
-        $countCommentaires = $this->getManager()->countCommentaires($user->getLogin());
+        $countCommentaires = $this->getManager()->countCommentaires($user->getUsername());
 
         return new JsonResponse(array('nbSituations' => $analyse['nbSituations'],
                                       'nbUtilisateursSansSituation' => $analyse['nbUtilisateursSansSituation'],
@@ -116,7 +116,7 @@ class ProfSituationController extends Controller
         // Obtention de l'utilisateur connecté
         $user = $this->getUser();
         // Obtention du manager puis des situations
-        $count = $this->getManager()->countCommentaires($user->getLogin());
+        $count = $this->getManager()->countCommentaires($user->getUsername());
 
         return new JsonResponse(array('count' => $count));
     }
@@ -149,7 +149,7 @@ class ProfSituationController extends Controller
 
                 // Obtention de l'utilisateur connecté
                 $user = $this->getUser();
-                $prof = $user->getlogin();
+                $prof = $user->getUsername();
                 // Création de l'intitulé
                 try {
                     $id = $manager->addSituationCommentaire($situation, $commentaire, $user, $today);

@@ -39,9 +39,9 @@ class StageController extends Controller
         // Obtention de l'utilisateur connecté
         $user = $this->getUser();
         // Obtention des stages
-        $stages = $this->getManager()->loadStages($user->getLogin());
+        $stages = $this->getManager()->loadStages($user->getUsername());
         // Nombre de stages par année
-        $arrayStagesAnnees = $this->getNbStagesMax($user->getLogin());
+        $arrayStagesAnnees = $this->getNbStagesMax($user->getUsername());
 
         return $this->render('stage/index.html.twig', array("arrayStages" => $stages, 'arrayStagesAnnees' => $arrayStagesAnnees));
     }
@@ -53,7 +53,7 @@ class StageController extends Controller
     {
         // Obtention de l'utilisateur connecté
         $user = $this->getUser();
-        $count = $this->getManager()->countStages($user); //->getLogin()
+        $count = $this->getManager()->countStages($user->getUsername());
 
         return new JsonResponse(array('count' => $count));
     }
@@ -76,7 +76,7 @@ class StageController extends Controller
         // Typologies
         $typologies = $manager->loadTypologies();
         // Nombre de stages par année
-        $arrayStagesAnnees = $this->getNbStagesMax($user->getLogin(), $user->getClasse());
+        $arrayStagesAnnees = $this->getNbStagesMax($user->getUsername(), $user->getClasse());
 
         // Si l'utilisateur soumet le formulaire
         if ($request->getMethod() == 'POST')
@@ -138,12 +138,12 @@ class StageController extends Controller
         // Obtention de l'utilisateur connecté
         $user = $this->getUser();
         // Recherche du stage
-        if (!$stage = $manager->loadStage($id, $user->getLogin()))
+        if (!$stage = $manager->loadStage($id, $user->getUsername()))
         {
-            return $this->render("TwigBundle/views/Exception/error404.html.twig");
+            return $this->render("Exception/error404.html.twig");
         }
 
-        $arrayStagesAnnees = $this->getNbStagesMax($user->getLogin());
+        $arrayStagesAnnees = $this->getNbStagesMax($user->getUsername());
 
         // Création du modèle du formulaire
         $model = $this->get('form.factory')->create(StageType::class, $stage);
@@ -225,7 +225,7 @@ class StageController extends Controller
             // Obtention de l'utilisateur connecté
             $user = $this->getUser();
             // Recherche du stage
-            if ($stage = $manager->loadStage($idStage, $user->getLogin())) {
+            if ($stage = $manager->loadStage($idStage, $user->getUsername())) {
                 $message = "Le stage a ete supprimé";
                 $status = 1;
                 // Suppression du film
@@ -275,7 +275,7 @@ class StageController extends Controller
             $user = $this->getUser();
 
             // Recherche du stage
-            if ($stage = $manager->loadStage($idStage, $user->getLogin()))
+            if ($stage = $manager->loadStage($idStage, $user->getUsername()))
             {
                 $message = "l'intitulé a été ajouté";
                 $status = 1;
@@ -362,14 +362,14 @@ class StageController extends Controller
         // Obtention de l'utilisateur connecté
         $user = $this->getUser();
         // Recherche du stage
-        if (!$stage = $manager->loadStage($id, $user->getLogin()))
+        if (!$stage = $manager->loadStage($id, $user->getUsername()))
         {
-            return $this->render("TwigBundle/views/Exception/error404.html.twig");
+            return $this->render("Exception/error404.html.twig");
         }
         // Recherche de l'intitule de ce stage
         if (!$intitule = $manager->loadStageIntitule($id, $idintitule))
         {
-            return $this->render("TwigBundle/views/Exception/error404.html.twig");
+            return $this->render("Exception/error404.html.twig");
         }
         // Obtention de toutes les activités
         $activites = $this->getActiviteManager()->loadActivites();
@@ -479,9 +479,9 @@ class StageController extends Controller
         // Obtention de l'utilisateur connecté
         $utilisateur = $this->getUser();
         // Recherche du stage
-        if (!$stage = $manager->loadStage($id, $utilisateur->getLogin()))
+        if (!$stage = $manager->loadStage($id, $utilisateur->getUsername()))
         {
-            return $this->render("TwigBundle/views/Exception/error404.html.twig");
+            return $this->render("TException/error404.html.twig");
         }
 
         // Obtention du template Attestation de stage

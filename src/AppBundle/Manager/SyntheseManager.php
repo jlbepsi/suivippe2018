@@ -45,12 +45,12 @@ class SyntheseManager
             $inValues = '(26,27)';
             if ($idParcours == 1)
                 $inValues = '(35,36,40,41,42)'; // Pour SLAM
-            $query2 = $this->entityManager->createQuery(
-                'SELECT e
+            $queryText = 'SELECT e
                     FROM AppBundle:Activite a, AppBundle:Evalue e, AppBundle:Epreuve ep
                     WHERE e.idactivite = a
                       AND e.idepreuve = ep
-                      AND a.id in ' . $inValues);
+                      AND a.id in ' . $inValues;
+            $query2 = $this->entityManager->createQuery($queryText);
             $result2 = $query2->getResult();
 
             foreach ($result2 as $item) {
