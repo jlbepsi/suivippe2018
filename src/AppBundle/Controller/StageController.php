@@ -6,14 +6,12 @@ use AppBundle\Controller\Prof\Utils\UtilisateurStages;
 use AppBundle\Form\TemplateProcessorImage;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 
 //use PhpOffice\PhpWord\TemplateProcessor;
 
-use AppBundle\Entity\Stageintitule;
 use AppBundle\Manager\ActiviteManager;
 use AppBundle\Entity\Stage;
 use AppBundle\Manager\StageManager;
@@ -92,7 +90,7 @@ class StageController extends Controller
                 $stage->setDatemodif(new \DateTime('now'));
 
                 // Obtention du fichier
-                $file = $stage->getEntrepriseLogo();
+                /*$file = $stage->getEntrepriseLogo();
                 if ($file) {
                     // Generate a unique name for the file before saving it
                     $fileName = 'logo'. $stage->getId() . '.' . $file->guessExtension();
@@ -106,7 +104,7 @@ class StageController extends Controller
                     // Update the 'brochure' property to store the PDF file name
                     // instead of its contents
                     $stage->setEntrepriseLogo($fileName);
-                }
+                }*/
 
                 $typologies = $manager->loadTypologies();
 
@@ -494,18 +492,27 @@ class StageController extends Controller
         /** VALEURS A RECUPERER **/
         $userNom = $utilisateur->getNom();
         $userPrenom = $utilisateur->getPrenom();
-        $userDateNaissance = $utilisateur->getDateNaissance()->format("d/m/Y");
-        $userSexe = ($utilisateur->getSexe()==1 ? "M" : "F");
-        $userAdresse = $utilisateur->getAdresse();
         $userMail = $utilisateur->getMail();
         $userParcours = $utilisateur->getNumparcours()->getLibelle();
         $templateProcessor->setValue('userNom', $userNom);
         $templateProcessor->setValue('userPrenom', $userPrenom);
+        $templateProcessor->setValue('userMail', $userMail);
+        $templateProcessor->setValue('userParcours', $userParcours);
+
+        // RGPD ??
+        $templateProcessor->setValue('userDateNaissance', '');
+        $templateProcessor->setValue('userSexe', '');
+        $templateProcessor->setValue('userAdresse', '');
+        /*
+        $userDateNaissance = $utilisateur->getDateNaissance()->format("d/m/Y");
+        $userSexe = ($utilisateur->getSexe()==1 ? "M" : "F");
+        $userAdresse = $utilisateur->getAdresse();
+        */
+        /*
         $templateProcessor->setValue('userDateNaissance', $userDateNaissance);
         $templateProcessor->setValue('userSexe', $userSexe);
         $templateProcessor->setValue('userAdresse', $userAdresse);
-        $templateProcessor->setValue('userMail', $userMail);
-        $templateProcessor->setValue('userParcours', $userParcours);
+        */
 
         // Entreprise
         $entrepriseNom = $stage->getEntreprisenom();

@@ -15,7 +15,7 @@ $(function () {
                 "type":"pie",
                 "data":
                     {
-                        "labels":["Etudiants avec stage", "Sans stage"],
+                        "labels":["Avec stage", "Sans stage"],
                         "datasets":[{
                             "label":"Stages",
                             "data":[nbUtilisateurs -nbUtilisateursSansStage, nbUtilisateursSansStage],
@@ -24,7 +24,7 @@ $(function () {
                     }
             });
 
-        var ctx = document.getElementById("chartjs-stage").getContext('2d');
+        ctx = document.getElementById("chartjs-stage").getContext('2d');
         new Chart(ctx,
             {
                 "type":"pie",
@@ -47,7 +47,7 @@ $(function () {
                 "type":"pie",
                 "data":
                     {
-                        "labels":["Etudiants avec situation", "Sans situation"],
+                        "labels":["Avec situation", "Sans situation"],
                         "datasets":[{
                             "label":"Stages",
                             "data":[nbUtilisateurs -nbUtilisateursSansSituation, nbUtilisateursSansSituation],
@@ -56,7 +56,7 @@ $(function () {
                     }
             });
 
-        var ctx = document.getElementById("chartjs-situation").getContext('2d');
+        ctx = document.getElementById("chartjs-situation").getContext('2d');
         new Chart(ctx,
             {
                 "type":"pie",
@@ -65,7 +65,7 @@ $(function () {
                         "labels":["Validées", "Validées avec commentaires", "Incomplètes"],
                         "datasets":[{
                             "label":"Situations",
-                            "data":[nbSituations, nbCommentaires, nbSituationsIncompletes],
+                            "data":[nbSituations -nbSituationsIncompletes, nbCommentaires, nbSituationsIncompletes],
                             "backgroundColor":["#28a745", "#20c997", "#fd7e14"]
                         }]
                     }
@@ -77,6 +77,9 @@ $(function () {
         function (data) {
             // Successful requests get here
             // Update the page elements
+
+            var oNbEtudiants = $('#nbEtudiants');
+            oNbEtudiants.text(data.nbUtilisateurs);
 
             var oNbStages = $('#nbStages');
             oNbStages.text(data.nbStages);

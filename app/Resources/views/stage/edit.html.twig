@@ -29,18 +29,19 @@
                 </button>
                 <hr>
                 <p>Vous devez corriger les éléments suivants:
+                </p>
                 <ul>
                     {% for recommandations in recommandations %}
                         <li>{{ recommandations }} </li>
                     {% endfor %}
                 </ul>
-                </p>
             </div>
         </div>
     {%  endif %}
 
     <p>
-        <a href="{{  path("stage_document_word", {'id':stage.id}) }}" target="_blank" class="btn btn-primary"><i class="fa fa-file-word-o" aria-hidden="true"></i>&nbsp;Générer le document Word</a>
+        <a href="{{  path("stage_document_word", {'id':stage.id}) }}" target="_blank" class="btn btn-primary"><i class="fa fa-file-word-o" aria-hidden="true"></i>&nbsp;Générer le document Word</a> &nbsp;&nbsp;
+        <a href="{{  asset('bundles/files/Attestation de stage.docx') }}" target="_blank" class="btn btn-outline-info"><i class="fa fa-file-word-o" aria-hidden="true"></i>&nbsp;Obtenir le document Word original</a> &nbsp;&nbsp;
     </p>
 
     <!-- Nav tabs -->
