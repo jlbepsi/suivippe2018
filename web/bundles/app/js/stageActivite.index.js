@@ -14,7 +14,7 @@ $(function () {
         if (id != '' && confirm("Voulez-vous supprimer l'intitulé '" + libelle + "' ? ")) {
             $('#loader').show('slow', null);
             // Perform the ajax post
-            $.post("/edsa-suivippe/web/app_dev.php/stage/deleteIntitule", { "idStage": idStage, "idIntitule": idIntitule },
+            $.post("/app_dev.php/stage/deleteIntitule", { "idStage": idStage, "idIntitule": idIntitule },
                 function (data) {
                     // Successful requests get here
                     // Update the page elements
@@ -104,7 +104,7 @@ $(function () {
         /*    TEST       */
         //var data = { Status: 1, IntituleId: "1", ActiviteNomenclature: idActivite + " **TEST**  - Bla bla" };
         /*****************/
-        $.post("/edsa-suivippe/web/app_dev.php/stage/ajouterIntituleActivite", { "idStage": idStage, "idIntitule": idIntituleNext, "intitule": intitule, "idActivite": idActivite },
+        $.post("/app_dev.php/stage/ajouterIntituleActivite", { "idStage": idStage, "idIntitule": idIntituleNext, "intitule": intitule, "idActivite": idActivite },
             function (data) {
                 if (data.status == 1) {
                     $('#update-message').attr("class", 'label label-success');
@@ -149,7 +149,7 @@ $(function () {
         // Perform the ajax post
         loadCompetences.show();
 
-        $.post("/edsa-suivippe/web/app_dev.php/competence/list/" + value, null,
+        $.post("/app_dev.php/competence/list/" + value, null,
             function (data) {
                 // Successful requests get here
                 // Update the page elements
@@ -347,7 +347,7 @@ $(function () {
             }
         });
 
-        $.post("/edsa-suivippe/web/app_dev.php/stage/majIntituleActivite", { "idStage": idStage, "idIntitule": idIntitule, "allActivites": allActivites },
+        $.post("/app_dev.php/stage/majIntituleActivite", { "idStage": idStage, "idIntitule": idIntitule, "allActivites": allActivites },
             function (data) {
                 if (data.Status == 1) {
                     // Recherche du TR des activités

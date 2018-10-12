@@ -48,14 +48,19 @@ class SituationController extends Controller
         // Obtention du parcours
         $idParcours = $user->getNumparcours()->getId();
 
-        $analyseSituationActivite = $this->getParameter('analyseSituationActivite');
-        $utilisateurSituations = new UtilisateurSituations();
-        $utilisateurSituations->setAnalyseSituationActivite($analyseSituationActivite);
-        $utilisateurSituations->setUtilisateur($user);
-        $utilisateurSituations->setSituation($situations);
-        $recommandations = $utilisateurSituations->verifierSituation();
-        if (count($recommandations) == 0)
+        if (count($situations) > 0) {
+            $analyseSituationActivite = $this->getParameter('analyseSituationActivite');
+            $utilisateurSituations = new UtilisateurSituations();
+            $utilisateurSituations->setAnalyseSituationActivite($analyseSituationActivite);
+            $utilisateurSituations->setUtilisateur($user);
+            $utilisateurSituations->setSituation($situations);
+            $recommandations = $utilisateurSituations->verifierSituation();
+            if (count($recommandations) == 0)
+                $recommandations = null;
+        } else {
             $recommandations = null;
+        }
+
 
 
         return $this->render('situation/index.html.twig', array('arraySituations' => $situations, 'count' => count($situations),

@@ -12,6 +12,7 @@ $(function () {
         format: "dd/mm/yyyy",
         language: "fr",
         autoclose: true,
+        calendarWeeks: true,
         todayHighlight: true
     });
 
@@ -19,6 +20,7 @@ $(function () {
         format: "dd/mm/yyyy",
         language: "fr",
         autoclose: true,
+        calendarWeeks: true,
         todayHighlight: true
     });
 
@@ -69,7 +71,7 @@ $(function () {
             btnDelete.attr("disabled", true);
 
             $.ajax({
-                url: "/stage/deleteIntitule",
+                url: "/app_dev.php/stage/deleteIntitule",
                 type: "post",
                 data: {"idStage": idStage, "idIntitule": idIntitule},
                 success: function (data) {
@@ -143,7 +145,7 @@ $(function () {
 
         // Traitement
         $.ajax({
-            url: "/stage/addIntitule",
+            url: "/app_dev.php/stage/addIntitule",
             type: "post",
             data: { "idStage" : idStage, "intitule": intitule },
             success: function(data){
@@ -153,8 +155,8 @@ $(function () {
 
                     var newRow = "<tr id='intitule" + data.idStage + '-' + data.idIntitule + "' idintitule='" + data.idIntitule + "'><td>" + data.intitule + "</td>";
                     newRow += "<td></td><td>";
-                    newRow += "<a class='btn btn-primary btn-sm' href='/stage/editIntitule/" + data.idStage + "/" + data.idIntitule + "' title='Modifier intitulé'><i class='fa fa-pencil' aria-hidden='true'></i>&nbsp;Modifier</a>";
-                    newRow += "<a class='btn btn-danger btn-sm' href='#' id='deleteIntituleActivite' name='deleteIntituleActivite' title='Supprimer intitulé'><i class='fa fa-trash' aria-hidden='true'></i>&nbsp;Supprimer</a>";
+                    newRow += "<a class='btn btn-primary btn-sm' href='/app_dev.php/stage/editIntitule/" + data.idStage + "/" + data.idIntitule + "' title='Modifier intitulé'><i class='fa fa-pencil-alt' aria-hidden='true'></i>&nbsp;Modifier</a>&nbsp;";
+                    newRow += "<a class='btn btn-danger btn-sm' href='#' id='deleteIntituleActivite' name='deleteIntituleActivite' title='Supprimer intitulé'><i class='fa fa-trash-alt' aria-hidden='true'></i>&nbsp;Supprimer</a>";
                     newRow += "</td></tr>";
 
                     // Obtention de la fin de liste

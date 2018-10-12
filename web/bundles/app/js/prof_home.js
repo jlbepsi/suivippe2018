@@ -73,7 +73,7 @@ $(function () {
     }
 
     // Stages
-    $.post("prof/stage/analyse", null,
+    $.post("/app_dev.php/prof/stage/analyse", null,
         function (data) {
             // Successful requests get here
             // Update the page elements
@@ -105,7 +105,7 @@ $(function () {
         });
 
     // Situations
-    $.post("prof/situation/analyse", null,
+    $.post("/app_dev.php/prof/situation/analyse", null,
         function (data) {
             // Successful requests get here
 

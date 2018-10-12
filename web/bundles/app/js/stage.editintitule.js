@@ -11,7 +11,7 @@ $(function () {
         var activiteId = oTR.attr("activiteId");
 
         // Perform the ajax post
-        $.post("/stage/removeactivite", { "id": activiteId, "idstage": idstage, "idintitule": idintitule },
+        $.post("/app_dev.php/stage/removeactivite", { "id": activiteId, "idstage": idstage, "idintitule": idintitule },
             function (data) {
                 // Successful requests get here
                 // Update the page elements
@@ -44,7 +44,7 @@ $(function () {
         var activiteId = oTR.attr("activiteId");
 
         // Perform the ajax post
-        $.post("/stage/addactivite", { "id": activiteId, "idstage": idstage, "idintitule": idintitule },
+        $.post("/app_dev.php/stage/addactivite", { "id": activiteId, "idstage": idstage, "idintitule": idintitule },
             function (data) {
                 // Successful requests get here
                 // Update the page elements

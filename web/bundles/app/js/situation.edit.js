@@ -94,7 +94,7 @@ $(function () {
         var idIntitule = oTR.attr("idintitule");
 
         // Perform the ajax post
-        $.post("/stage/deleteIntitule", { "idStage": idStage, "idIntitule": idIntitule },
+        $.post("/app_dev.php/stage/deleteIntitule", { "idStage": idStage, "idIntitule": idIntitule },
             function (data) {
                 // Successful requests get here
                 // Update the page elements
@@ -118,7 +118,7 @@ $(function () {
         var activiteId = oTR.attr("activiteId");
 
         // Perform the ajax post
-        $.post("/situation/removeactivite", { "id": activiteId, "reference": situationReference },
+        $.post("/app_dev.php/situation/removeactivite", { "id": activiteId, "reference": situationReference },
             function (data) {
                 // Successful requests get here
                 // Update the page elements
@@ -151,7 +151,7 @@ $(function () {
         var activiteId = oTR.attr("activiteId");
 
         // Perform the ajax post
-        $.post("/situation/addactivite", { "id": activiteId, "reference": situationReference },
+        $.post("/app_dev.php/situation/addactivite", { "id": activiteId, "reference": situationReference },
             function (data) {
                 // Successful requests get here
                 // Update the page elements

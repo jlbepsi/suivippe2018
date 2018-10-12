@@ -1,21 +1,8 @@
-/* =========================================================
- * bootstrap-datepicker.js
- * Repo: https://github.com/uxsolutions/bootstrap-datepicker/
- * Demo: https://eternicode.github.io/bootstrap-datepicker/
- * Docs: https://bootstrap-datepicker.readthedocs.org/
- * =========================================================
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+/*!
+ * Datepicker for Bootstrap v1.8.0 (https://github.com/uxsolutions/bootstrap-datepicker)
  *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- * ========================================================= */
+ * Licensed under the Apache License v2.0 (http://www.apache.org/licenses/LICENSE-2.0)
+ */
 
 (function(factory){
     if (typeof define === 'function' && define.amd) {
@@ -427,12 +414,12 @@
                     'mousedown touchstart': $.proxy(function(e){
                         // Clicked outside the datepicker, hide it
                         if (!(
-                                this.element.is(e.target) ||
-                                this.element.find(e.target).length ||
-                                this.picker.is(e.target) ||
-                                this.picker.find(e.target).length ||
-                                this.isInline
-                            )){
+                            this.element.is(e.target) ||
+                            this.element.find(e.target).length ||
+                            this.picker.is(e.target) ||
+                            this.picker.find(e.target).length ||
+                            this.isInline
+                        )){
                             this.hide();
                         }
                     }, this)
@@ -1164,12 +1151,12 @@
                     factor *= 10;
                 /* falls through */
                 case 1:
-                    prevIsDisabled = Math.floor(year / factor) * factor < startYear;
+                    prevIsDisabled = Math.floor(year / factor) * factor <= startYear;
                     nextIsDisabled = Math.floor(year / factor) * factor + factor > endYear;
                     break;
                 case 0:
-                    prevIsDisabled = year <= startYear && month < startMonth;
-                    nextIsDisabled = year >= endYear && month > endMonth;
+                    prevIsDisabled = year <= startYear && month <= startMonth;
+                    nextIsDisabled = year >= endYear && month >= endMonth;
                     break;
             }
 
@@ -1722,8 +1709,8 @@
         immediateUpdates: false,
         title: '',
         templates: {
-            leftArrow: '&#x00AB;',
-            rightArrow: '&#x00BB;'
+            leftArrow: '<i class="fas fa-angle-double-left"></i>',
+            rightArrow: '<i class="fas fa-angle-double-right"></i>'
         },
         showWeekDays: true
     };
@@ -1946,24 +1933,24 @@
             return date.join('');
         },
         headTemplate: '<thead>'+
-        '<tr>'+
-        '<th colspan="7" class="datepicker-title"></th>'+
-        '</tr>'+
-        '<tr>'+
-        '<th class="prev">'+defaults.templates.leftArrow+'</th>'+
-        '<th colspan="5" class="datepicker-switch"></th>'+
-        '<th class="next">'+defaults.templates.rightArrow+'</th>'+
-        '</tr>'+
-        '</thead>',
+            '<tr>'+
+            '<th colspan="7" class="datepicker-title"></th>'+
+            '</tr>'+
+            '<tr>'+
+            '<th class="prev">'+defaults.templates.leftArrow+'</th>'+
+            '<th colspan="5" class="datepicker-switch"></th>'+
+            '<th class="next">'+defaults.templates.rightArrow+'</th>'+
+            '</tr>'+
+            '</thead>',
         contTemplate: '<tbody><tr><td colspan="7"></td></tr></tbody>',
         footTemplate: '<tfoot>'+
-        '<tr>'+
-        '<th colspan="7" class="today"></th>'+
-        '</tr>'+
-        '<tr>'+
-        '<th colspan="7" class="clear"></th>'+
-        '</tr>'+
-        '</tfoot>'
+            '<tr>'+
+            '<th colspan="7" class="today"></th>'+
+            '</tr>'+
+            '<tr>'+
+            '<th colspan="7" class="clear"></th>'+
+            '</tr>'+
+            '</tfoot>'
     };
     DPGlobal.template = '<div class="datepicker">'+
         '<div class="datepicker-days">'+
@@ -2016,7 +2003,7 @@
 
     /* DATEPICKER VERSION
      * =================== */
-    $.fn.datepicker.version = '1.7.1';
+    $.fn.datepicker.version = '1.8.0';
 
     $.fn.datepicker.deprecated = function(msg){
         var console = window.console;

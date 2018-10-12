@@ -28,7 +28,7 @@ class StageType extends AbstractType
         $builder->add('datefin', 'Symfony\Component\Form\Extension\Core\Type\DateType',
             array('widget' => 'single_text', 'format' => 'dd/MM/yyyy', 'error_bubbling' => true));
         $builder->add('descriptif', 'Symfony\Component\Form\Extension\Core\Type\TextareaType', array('label' => 'Descriptif: '));
-        $builder->add('entrepriseNom', 'Symfony\Component\Form\Extension\Core\Type\TextType', array('label' => 'Nom de l\'entreprise: '));
+        $builder->add('entrepriseNom', 'Symfony\Component\Form\Extension\Core\Type\TextareaType', array('label' => 'Nom de l\'entreprise: '));
         $builder->add('entrepriseAdresse', 'Symfony\Component\Form\Extension\Core\Type\TextareaType', array('label' => 'Adresse de l\'entreprise: '));
         $builder->add('entrepriseContact', 'Symfony\Component\Form\Extension\Core\Type\TextareaType', array('label' => 'Contact de l\'entreprise: '));
         $builder->add('entrepriseLogo', FileType::class, array('label' => 'Logo de l\'entreprise: ', 'data_class' => null));

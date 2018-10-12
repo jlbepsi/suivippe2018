@@ -28,7 +28,7 @@ $(function () {
 
         if (confirm("Confirmer la suppression du commentaire ?")) {
             // Perform the ajax post
-            $.post("/prof/situation/deletecommentaire", {"id": idCommentaire},
+            $.post("/app_dev.php/prof/situation/deletecommentaire", {"id": idCommentaire},
                 function (data) {
                     // Successful requests get here
                     // Update the page elements
@@ -75,7 +75,7 @@ $(function () {
             $('#btnNewCommentaireModal').attr("disabled", true);
 
             $.ajax({
-                url: "/prof/situation/addcommentaire",
+                url: "/app_dev.php/prof/situation/addcommentaire",
                 type: "post",
                 data: {"refSituation": refSituation, "commentaire": commentaire},
                 success: function (data) {
@@ -118,7 +118,7 @@ $(function () {
             btnModifyCommentaire.attr("disabled", true);
 
             $.ajax({
-                url: "/prof/situation/modifycommentaire",
+                url: "/app_dev.php/prof/situation/modifycommentaire",
                 type: "post",
                 data: {"id": idCommentaire, "commentaire": commentaire},
                 success: function (data) {

@@ -57,4 +57,11 @@
             element.parent().removeClass('collapse');
     }
 
+    var element2 = $('ul.navbar-sidenav a').filter(function() {
+        return this.href == url;
+    }).parent();
+    if (element2.is('li'))  {
+        element2.addClass('active');
+        element2.parent().removeClass('collapse');
+    }
 })(jQuery); // End of use strict

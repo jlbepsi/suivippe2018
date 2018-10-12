@@ -6,7 +6,7 @@ $(function () {
     $('#loaderStages').show('slow', null);
     $('#loaderSituations').show('slow', null);
     // Stages
-    $.post("stage/count", null,
+    $.post("/app_dev.php/stage/count", null,
         function (data) {
             // Successful requests get here
             // Update the page elements
@@ -25,7 +25,7 @@ $(function () {
         });
 
     // Situations
-    $.post("situation/count", null,
+    $.post("/app_dev.php/situation/count", null,
         function (data) {
             // Successful requests get here
             var oNbSituations = $('#nbSituations');

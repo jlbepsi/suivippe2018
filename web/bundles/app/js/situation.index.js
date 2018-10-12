@@ -31,7 +31,7 @@ $(function () {
             btnEdit.attr("disabled", true);
 
             $.ajax({
-                url: "/situation/delete",
+                url: "/app_dev.php/situation/delete",
                 type: "post",
                 data: { "refSituation": refSituation },
                 success: function(data){

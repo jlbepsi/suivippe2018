@@ -12,7 +12,7 @@ $(function () {
         if (id != '' && confirm("La suppression du stage '" + libelle + "' supprimera aussi les initulés et activités.\nConfirmer la suppression ?")) {
             $('#loader').show('slow', null);
             // Perform the ajax post
-            $.post("/stage/delete", { "idStage": id },
+            $.post("/app_dev.php/stage/delete", { "idStage": id },
                 function (data) {
                     // Successful requests get here
                     // Update the page elements

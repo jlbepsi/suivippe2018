@@ -7,14 +7,16 @@
 {% block body %}
     <div class="row">
         <div class="col-lg-12">
-            <h1 class="page-header">Liste des stages</h1>
+            <h3 class="page-header">Liste des stages</h3>
         </div>
         <!-- /.col-lg-12 -->
     </div>
 
     {%  if arrayStagesAnnees["stage1"] or arrayStagesAnnees["stage2"] %}
         <p>
-            <a class="btn btn-primary btn-sm" href="{{  path("stage_add") }}">Nouveau stage</a>
+            <a class="btn btn-primary btn-sm" href="{{  path("stage_add") }}">
+                <i class="fas fa-plus-circle"></i>&nbsp;Nouveau stage
+            </a>
         </p>
     {% else %}
         <div id="maxStage" class="alert alert-danger alert-dismissible fade show col-md-12" role="alert">
@@ -40,8 +42,8 @@
             <td id="libcourt">{{ stage.libellecourt }}</td>
             <td>{{ stage.entreprisenom }}</td>
             <td>
-                <a class="btn btn-primary btn-sm" href="{{ path('stage_edit', {'id':stage.id}) }}" title="Modifier le stage"><i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;Modifier</a>
-                <a class="btn btn-danger btn-sm" href="#" id="deleteStage" name="deleteStage" title="Supprimer le stage"><i class="fa fa-trash" aria-hidden="true"></i>&nbsp;Supprimer</a>
+                <a class="btn btn-primary btn-sm" href="{{ path('stage_edit', {'id':stage.id}) }}" title="Modifier le stage"><i class="fa fa-pencil-alt" aria-hidden="true"></i>&nbsp;Modifier</a>
+                <a class="btn btn-danger btn-sm" href="#" id="deleteStage" name="deleteStage" title="Supprimer le stage"><i class="fa fa-trash-alt" aria-hidden="true"></i>&nbsp;Supprimer</a>
             </td>
         </tr>
 {% else %}

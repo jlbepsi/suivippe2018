@@ -4,13 +4,16 @@
     Modification du stage
 {% endblock %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('bundles/app/css/bootstrap-datepicker.css') }}" />
+{% endblock %}
 
 {% block body %}
     <div class="row">
         <div class="col-lg-12">
-            <h2 class="page-header">
+            <h3 class="page-header">
                     Modification du stage '{{ stage.libelleCourt }}'
-            </h2>
+            </h3>
         </div>
         <!-- /.col-lg-12 -->
     </div>
@@ -21,27 +24,25 @@
     </p>
 
     {% if recommandations %}
-        <div class="row">
-            <div class="alert alert-danger alert-dismissible fade show col-md-12" role="alert">
-                <h4 class="alert-heading">Corrections à apporter</h4>
-                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <hr>
-                <p>Vous devez corriger les éléments suivants:
-                </p>
-                <ul>
-                    {% for recommandations in recommandations %}
-                        <li>{{ recommandations }} </li>
-                    {% endfor %}
-                </ul>
-            </div>
+        <div class="alert alert-danger alert-dismissible fade show col-md-12" role="alert">
+            <h4 class="alert-heading">Corrections à apporter</h4>
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            <hr>
+            <p>Vous devez corriger les éléments suivants:
+            </p>
+            <ul>
+                {% for recommandations in recommandations %}
+                    <li>{{ recommandations }} </li>
+                {% endfor %}
+            </ul>
         </div>
     {%  endif %}
 
     <p>
-        <a href="{{  path("stage_document_word", {'id':stage.id}) }}" target="_blank" class="btn btn-primary"><i class="fa fa-file-word-o" aria-hidden="true"></i>&nbsp;Générer le document Word</a> &nbsp;&nbsp;
-        <a href="{{  asset('bundles/files/Attestation de stage.docx') }}" target="_blank" class="btn btn-outline-info"><i class="fa fa-file-word-o" aria-hidden="true"></i>&nbsp;Obtenir le document Word original</a> &nbsp;&nbsp;
+        <a href="{{  path("stage_document_word", {'id':stage.id}) }}" target="_blank" class="btn btn-primary"><i class="far fa-file-word" aria-hidden="true"></i>&nbsp;Générer le document Word</a> &nbsp;&nbsp;
+        <a href="{{  asset('bundles/files/Attestation de stage.docx') }}" target="_blank" class="btn btn-outline-info"><i class="far fa-file-word" aria-hidden="true"></i>&nbsp;Obtenir le document Word original</a> &nbsp;&nbsp;
     </p>
 
     <!-- Nav tabs -->
@@ -200,7 +201,7 @@
             <br />
 
             <button id="btnNewIntituleModal" type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#newIntituleModal">
-                Nouvel intitule
+                <i class="fas fa-plus-circle"></i>&nbsp;Nouvel intitule
             </button>
             <div id="update-message"></div><br />
 
@@ -222,8 +223,8 @@
                             {% endfor %}
                         </td>
                         <td>
-                            <a class="btn btn-primary btn-sm" href="{{ path('stage_edit_intitule', {'id':stage.id, 'idintitule' : intitule.idintitule}) }}" title="Modifier l'intitulé"><i class="fa fa-pencil" aria-hidden="true"></i>&nbsp;Modifier</a>
-                            <a class="btn btn-danger btn-sm" href="#" id="deleteIntituleActivite" name="deleteIntituleActivite" title="Supprimer l'intitulé"><i class="fa fa-trash" aria-hidden="true"></i>&nbsp;Supprimer</a>
+                            <a class="btn btn-primary btn-sm" href="{{ path('stage_edit_intitule', {'id':stage.id, 'idintitule' : intitule.idintitule}) }}" title="Modifier l'intitulé"><i class="fa fa-pencil-alt" aria-hidden="true"></i>&nbsp;Modifier</a>
+                            <a class="btn btn-danger btn-sm" href="#" id="deleteIntituleActivite" name="deleteIntituleActivite" title="Supprimer l'intitulé"><i class="fa fa-trash-alt" aria-hidden="true"></i>&nbsp;Supprimer</a>
                          </td>
                     </tr>
                     {% else %}
