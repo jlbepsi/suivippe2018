@@ -14,4 +14,11 @@ class SituationSearchCriteria
     public $libelle;
     public $descriptif;
     public $date;
+
+    public function isEmpty()
+    {
+        return empty($this->libelle)
+            && empty($this->descriptif)
+            && empty($this->date);
+    }
 }

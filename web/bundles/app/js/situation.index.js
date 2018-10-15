@@ -69,10 +69,10 @@ $(function () {
     // Bouton collapse
     $('.collapse').on('shown.bs.collapse', function(){
 
-        $(this).parent().find(".glyphicon-plus").removeClass("glyphicon-plus").addClass("glyphicon-minus");
+        $(this).parent().find("#chevron").removeClass("fas fa-chevron-up").addClass("fas fa-chevron-down");
 
 
     }).on('hidden.bs.collapse', function(){
-        $(this).parent().find(".glyphicon-minus").removeClass("glyphicon-minus").addClass("glyphicon-plus");
+        $(this).parent().find("#chevron").removeClass("fas fa-chevron-down").addClass("fas fa-chevron-up");
     });
 });

@@ -4,7 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Form\UtilisateurType;
 use AppBundle\Manager\UtilisateurManager;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Config\Definition\Exception\Exception;
 use Symfony\Component\HttpFoundation\Request;

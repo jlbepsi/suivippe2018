@@ -3,7 +3,7 @@
 namespace AppBundle\Controller\Prof;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ProfesseurDefaultController extends Controller
 {

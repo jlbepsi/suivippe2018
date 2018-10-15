@@ -1,10 +1,14 @@
-Migration de portefeuille vers suivippe2017
+Migration de portefeuille vers suivippe
+
+Il faut copier la BD portefeuille (nouveau nom: portefeuilleSnapshot) sur le serveur MySQL ou se trouve la BD suivippe
 
 
+UPDATE portefeuilleSnapshot.port_etudiant
+SET login = SUBSTR(mel, 1, LOCATE('@', mel)-1)
 
 -- ETUDIANT
-INSERT INTO suivippe2017.utilisateur(login,
-                            password,
+INSERT INTO suivippe.utilisateur(login,
+                            pwdEnClair,
                             type,
                             classe,
                             nom,
@@ -13,28 +17,33 @@ INSERT INTO suivippe2017.utilisateur(login,
                             roles,
                             numParcours,
                             salt)
-SELECT SUBSTR(mel, 1, LOCATE('@', mel)-1), mdp, 1, 'B1', nom, prenom, mel, 'ROLE_USER', (numGroupe -1),  ''
-FROM portefeuille.port_etudiant
+SELECT login, mdp, 1, 'B1', nom, prenom, mel, 'ROLE_USER', (numGroupe -1),  ''
+FROM portefeuilleSnapshot.port_etudiant
+WHERE valide = 'O'
+
+UPDATE suivippe.utilisateur
+SET password = SHA2(pwdEnClair, 512)
 
 
 -- SITUATION
-INSERT INTO situation (login, libelle, descriptif, datedebut, datefin, codeCadre, codeLocalisation, port_ref)
-SELECT SUBSTR(mel, 1, LOCATE('@', mel)-1), libcourt, descriptif,datedebut, datefin,  codeCadre, codeLocalisation, ref
-FROM portefeuille.port_situation si, portefeuille.port_etudiant et
-WHERE si.numEtudiant = et.num
+INSERT INTO suivippe.situation (login, libelle, descriptif, datedebut, datefin, codeCadre, codeLocalisation, port_ref)
+SELECT et.login, libcourt, descriptif,datedebut, datefin,  codeCadre, codeLocalisation, ref
+FROM portefeuilleSnapshot.port_situation si, portefeuilleSnapshot.port_etudiant et, suivippe.utilisateur ut
+WHERE si.numEtudiant = et.num AND et.login = ut.login
+
 
 
 -- TYPOLOGIE
-INSERT INTO suivippe2017.situationtypo(reference,code)
-SELECT suivippe2017si.reference, esttypo.codeTypologie
-FROM portefeuille.port_esttypo esttypo, suivippe2017.situation suivippe2017si
-WHERE suivippe2017si.port_ref = esttypo.refSituation
+INSERT INTO suivippe..situationtypo(reference,code)
+SELECT suivippe.si.reference, esttypo.codeTypologie
+FROM portefeuilleSnapshot.port_esttypo esttypo, suivippe..situation suivippe.si
+WHERE suivippe.si.port_ref = esttypo.refSituation
 
 
 
 
 -- ACTIVITES
-INSERT INTO suivippe2017.activitecitee(idActivite,refSituation)
-SELECT idActivite, suivippe2017si.reference
-FROM portefeuille.port_activitecitee ac, suivippe2017.situation suivippe2017si
-WHERE suivippe2017si.port_ref = ac.refSituation
+INSERT INTO suivippe..activitecitee(idActivite,refSituation)
+SELECT idActivite, suivippe.si.reference
+FROM portefeuilleSnapshot.port_activitecitee ac, suivippe..situation suivippe.si
+WHERE suivippe.si.port_ref = ac.refSituation

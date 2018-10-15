@@ -10,24 +10,20 @@ SET @userToRemove = '';
 -- SITUATION
 --
 
-
 DELETE FROM activitecitee
 WHERE refSituation IN (SELECT reference FROM situation WHERE login = @userToRemove)
 
-
 DELETE FROM commentaire
 WHERE refSituation IN (SELECT reference FROM situation WHERE login = @userToRemove)
-
-
-DELETE FROM situatione4
-WHERE referencee4 IN (SELECT reference FROM situation WHERE login = @userToRemove)
-
 
 DELETE FROM situationtypo
 WHERE reference IN (SELECT reference FROM situation WHERE login = @userToRemove)
 
 DELETE FROM situation
 WHERE login = @userToRemove
+
+DELETE FROM situatione4
+WHERE referencee4 IN (SELECT reference FROM situation WHERE login = @userToRemove)
 
 
 --

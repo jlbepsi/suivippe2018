@@ -4,7 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Controller\Prof\Utils\UtilisateurSituations;
 use AppBundle\Entity\Situatione4;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
@@ -35,10 +35,13 @@ class SituationController extends Controller
         // Obtention de l'utilisateur connecté
         $user = $this->getUser();
 
+        $doAnalyse = true;
         if ($request->getMethod() == 'POST') {
             $form->handleRequest($request);
 
             // L'utilisateur utilise le formulaire recherche
+            $situationSearchCriteria = $form->getData();
+            $doAnalyse = $situationSearch->isEmpty();
             $situations = $this->getManager()->loadSituationsWhere($form->getData(), $user->getUsername());
         }
         else {
@@ -48,7 +51,7 @@ class SituationController extends Controller
         // Obtention du parcours
         $idParcours = $user->getNumparcours()->getId();
 
-        if (count($situations) > 0) {
+        if ($doAnalyse && count($situations) > 0) {
             $analyseSituationActivite = $this->getParameter('analyseSituationActivite');
             $utilisateurSituations = new UtilisateurSituations();
             $utilisateurSituations->setAnalyseSituationActivite($analyseSituationActivite);

@@ -3,7 +3,7 @@
 namespace AppBundle\Controller\Prof;
 
 use AppBundle\Controller\Prof\Utils\UtilisateurStages;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 use AppBundle\Manager\StageManager;

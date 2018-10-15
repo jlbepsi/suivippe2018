@@ -74,3 +74,8 @@ swiftmailer:
     username: '%mailer_user%'
     password: '%mailer_password%'
     spool: { type: memory }
+
+# Deprecated : Enabling the “sensio_framework_extra.router.annotations” configuration is deprecated since version 5.2. Set it to false and use the “Symfony\Component\Routing\Annotation\Route” annotation from Symfony itself.
+sensio_framework_extra:
+    router:
+        annotations: false

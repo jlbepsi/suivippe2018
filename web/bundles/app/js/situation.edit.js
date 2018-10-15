@@ -211,11 +211,21 @@ $(function () {
     });
 
     // Bouton collapse
-    $('.collapse').on('shown.bs.collapse', function(){
+    /*$('.collapse').on('shown.bs.collapse', function(){
 	var div = $(this).parent();
         var iObj = div.find(".fa fa-plus");
 	iObj.removeClass("fa fa-plus").addClass("fa fa-minus");
     }).on('hidden.bs.collapse', function(){
         $(this).parent().find(".fa fa-minus").removeClass("fa fa-minus").addClass("fa fa-plus");
+    });*/
+
+    // Bouton collapse
+    $('.collapse').on('shown.bs.collapse', function(){
+
+        $(this).parent().find("#chevron").removeClass("fas fa-chevron-up").addClass("fas fa-chevron-down");
+
+
+    }).on('hidden.bs.collapse', function(){
+        $(this).parent().find("#chevron").removeClass("fas fa-chevron-down").addClass("fas fa-chevron-up");
     });
 });

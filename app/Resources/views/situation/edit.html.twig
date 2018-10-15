@@ -22,7 +22,7 @@
     {% if recommandations %}
     <div class="alert alert-danger alert-dismissible fade show col-md-12" role="alert">
         <a data-toggle="collapse" href="#collapseErrors" role="button" aria-expanded="false" aria-controls="collapseExample">
-            <i class="fa fa-plus" aria-hidden="true"></i>
+            <i id="chevron" class="fas fa-chevron-up"></i>
             Afficher les corrections à apporter
         </a>
 
@@ -192,8 +192,8 @@
                                 > Oui
 
                             <div class="form-row">
-                                <div class="form-group col-md-4">
-                                    <label for="">Type de situation: </label>
+                                <div class="form-group col-md-6">
+                                    <label for="optionsE4">Type de situation: </label>
                                     <input type="radio" name="optionsE4" id="e4_poo" value="1"
                                             {%  if isSituationE4 and situation.refe4.competenceapplication == 1 %} checked {% endif %} {{ situationE4Disabled }} /> Client lourd
                                     <input type="radio" name="optionsE4" id="e4_siteweb" value="2"
@@ -202,8 +202,8 @@
                                             {%  if isSituationE4 and situation.refe4.competenceapplication == 3 %} checked {% endif %} {{ situationE4Disabled }} align=""/> Application mobile
                                 </div>
 
-                                <div class="form-group col-md-8">
-                                    <label for="">Base de données: </label>
+                                <div class="form-group col-md-6">
+                                    <label for="e4_sgdb">Base de données: </label>
                                     <input id="e4_sgdb" name="e4_sgdb" type="checkbox" {{ situationE4Disabled }}
                                             {%  if isSituationE4 and situation.refe4.competencesgbd == 1 %} checked {% endif %}/>
                                     Utilisation de Procédure Sotckées / Trigger
@@ -212,7 +212,7 @@
 
                             <div class="form-row">
                                 <div class="form-group col-md-1">
-                                    <label for="equipe">Effectué : </label>
+                                    <label for="e4_equipe">Effectué : </label>
                                     <select id="e4_equipe" name="e4_equipe" class="form-control" {{ situationE4Disabled }} >
                                         <option value="0" {%  if isSituationE4 and situation.refe4.equipe == 0 %} selected {% endif %}>Seul</option>
                                         <option value="1" {%  if isSituationE4 and situation.refe4.equipe == 1 %} selected {% endif %}>En équipe</option>
@@ -224,7 +224,7 @@
                                     <input type="text" id="e4_contexte" name="e4_contexte" maxlength="80" placeholder="Contexte" class="form-control" value="{{ (isSituationE4 ? situation.refe4.contexte : "") }}" {{ situationE4Disabled }} />
                                 </div>
                                 <div class="form-group col-md-6">
-                                    <label for="situation_descriptif">Réalisation: </label>
+                                    <label for="e4_realisation">Réalisation: </label>
                                     <textarea id="e4_realisation" name="e4_realisation" maxlength="250" class="form-control" {{ situationE4Disabled }} >{{ (isSituationE4 ? situation.refe4.realisation : "") }}</textarea>
                                 </div>
                             </div>
