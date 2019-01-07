@@ -15,7 +15,7 @@ class SituationType extends AbstractType
     {
         $builder
             ->add('libelle', 'Symfony\Component\Form\Extension\Core\Type\TextType')
-            ->add('descriptif', 'Symfony\Component\Form\Extension\Core\Type\TextType')
+            ->add('descriptif', 'Symfony\Component\Form\Extension\Core\Type\TextareaType')
             ->add('datedebut', 'Symfony\Component\Form\Extension\Core\Type\DateType', array('widget' => 'single_text', 'format' => 'dd/MM/yyyy'))
             ->add('datefin', 'Symfony\Component\Form\Extension\Core\Type\DateType', array('widget' => 'single_text', 'format' => 'dd/MM/yyyy'));
 

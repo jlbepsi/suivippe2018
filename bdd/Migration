@@ -18,8 +18,9 @@ INSERT INTO suivippe.utilisateur(login,
                             numParcours,
                             salt)
 SELECT login, mdp, 1, 'B1', nom, prenom, mel, 'ROLE_USER', (numGroupe -1),  ''
-FROM portefeuilleSnapshot.port_etudiant
+FROM portefeuilleSnapshot.port_etudiant pe
 WHERE valide = 'O'
+AND  pe.login NOT IN (SELECT login FROM suivippe.utilisateur)
 
 UPDATE suivippe.utilisateur
 SET password = SHA2(pwdEnClair, 512)
@@ -32,18 +33,20 @@ FROM portefeuilleSnapshot.port_situation si, portefeuilleSnapshot.port_etudiant 
 WHERE si.numEtudiant = et.num AND et.login = ut.login
 
 
+UPDATE situation
+SET codeLangage=1, codeFramework=1, codeOS = 1, codeService = 1
 
 -- TYPOLOGIE
-INSERT INTO suivippe..situationtypo(reference,code)
-SELECT suivippe.si.reference, esttypo.codeTypologie
-FROM portefeuilleSnapshot.port_esttypo esttypo, suivippe..situation suivippe.si
+INSERT INTO suivippe.situationtypo(reference,code)
+SELECT si.reference, esttypo.codeTypologie
+FROM portefeuilleSnapshot.port_esttypo esttypo, suivippe.situation si
 WHERE suivippe.si.port_ref = esttypo.refSituation
 
 
 
 
 -- ACTIVITES
-INSERT INTO suivippe..activitecitee(idActivite,refSituation)
+INSERT INTO suivippe.activitecitee(idActivite,refSituation)
 SELECT idActivite, suivippe.si.reference
-FROM portefeuilleSnapshot.port_activitecitee ac, suivippe..situation suivippe.si
+FROM portefeuilleSnapshot.port_activitecitee ac, suivippe.situation si
 WHERE suivippe.si.port_ref = ac.refSituation

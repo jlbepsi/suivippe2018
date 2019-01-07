@@ -1,0 +1,3 @@
+Dans le fichier /etc/hosts, ajouter :
+
+127.0.0.1	debug.suivippe.local
