@@ -1,0 +1,9 @@
+dans un terminal du répertoire du projet: (epsi est le nom de l'utilsateur)
+
+mkdir -p var/cache var/logs var/sessions
+setfacl -R -m u:www-data:rwx -m u:jeanlucbompard:rwx var/cache var/logs var/sessions
+setfacl -dR -m u:www-data:rwx -m u:jeanlucbompard:rwx var/cache var/logs var/sessions
+
+
+Puis charger les dépendences:
+php composer.phar install
