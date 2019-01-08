@@ -167,6 +167,9 @@ $(function () {
                     // Attache l'évènement onClick au dernier élément ajouté
                     $('#listeActivites > tbody > tr:last #deleteIntituleActivite').bind('click', deleteIntituleActivite);
 
+                    // Bouton normal
+                    $('#btnNewIntituleModal').attr("disabled", false);
+
                     // On enlève la ligne indiquant "aucun intitulé"
                     var oTD = $("#aucunItitule");
                     if (oTD != "undefined") {

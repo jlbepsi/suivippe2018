@@ -224,7 +224,7 @@ class StageController extends Controller
             $user = $this->getUser();
             // Recherche du stage
             if ($stage = $manager->loadStage($idStage, $user->getUsername())) {
-                $message = "Le stage a ete supprimé";
+                $message = "Le stage a été supprimé";
                 $status = 1;
                 // Suppression du film
                 try {
@@ -322,7 +322,7 @@ class StageController extends Controller
             $manager = $this->getManager();
             // Recherche de l'intitulé
             if ($stageIntitule = $manager->loadStageIntitule($idStage, $idIntitule)) {
-                $message = "L'intitulé a ete supprimé";
+                $message = "L'intitulé a été supprimé";
                 $status = 1;
                 // Suppression du film
                 try {
