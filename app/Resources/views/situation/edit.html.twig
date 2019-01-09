@@ -74,10 +74,28 @@
                     </div>
                 </div>
 
-                {% if idParcours == 1 %}  <!-- SISR -->
+                <!-- Pas de distinction de parcours -->
+                <div class="form-check form-check-inline">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="radio" value="2"  disabled
+                        {% if situation.typeSituation == 2 %} checked {% endif %}
+                        > Développeur
+                    </label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <label class="form-check-label">
+                        <input class="form-check-input" type="radio" value="1" disabled
+                                {% if situation.typeSituation == 1 %} checked {% endif %}
+                        > Réseau
+                    </label>
+                </div>
+
+                <div id="divParcoursSISR"
+                        {% if situation.typeSituation == 2 %} style="display: none;" {% endif %}
+                     >
                     <div class="form-row">
                         <div class="form-group col-md-4">
-                            <label for="appbundle_situation_codeos">Système d'exploitation: </label>
+                            <label for="situation_codelangage">Système d'exploitation: </label>
                             {{ form_widget(form.codeos) }}
                         </div>
                         <div class="form-group col-md-8">
@@ -85,63 +103,22 @@
                             {{ form_widget(form.codeservice) }}
                         </div>
                     </div>
-                {% elseif idParcours == 2 %}  <!-- SLAM -->
-                <div class="form-row">
-                    <div class="form-group col-md-4">
-                        <label for="appbundle_situation_codelangage">Langage: </label>
-                        {{ form_widget(form.codelangage) }}
-                    </div>
-                    <div class="form-group col-md-8">
-                        <label for="appbundle_situation_codeframework">Framework: </label>
-                        <select id="appbundle_situation_codeframework" name="appbundle_situation[codeframework]" class="form-control"></select>
+                </div>
+
+                <div id="divParcoursSLAM"
+                        {% if situation.typeSituation == 1 %} style="display: none;" {% endif %}
+                >
+                    <div class="form-row">
+                        <div class="form-group col-md-4">
+                            <label class="control-label required" for="appbundle_situation_codelangage">Langage: </label>
+                            {{ form_widget(form.codelangage) }}
+                        </div>
+                        <div class="form-group col-md-8">
+                            <label class="control-label required" for="appbundle_situation_codeframework">Framework: </label>
+                            <select id="appbundle_situation_codeframework" name="appbundle_situation[codeframework]" class="form-control"></select>
+                        </div>
                     </div>
                 </div>
-                {% else %}  <!-- Parcours non défini -->
-                    <div class="form-check form-check-inline">
-                        <label class="form-check-label">
-                            <input class="form-check-input" type="radio" value="2"  disabled
-                            {% if situation.typeSituation == 2 %} checked {% endif %}
-                            > Développeur
-                        </label>
-                    </div>
-                    <div class="form-check form-check-inline">
-                        <label class="form-check-label">
-                            <input class="form-check-input" type="radio" value="1" disabled
-                                    {% if situation.typeSituation == 1 %} checked {% endif %}
-                            > Réseau
-                        </label>
-                    </div>
-
-                    <div id="divParcoursSISR"
-                            {% if situation.typeSituation == 2 %} style="display: none;" {% endif %}
-                         >
-                        <div class="form-row">
-                            <div class="form-group col-md-4">
-                                <label for="situation_codelangage">Système d'exploitation: </label>
-                                {{ form_widget(form.codeos) }}
-                            </div>
-                            <div class="form-group col-md-8">
-                                <label for="appbundle_situation_codeframework">Service: </label>
-                                {{ form_widget(form.codeservice) }}
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="divParcoursSLAM"
-                            {% if situation.typeSituation == 1 %} style="display: none;" {% endif %}
-                    >
-                        <div class="form-row">
-                            <div class="form-group col-md-4">
-                                <label class="control-label required" for="appbundle_situation_codelangage">Langage: </label>
-                                {{ form_widget(form.codelangage) }}
-                            </div>
-                            <div class="form-group col-md-8">
-                                <label class="control-label required" for="appbundle_situation_codeframework">Framework: </label>
-                                <select id="appbundle_situation_codeframework" name="appbundle_situation[codeframework]" class="form-control"></select>
-                            </div>
-                        </div>
-                    </div>
-                {%  endif %}
 
                 <div class="form-row">
                     <div class="form-group col-md-4">

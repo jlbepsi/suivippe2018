@@ -74,7 +74,8 @@
             {%  if classe == "B2" %}
             <th width="4">E4</th>
             {% endif %}
-            <th width="160">Activités citées</th>
+            <th width="90">Activités</th>
+            <th width="80">Type</th>
             {% if idParcours == 1 %}  <!-- SISR -->
                 <th width="80">OS</th>
                 <th width="120">Service</th>
@@ -82,7 +83,6 @@
                 <th width="80">Langage</th>
                 <th width="120">Framework</th>
             {%  else %} <!-- Pas de parcours -->
-                <th width="80">Type</th>
                 <th width="80">OS ou Langage</th>
                 <th width="120">Service ou Framework</th>
             {%  endif %}
@@ -94,9 +94,21 @@
         </thead>
         <tbody>
         {% for situation in arraySituations %}
-        <tr id="{{  situation.reference }}" >
+            {# Affichage d'une erreur si le parcours ne correspond pas au type de situation #}
+            {%  set erreurParcours = false %}
+            {% if idParcours == 1 %}  <!-- SISR -->
+                {%  if situation.codelangage %}
+                    {%  set erreurParcours = true %}
+                {% endif %}
+            {% elseif idParcours == 2  %}<!-- SLAM -->
+                {%  if situation.codeos %}
+                    {%  set erreurParcours = true %}
+                {% endif %}
+            {% endif %}
+
+        <tr id="{{  situation.reference }}" {%  if erreurParcours %}class="tr_warning"{% endif %} >
             <td id="libelle">{{  situation.libelle }}</td>
-            <td>{{  situation.descriptif }}</td>
+            <td>{%  if erreurParcours %}<p class="validation-summary-errors" >Cette situation ne correspond pas à votre parcours</p>{% endif %}{{  situation.descriptif }}</td>
 
             {%  if classe == "B2" %}
             <td>{% if situation.refe4 %} <b>Oui</b> {% else %} Non {% endif %}</td>
@@ -104,19 +116,13 @@
 
             {%  set activiteCount = situation.activiteCount %}
             <td {% if activiteCount==0 %} class="nonnote" {% endif %}>{{ activiteCount }}</td>
-            {% if idParcours == 1 %}  <!-- SISR -->
-                <td>{{  situation.codeos.libelle }}</td>
-                <td>{{  situation.codeservice.libelle }}</td>
-            {% elseif idParcours == 2 %}<!-- SLAM -->
-                <td>{{  situation.codelangage.libelle }}</td>
-                <td>{{  situation.codeframework.libelle }}</td>
-            {%  else %} <!-- Pas de parcours -->
-                <td>{%  if situation.codeos %}SISR{% else %}SLAM{% endif %}</td>
+            <!-- Pas de parcours -->
+                <td>{%  if situation.codeos %}Réseau{% else %}Dév.{% endif %}</td>
                 {%  if situation.codeos %}<td>{{  situation.codeos.libelle }}</td>{% endif %}
                 {%  if situation.codeservice %}<td>{{  situation.codeservice.libelle }}</td>{% endif %}
                 {%  if situation.codelangage %}<td>{{  situation.codelangage.libelle }}</td>{% endif %}
                 {%  if situation.codeframework %}<td>{{  situation.codeframework.libelle }}</td>{% endif %}
-            {%  endif %}
+
             <td style="width:150px">{{  situation.datedebut | date("d/m/Y") }}</td>
             <td style="width:150px">{{  situation.datefin | date("d/m/Y") }}</td>
             <td>
