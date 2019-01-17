@@ -112,20 +112,52 @@ class SituationController extends Controller
 
                 // Obtention du parcours
                 $radioParcours = $request->request->get('radioParcours');
-                if ($radioParcours != null)
+                if ($radioParcours == null)
+                {
+                    // Obtention du parcours comme type de situation
+                    $typeSituation = $user->getNumparcours()->getId();
+                }
+                else
+                {
+                    $typeSituation = $radioParcours;
+                }
+                if ($typeSituation == 1) // SISR
+                {
+                    $situation->setCodeframework(null);
+                    $situation->setCodelangage(null);
+
+                    $situation->setTypeos($request->request->get('radioTypeOS'));
+                }
+                else
+                {
+                    $situation->setCodeos(null);
+                    $situation->setCodeservice(null);
+                    $situation->setTypeos(-1);
+                    $situation->setServices(null);
+                }
+                /*if ($radioParcours != null)
                 {
                     if ($radioParcours == 1) // SISR
                     {
-                        $situation->setCodeframework(null);
-                        $situation->setCodelangage(null);
+                        $typeSituatuion = 1;
+                        $situation->setCodeframework(1);
+                        $situation->setCodelangage(1);
                     }
                     else // SLAM
                     {
-                        $situation->setCodeos(null);
-                        $situation->setCodeservice(null);
+                        $situation->setCodeos(1);
+                        $situation->setCodeservice(1);
+                        $situation->setTypeos(-1);
+                        $situation->setServices(null);
                     }
 
                 }
+                else
+                {
+                    // Obtention du parcours comme type de situation
+                    $typeSituatuion = $user->getNumparcours()->getId();
+                }*/
+                $situation->setTypeSituation($typeSituation);
 
                 // Obtention des situations obligatoires: Typologie
                 $mandatory = $request->request->get('mandatory');
@@ -175,8 +207,25 @@ class SituationController extends Controller
             // Validation du modèle
             if ($model->isValid())
             {
+
+                // Obtention du type de situation
+                $typeSituation = $request->request->get('radioParcours');
+                if ($typeSituation == 1) // SISR
+                {
+                    $situation->setCodeframework(null);
+                    $situation->setCodelangage(null);
+
+                    $situation->setTypeos($request->request->get('radioTypeOS'));
+                }
+                else
+                {
+                    $situation->setCodeos(null);
+                    $situation->setCodeservice(null);
+                    $situation->setTypeos(-1);
+                    $situation->setServices(null);
+                }
                 // Obtention du parcours
-                $radioParcours = $request->request->get('radioParcours');
+                /*$radioParcours = $request->request->get('radioParcours');
                 if ($radioParcours != null)
                 {
                     if ($radioParcours == 1) // SISR
@@ -190,7 +239,7 @@ class SituationController extends Controller
                         $situation->setCodeservice(null);
                     }
 
-                }
+                }*/
 
                 // Obtention des situations obligatoires: Typologie
                 $mandatory = $request->request->get('mandatory');

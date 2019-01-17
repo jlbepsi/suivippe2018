@@ -77,6 +77,13 @@ class Situation
     private $codecadre;
 
     /**
+     * @var integer
+     *
+     * @ORM\Column(name="typesituation", type="integer", nullable=true)
+     */
+    private $typesituation;
+
+    /**
      * @var \AppBundle\Entity\Langage
      *
      * @ORM\ManyToOne(targetEntity="Langage")
@@ -115,6 +122,20 @@ class Situation
      * })
      */
     private $codeservice;
+
+    /**
+     * @var integer
+     *
+     * @ORM\Column(name="typeos", type="integer", nullable=true)
+     */
+    private $typeos;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="services", type="string", length=200, nullable=false)
+     */
+    private $services;
 
     /**
      * @var \AppBundle\Entity\Situatione4
@@ -443,6 +464,48 @@ class Situation
     }
 
 
+
+    /**
+     * @return int
+     */
+    public function getTypeos()
+    {
+        return $this->typeos;
+    }
+
+    /**
+     * @param int $typeos
+     */
+    public function setTypeos($typeos)
+    {
+        $this->typeos = $typeos;
+    }
+
+    /**
+     * @return string
+     */
+    public function getServices()
+    {
+        return $this->services;
+    }
+
+    /**
+     * @param string $services
+     */
+    public function setServices($services)
+    {
+        $this->services = $services;
+    }
+
+
+
+    /**
+     * @param string $services
+     */
+    public function setTypeSituation($typesituation)
+    {
+        $this->typesituation = $typesituation;
+    }
     /**
      * Get type de situation : SISR :1, SLAM : 2
      *
@@ -450,7 +513,7 @@ class Situation
      */
     public function getTypeSituation()
     {
-        return ($this->codeservice == null ? 2 : 1);
+        return $this->typesituation;
     }
 
     /**

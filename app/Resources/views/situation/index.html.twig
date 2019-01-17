@@ -97,11 +97,11 @@
             {# Affichage d'une erreur si le parcours ne correspond pas au type de situation #}
             {%  set erreurParcours = false %}
             {% if idParcours == 1 %}  <!-- SISR -->
-                {%  if situation.codelangage %}
+                {%  if situation.typeSituation == 2 %}
                     {%  set erreurParcours = true %}
                 {% endif %}
-            {% elseif idParcours == 2  %}<!-- SLAM -->
-                {%  if situation.codeos %}
+            {% elseif erreurParcours == 2  %} <!-- SLAM -->
+                {%  if situation.typeSituation == 1 %}
                     {%  set erreurParcours = true %}
                 {% endif %}
             {% endif %}
@@ -117,11 +117,20 @@
             {%  set activiteCount = situation.activiteCount %}
             <td {% if activiteCount==0 %} class="nonnote" {% endif %}>{{ activiteCount }}</td>
             <!-- Pas de parcours -->
-                <td>{%  if situation.codeos %}Réseau{% else %}Dév.{% endif %}</td>
-                {%  if situation.codeos %}<td>{{  situation.codeos.libelle }}</td>{% endif %}
-                {%  if situation.codeservice %}<td>{{  situation.codeservice.libelle }}</td>{% endif %}
-                {%  if situation.codelangage %}<td>{{  situation.codelangage.libelle }}</td>{% endif %}
-                {%  if situation.codeframework %}<td>{{  situation.codeframework.libelle }}</td>{% endif %}
+            <td>{%  if situation.typeSituation == 1 %}Réseau{% else %}Dév.{% endif %}</td>
+            {%  if situation.typeSituation == 1 %} <!-- SISR -->
+            <td>
+                {% if situation.typeos == 0 %}Windows et Linux
+                {% elseif situation.typeos == 1 %}Linux
+                {% else %}Windows
+                {% endif %}
+
+            </td>
+            <td>{{  situation.services }}</td>
+            {% else %}
+            <td>{{  situation.codelangage.libelle }}</td>
+            <td>{{  situation.codeframework.libelle }}</td>
+            {% endif %}
 
             <td style="width:150px">{{  situation.datedebut | date("d/m/Y") }}</td>
             <td style="width:150px">{{  situation.datefin | date("d/m/Y") }}</td>

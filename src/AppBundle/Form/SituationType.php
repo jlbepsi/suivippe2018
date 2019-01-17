@@ -48,6 +48,9 @@ class SituationType extends AbstractType
             'label' => "Service:",
             'choice_label' => 'libelle',
         ));
+
+        $builder
+            ->add('services', 'Symfony\Component\Form\Extension\Core\Type\TextareaType');
     }
     
     /**

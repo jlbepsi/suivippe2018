@@ -40,12 +40,28 @@
             {% if idParcours == 1 %}  <!-- SISR -->
             <div class="form-row">
                 <div class="form-group col-md-4">
-                    <label for="situation_codelangage">Système d'exploitation: </label>
-                    {{ form_widget(form.codeos) }}
+                    <label class="control-label required" for="situation_codelangage">System d'exploitation: </label><br />
+
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="radioTypeOS" id="Windows" value="2" checked> Windows
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="radioTypeOS" id="Linux" value="1"> Linux
+                        </label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <label class="form-check-label">
+                            <input class="form-check-input" type="radio" name="radioTypeOS" id="WindowsLinux" value="0"> Windows et Linux
+                        </label>
+                    </div>
+
                 </div>
                 <div class="form-group col-md-8">
                     <label for="situation_codeservice">Service: </label>
-                    {{ form_widget(form.codeservice) }}
+                    {{ form_widget(form.services) }}
                 </div>
             </div>
             {% elseif idParcours == 2 %}  <!-- SLAM -->
@@ -74,12 +90,28 @@
                 <div id="divParcoursSISR" style="display: none;">
                     <div class="form-row">
                         <div class="form-group col-md-4">
-                            <label for="situation_codelangage">Système d'exploitation: </label>
-                            {{ form_widget(form.codeos) }}
+
+                            <label class="control-label required" for="situation_codelangage">System d'exploitation: </label><br />
+                            <div class="form-check form-check-inline">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="radio" name="radioTypeOS" id="Windows" value="2" checked> Windows
+                                </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="radio" name="radioTypeOS" id="Linux" value="1"> Linux
+                                </label>
+                            </div>
+                            <div class="form-check form-check-inline">
+                                <label class="form-check-label">
+                                    <input class="form-check-input" type="radio" name="radioTypeOS" id="WindowsLinux" value="0"> Windows et Linux
+                                </label>
+                            </div>
+
                         </div>
                         <div class="form-group col-md-8">
                             <label for="situation_codeservice">Service: </label>
-                            {{ form_widget(form.codeservice) }}
+                            {{ form_widget(form.services) }}
                         </div>
                     </div>
                 </div>
