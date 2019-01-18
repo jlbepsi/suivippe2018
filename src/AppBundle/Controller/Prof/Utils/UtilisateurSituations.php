@@ -88,15 +88,13 @@ class UtilisateurSituations
         $langages = array();
         $frameworks = array();
         $oss = array();
-        $services = array();
         $activites = array();
 
         $analyseSituationActivite = $this->analyseSituationActivite;
 
         $nbE4 = 0;
-        $id = 0;
         // Obtention du parcours
-        $parcours = $this->getUtilisateur()->getNumparcours()->getNomenclature();
+        $numParcours = $this->getUtilisateur()->getNumparcours()->getId();
 
         $recommandations = null;
         if (count($this->situations) > 0) {
@@ -108,15 +106,15 @@ class UtilisateurSituations
                 // Nombre d'activité
                 $activites[$situation->getReference()] = count($situation->getIdactivite());
 
-                switch (trim($parcours)) {
-                    case 'SLAM':
+                switch ($numParcours) {
+                    case 2:     // SLAM
                         // Variété des frameworks et langages
                         if ($situation->getCodelangage()) {
                             $id = $situation->getCodelangage()->getId();
                             if (array_key_exists($id, $langages))
                                 $langages[$id] += 1;
                             else
-                                $langages[$id] = 0;
+                                $langages[$id] = 1;
 
                         }
                         if ($situation->getCodeframework()) {
@@ -125,28 +123,29 @@ class UtilisateurSituations
                             if (array_key_exists($id, $frameworks))
                                 $frameworks[$id] += 1;
                             else
-                                $frameworks[$id] = 0;
+                                $frameworks[$id] = 1;
 
                         }
                         break;
 
-                    case 'SISR':
+                    case 1:     // SISR
                         // Variété des OS et Services
-                        if ($situation->getCodeos()) {
-                            $id = $situation->getCodeos()->getId();
+                        // OS : Windows et Linux => 0, Linux => 1, Windows => 2
+                        $id = $situation->getTypeos();
+                        if ($id == 0) {
+                            if (array_key_exists(1, $oss))
+                                $oss[1] += 1;
+                            else
+                                $oss[1] = 1;
+                            if (array_key_exists(2, $oss))
+                                $oss[2] += 1;
+                            else
+                                $oss[2] = 1;
+                        } else {
                             if (array_key_exists($id, $oss))
                                 $oss[$id] += 1;
                             else
-                                $oss[$id] = 0;
-
-                        }
-                        if ($situation->getCodeservice()) {
-                            $id = $situation->getCodeservice()->getId();
-                            if (array_key_exists($id, $services))
-                                $services[$id] += 1;
-                            else
-                                $services[$id] = 0;
-
+                                $oss[$id] = 1;
                         }
                         break;
                     default:
@@ -170,7 +169,7 @@ class UtilisateurSituations
                     break;
                 }
             }
-            if (trim($parcours) == 'SLAM') {
+            if ($numParcours == 2) {    // SLAM
                 if (count($langages) < 2) {
                     $recommandations[] = "Vous devez avoir 2 langages différents";
                 }
@@ -178,12 +177,9 @@ class UtilisateurSituations
                     $recommandations[] = "Vous devez avoir 2 Framework différents";
                 }
             }
-            if (trim($parcours) == 'SISR') {
+            else if ($numParcours == 1) {    // SISR
                 if (count($oss) < 2) {
                     $recommandations[] = "Vous devez avoir 2 OS différents";
-                }
-                if (count($services) < 4) {
-                    $recommandations[] = "Vous devez avoir 4 services différents";
                 }
             }
         }

@@ -51,6 +51,7 @@ class SituationController extends Controller
         // Obtention du parcours
         $idParcours = $user->getNumparcours()->getId();
 
+        // Analyse des situations
         if ($doAnalyse && count($situations) > 0) {
             $analyseSituationActivite = $this->getParameter('analyseSituationActivite');
             $utilisateurSituations = new UtilisateurSituations();
@@ -307,6 +308,7 @@ class SituationController extends Controller
         // Obtention des frameworks
         $listeframework = $manager->loadFramework();
 
+        // Analyse des situations
         $recommandations = null;
         $analyseSituationActivite = $this->getParameter('analyseSituationActivite');
         if (count($situation->getIdactivite()) < $analyseSituationActivite) {
