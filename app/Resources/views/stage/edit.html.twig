@@ -42,7 +42,8 @@
 
     <p>
         <a href="{{  path("stage_document_word", {'id':stage.id}) }}" target="_blank" class="btn btn-primary"><i class="far fa-file-word" aria-hidden="true"></i>&nbsp;Générer le document Word</a> &nbsp;&nbsp;
-        <a href="{{  asset('bundles/files/Attestation de stage.docx') }}" target="_blank" class="btn btn-outline-info"><i class="far fa-file-word" aria-hidden="true"></i>&nbsp;Obtenir le document Word original</a> &nbsp;&nbsp;
+        {%  set wordFilename = 'bundles/files/' ~ filename %}
+        <a href="{{  asset(wordFilename) }}" target="_blank" class="btn btn-outline-info"><i class="far fa-file-word" aria-hidden="true"></i>&nbsp;Obtenir le document Word original</a> &nbsp;&nbsp;
     </p>
 
     <!-- Nav tabs -->

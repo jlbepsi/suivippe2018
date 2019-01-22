@@ -203,10 +203,19 @@ class StageController extends Controller
         $utilisateurStages->addStage($stage);
         $recommandations = $utilisateurStages->verifierStage();
 
-        return $this->render('stage/edit.html.twig', array('form' => $model->createView(),
-                             'stage' => $stage, 'page' => $page, 'intitulesActivites' => $intitulesActivites,
-                             'arrayStagesAnnees' => $arrayStagesAnnees,
-                             'typologies' => $typologies, 'recommandations' => $recommandations));
+        // Nom duf fichier word
+        $filename    = $this->getParameter('word_template_filename');
+
+        return $this->render('stage/edit.html.twig', array(
+            'form' => $model->createView(),
+            'stage' => $stage,
+            'page' => $page,
+            'filename' => $filename,
+            'intitulesActivites' => $intitulesActivites,
+            'arrayStagesAnnees' => $arrayStagesAnnees,
+            'typologies' => $typologies,
+            'recommandations' => $recommandations,
+            ));
     }
 
     /**
@@ -485,7 +494,7 @@ class StageController extends Controller
         // Obtention du template Attestation de stage
         $path = $this->getParameter('kernel.root_dir');
         $path .= "/Resources/word/";
-        $filename    = 'attestation-stage-2018.docx';
+        $filename    = $this->getParameter('word_template_filename');
         $templateProcessor = new TemplateProcessorImage($path . $filename);
 
         // On charge le valeurs dans le document
