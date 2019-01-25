@@ -37,6 +37,7 @@ security:
             logout_on_user_change: true
 
     access_control:
+        - { path: ^/api, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/login, roles: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/prof, roles: ROLE_PROF }
         - { path: ^/, roles: ROLE_USER }
