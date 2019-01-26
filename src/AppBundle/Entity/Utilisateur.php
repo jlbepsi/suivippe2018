@@ -79,7 +79,7 @@ class Utilisateur implements UserInterface
     private $roles;
 
     /**
-     * @var \Parcours
+     * @var \AppBundle\Entity\Parcours
      *
      * @ORM\ManyToOne(targetEntity="Parcours")
      * @ORM\JoinColumns({

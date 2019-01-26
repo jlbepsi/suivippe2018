@@ -27,11 +27,6 @@ table.table tr.tr_caption
     border-color: #e9ecef;
     font-weight: bold;
 }
-table.table tr.tr_warning
-{
-    background: #cccccc;
-    font-style:italic;
-}
 table.table td.td_warning
 {
     color: #ac2925;

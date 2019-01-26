@@ -56,9 +56,5 @@
 {% endblock %}
 
 {% block javascripts %}
-    {% javascripts
-    'bundles/app/js/stage.index.js'
-    %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
+    <script type="text/javascript" src="{{ asset('app/js/stage.index.js') }}"></script>
 {% endblock %}

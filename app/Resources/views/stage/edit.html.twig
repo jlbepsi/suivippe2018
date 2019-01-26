@@ -241,11 +241,7 @@
 {% endblock %}
 
 {% block javascripts %}
-    {% javascripts
-    'bundles/app/bootstrap/js/bootstrap-datepicker.js'
-    'bundles/app/bootstrap/js/bootstrap-datepicker.fr.js'
-    'bundles/app/js/stage.edit.js'
-    %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
+    <script src="{{ asset('app/bootstrap/js/bootstrap-datepicker.js') }}"></script>
+    <script src="{{ asset('app/bootstrap/js/bootstrap-datepicker.fr.js') }}"></script>
+    <script src="{{ asset('app/js/stage.edit.js') }}"></script>
 {% endblock %}

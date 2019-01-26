@@ -206,11 +206,7 @@
 {% endblock %}
 
 {% block javascripts %}
-    {% javascripts
-    'bundles/app/bootstrap/js/bootstrap-datepicker.js'
-    'bundles/app/bootstrap/js/bootstrap-datepicker.fr.js'
-    'bundles/app/js/prof_situation.edit.js'
-    %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
+    <script type="text/javascript" src="{{ asset('app/bootstrap/js/bootstrap-datepicker.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('app/bootstrap/js/bootstrap-datepicker.fr.js') }}"></script>
+    <script type="text/javascript" src="{{ asset('app/js/prof_situation.edit.js') }}"></script>
 {% endblock %}

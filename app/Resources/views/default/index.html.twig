@@ -60,9 +60,5 @@
 {% endblock %}
 
 {% block javascripts %}
-    {% javascripts
-    'bundles/app/js/home.js'
-    %}
-    <script type="text/javascript" src="{{ asset_url }}"></script>
-    {% endjavascripts %}
+    <script type="text/javascript" src="{{ asset('app/js/home.js') }}"></script>
 {% endblock %}
