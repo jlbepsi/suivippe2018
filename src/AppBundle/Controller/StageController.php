@@ -560,7 +560,7 @@ class StageController extends Controller
 
             $activitesChaine = "";
             foreach ($intitulesActivite->getIdactivite() as $activite) {
-                $activitesChaine .= $activite->getNomenclature() . "-" . $activite->getLibelle()."\n";
+                $activitesChaine .= $activite->getNomenclature() . "-" . $activite->getLibelle()."</w:t><w:br/><w:t>";
             }
             $templateProcessor->setValue('stageIntituleActivite#'.$cpt, $activitesChaine);
 
