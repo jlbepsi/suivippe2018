@@ -49,7 +49,7 @@
             <tr class='tr_caption'>
                 <td colspan="6" {{ (nbStages==0 ? "class='td_warning'" : "") }}>
                     {%  if nbStages == 0 %}
-                        <i class="fa fa-exclamation-triangle fa-2x"></i>&nbsp;{{  utilisateurStages.utilisateur.nomlong }} ({{  utilisateurStages.utilisateur.numparcours.nomenclature }}): AUCUN STAGE
+                        <i class="fa fa-exclamation-triangle fa-2x"></i>&nbsp;{{  utilisateurStages.utilisateur.nomlong }} ({{  utilisateurStages.utilisateur.numparcours.nomenclature }}) : AUCUN STAGE
                     {% else %}
                         {{  utilisateurStages.utilisateur.nomlong }} ({{  utilisateurStages.utilisateur.numparcours.nomenclature }})
                     {% endif %}

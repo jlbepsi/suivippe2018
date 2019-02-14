@@ -104,6 +104,7 @@ class StageManager
     /**
      * @param \AppBundle\Entity\Stage $stage
      * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
      */
     public function saveStage(Stage $stage)
     {
@@ -114,6 +115,7 @@ class StageManager
     /**
      * @param \AppBundle\Entity\Stage $stage
      * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\DBAL\DBALException
      */
     public function removeStage(Stage $stage)
     {
@@ -184,6 +186,7 @@ class StageManager
     /**
      * @param \AppBundle\Entity\Stageintitule $stageIntitule
      * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
      */
     public function removeStageIntitule(Stageintitule $stageIntitule)
     {
@@ -197,6 +200,7 @@ class StageManager
     /**
      * @param \AppBundle\Entity\Stageintitule $stageIntitule
      * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
      */
     public function saveStageIntitule(Stageintitule $stageIntitule)
     {
@@ -244,6 +248,7 @@ class StageManager
      * @param $idIntitule integer
      * @param $idActivite integer
      * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
      */
     public function addStageActivite($idStage, $idIntitule, $idActivite)
     {
@@ -264,6 +269,7 @@ class StageManager
      * @param $idIntitule integer
      * @param $idActivite integer
      * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws \Doctrine\ORM\ORMException
      */
     public function removeStageActivite($idStage, $idIntitule, $idActivite)
     {
@@ -343,6 +349,8 @@ class StageManager
                     FROM AppBundle:Stage st, AppBundle:Utilisateur us
                     WHERE st.login = us
                       AND us.classe = :pClasse
+                      AND us.actif = 1
+                      AND us.type = 1
                     ORDER BY us.nom, us.prenom'
             )->setParameter('pClasse', $classe);
         }
@@ -353,6 +361,8 @@ class StageManager
                 'SELECT st
                     FROM AppBundle:Stage st, AppBundle:Utilisateur us
                     WHERE st.login = us
+                      AND us.actif = 1
+                      AND us.type = 1
                     ORDER BY us.nom, us.prenom'
             );
         }
@@ -366,9 +376,9 @@ class StageManager
         }
 
 
-        // On charge tous les utilisateurs qui n'ont pas de situations
+        // On charge tous les utilisateurs qui n'ont pas de stages
         $repositoryUtilisateur = $this->entityManager->getRepository('AppBundle:Utilisateur');
-        $utilisateurs = $repositoryUtilisateur->findEtudiants($classe);
+        $utilisateurs = $repositoryUtilisateur->findActiveEtudiants($classe);
         $utilisateursStages->setUtilisateursSansStage($utilisateurs);
 
         return $utilisateursStages;

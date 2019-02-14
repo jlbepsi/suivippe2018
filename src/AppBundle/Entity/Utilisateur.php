@@ -118,6 +118,13 @@ class Utilisateur implements UserInterface
      */
     private $numexamen;
 
+    /**
+     * @var int
+     *
+     * @ORM\Column(name="actif ", type="integer", nullable=true)
+     */
+    private $actif;
+
 
     public function __construct()
     {
@@ -436,6 +443,31 @@ class Utilisateur implements UserInterface
     {
         $this->numexamen = $numexamen;
     }
+
+    /**
+     * @return int
+     */
+    public function isActif()
+    {
+        return $this->getActif() == 1;
+    }
+    /**
+     * @return int
+     */
+    public function getActif()
+    {
+        return $this->actif;
+    }
+
+    /**
+     * @param int $actif
+     */
+    public function setActif($actif)
+    {
+        $this->actif = $actif;
+    }
+
+
 
     /**
      * Returns the username used to authenticate the user.

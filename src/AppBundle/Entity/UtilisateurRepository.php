@@ -12,6 +12,29 @@ use Doctrine\ORM\EntityRepository;
  */
 class UtilisateurRepository extends EntityRepository
 {
+    public function findActiveEtudiants($classe = null)
+    {
+        if ($classe != null)
+        {
+            $query = $this->createQueryBuilder('u')
+                ->where("u.classe = :pClasse")
+                ->andWhere("u.actif = 1")
+                ->andWhere("u.type = 1")
+                ->setParameter(':pClasse', $classe)
+                ->add('orderBy','u.nom ASC, u.prenom ASC')
+                ->getQuery();
+        }
+        else {
+            $query = $this->createQueryBuilder('u')
+                ->where("u.classe ='B1' OR u.classe ='B2'")
+                ->andWhere("u.actif = 1")
+                ->add('orderBy','u.nom ASC, u.prenom ASC')
+                ->getQuery();
+        }
+
+        return $query->getResult();
+    }
+
     public function findEtudiants($classe = null)
     {
         if ($classe != null)

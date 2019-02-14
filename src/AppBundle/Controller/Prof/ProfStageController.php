@@ -58,6 +58,9 @@ class ProfStageController extends Controller
         $intitulesActivites = $manager->loadStageIntitules($id);
 
         $utilisateurStages = new UtilisateurStages();
+        foreach ($intitulesActivites as $stagesIntitule) {
+            $stage->addIntitulesActivites($stagesIntitule);
+        }
         $utilisateurStages->addStage($stage);
         $recommandations = $utilisateurStages->verifierStage();
 

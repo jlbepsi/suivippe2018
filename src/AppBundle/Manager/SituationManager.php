@@ -66,6 +66,8 @@ class SituationManager
                     FROM AppBundle:Situation si, AppBundle:Utilisateur us
                     WHERE si.login = us
                       AND us.classe = :pClasse
+                      AND us.actif = 1
+                      AND us.type = 1
                     ORDER BY us.nom, us.prenom'
             )->setParameter('pClasse', $classe);
         }
@@ -76,6 +78,8 @@ class SituationManager
                 'SELECT si
                     FROM AppBundle:Situation si, AppBundle:Utilisateur us
                     WHERE si.login = us
+                      AND us.actif = 1
+                      AND us.type = 1
                     ORDER BY us.nom, us.prenom'
             );
         }
@@ -85,7 +89,7 @@ class SituationManager
 
         // On charge tous les utilisateurs qui n'ont pas de situations
         $repositoryUtilisateur = $this->entityManager->getRepository('AppBundle:Utilisateur');
-        $utilisateurs = $repositoryUtilisateur->findEtudiants($classe);
+        $utilisateurs = $repositoryUtilisateur->findActiveEtudiants($classe);
         $utilisateursSituations->setUtilisateursSansSituation($utilisateurs);
 
         return $utilisateursSituations;
