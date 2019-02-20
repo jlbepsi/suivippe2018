@@ -33,24 +33,8 @@ class SituationType extends AbstractType
             'label' => "Framework:",
             'choice_label' => 'libelle',
         ));
-
-        $builder->add('codeos', 'Symfony\Bridge\Doctrine\Form\Type\EntityType', array(
-            'class' => 'AppBundle:Operatingsystem',
-            'required' =>true,
-            'label' => "Système d'exploitation:",
-            'choice_label' => 'libelle',
-        ));
-
-
-        $builder->add('codeservice', 'Symfony\Bridge\Doctrine\Form\Type\EntityType', array(
-            'class' => 'AppBundle:Services',
-            'required' =>true,
-            'label' => "Service:",
-            'choice_label' => 'libelle',
-        ));
-
         $builder
-            ->add('services', 'Symfony\Component\Form\Extension\Core\Type\TextareaType');
+            ->add('services', 'Symfony\Component\Form\Extension\Core\Type\TextareaType', array('required' => false));
     }
     
     /**

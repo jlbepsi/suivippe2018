@@ -59,6 +59,7 @@
     <!-- Tab panes -->
     <div class="tab-content">
         <div role="tabpanel" class="tab-pane active" id="description">
+            <!--<form action="{{ path('situation_edit', {'id':situation.reference}) }}" method="post">-->
             <form action="{{ path('situation_edit', {'id':situation.reference}) }}" method="post">
                 {{ form_errors(form) }}
                 {{ form_row(form._token) }}
@@ -90,9 +91,8 @@
                     </label>
                 </div>
 
-                <div id="divParcoursSISR"
-                        {% if situation.typeSituation == 2 %} style="display: none;" {% endif %}
-                     >
+                {% if situation.typeSituation == 1 %} <!-- SISR -->
+                <div id="divParcoursSISR">
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label class="control-label required" for="situation_codelangage">System d'exploitation: </label><br />
@@ -126,10 +126,10 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
 
-                <div id="divParcoursSLAM"
-                        {% if situation.typeSituation == 1 %} style="display: none;" {% endif %}
-                >
+                {% if situation.typeSituation == 2 %} <!-- SLAM -->
+                <div id="divParcoursSLAM">
                     <div class="form-row">
                         <div class="form-group col-md-4">
                             <label class="control-label required" for="appbundle_situation_codelangage">Langage: </label>
@@ -141,6 +141,7 @@
                         </div>
                     </div>
                 </div>
+                {% endif %}
 
                 <div class="form-row">
                     <div class="form-group col-md-4">
@@ -174,6 +175,7 @@
                         </fieldset>
                     </div>
                 </div>
+
 
                 {%  if situation.login.classe == "B2" %}
                 <div class="form-row">

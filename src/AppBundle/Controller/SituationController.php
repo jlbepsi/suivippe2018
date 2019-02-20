@@ -131,33 +131,9 @@ class SituationController extends Controller
                 }
                 else
                 {
-                    $situation->setCodeos(null);
-                    $situation->setCodeservice(null);
                     $situation->setTypeos(-1);
                     $situation->setServices(null);
                 }
-                /*if ($radioParcours != null)
-                {
-                    if ($radioParcours == 1) // SISR
-                    {
-                        $typeSituatuion = 1;
-                        $situation->setCodeframework(1);
-                        $situation->setCodelangage(1);
-                    }
-                    else // SLAM
-                    {
-                        $situation->setCodeos(1);
-                        $situation->setCodeservice(1);
-                        $situation->setTypeos(-1);
-                        $situation->setServices(null);
-                    }
-
-                }
-                else
-                {
-                    // Obtention du parcours comme type de situation
-                    $typeSituatuion = $user->getNumparcours()->getId();
-                }*/
                 $situation->setTypeSituation($typeSituation);
 
                 // Obtention des situations obligatoires: Typologie
@@ -220,27 +196,9 @@ class SituationController extends Controller
                 }
                 else
                 {
-                    $situation->setCodeos(null);
-                    $situation->setCodeservice(null);
                     $situation->setTypeos(-1);
                     $situation->setServices(null);
                 }
-                // Obtention du parcours
-                /*$radioParcours = $request->request->get('radioParcours');
-                if ($radioParcours != null)
-                {
-                    if ($radioParcours == 1) // SISR
-                    {
-                        $situation->setCodeframework(null);
-                        $situation->setCodelangage(null);
-                    }
-                    else // SLAM
-                    {
-                        $situation->setCodeos(null);
-                        $situation->setCodeservice(null);
-                    }
-
-                }*/
 
                 // Obtention des situations obligatoires: Typologie
                 $mandatory = $request->request->get('mandatory');

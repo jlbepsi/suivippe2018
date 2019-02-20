@@ -133,7 +133,7 @@ class Situation
     /**
      * @var string
      *
-     * @ORM\Column(name="services", type="string", length=200, nullable=false)
+     * @ORM\Column(name="services", type="string", length=200, nullable=true)
      */
     private $services;
 
