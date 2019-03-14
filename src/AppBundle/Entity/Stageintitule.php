@@ -29,7 +29,7 @@ class Stageintitule
     private $intitule;
 
     /**
-     * @var \Stage
+     * @var \AppBundle\Entity\Stage
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")
@@ -159,6 +159,15 @@ class Stageintitule
     public function removeIdactivite(\AppBundle\Entity\Activite $idactivite)
     {
         $this->idactivite->removeElement($idactivite);
+    }
+
+    /**
+     * Remove all idactivite
+     *
+     */
+    public function removeAllIdactivite()
+    {
+        $this->idactivite->clear();
     }
 
     /**

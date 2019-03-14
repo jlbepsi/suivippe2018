@@ -191,6 +191,7 @@ class StageManager
     public function removeStageIntitule(Stageintitule $stageIntitule)
     {
         // Supprime toutes les activtés
+        $stageIntitule->removeAllIdactivite();
 
         // puis supprime l 'intitulé du stage
         $this->entityManager->remove($stageIntitule);
