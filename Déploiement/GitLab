@@ -1,0 +1,31 @@
+Script de déploiement sur GitLab
+
+### update_suivippe2018_prod.sh:
+
+#!/bin/bash
+
+# Le répertoire de destination
+cd /app/suivippe2018
+# Instruction pour git : le repo et l'identification ont été faite
+# git checkout master
+git pull origin master
+# Instruction Symfony 3.4 pour le déploiement
+php composer.phar install
+php bin/console cache:clear
+php bin/console cache:clear --env=prod
+php bin/console assets:install web
+
+# Création des répertoires s'ils n'existent pas
+if [ ! -d "var/cache" ]
+then
+	echo "Création des répertoires"
+	mkdir -p var/cache
+	mkdir -p var/logs
+	mkdir -p var/sessions
+
+	# Permission sur les répertoires
+	setfacl -R -m u:www-data:rwx var/cache var/logs var/sessions
+	setfacl -dR -m u:www-data:rwx var/cache var/logs var/sessions
+fi
+
+### Fin du script
