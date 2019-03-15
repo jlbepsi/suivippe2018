@@ -7,8 +7,9 @@ Script de déploiement sur GitLab
 # Le répertoire de destination
 cd /app/suivippe2018
 # Instruction pour git : le repo et l'identification ont été faite
-# git checkout master
+git checkout .
 git pull origin master
+
 # Instruction Symfony 3.4 pour le déploiement
 php composer.phar install
 php bin/console cache:clear
@@ -25,7 +26,15 @@ then
 
 	# Permission sur les répertoires
 	setfacl -R -m u:www-data:rwx var/cache var/logs var/sessions
+	setfacl -R -m u:gitlabci:rwx  var/cache var/logs var/sessions
 	setfacl -dR -m u:www-data:rwx var/cache var/logs var/sessions
+	setfacl -dR -m u:gitlabci:rwx var/cache var/logs var/sessions
+fi
+
+# Copie de fontawesome s'il n'existe pas
+if [ ! -d "web/app/fontawesome5" ]
+then
+    cp -R ../ressources/web/fontawesome5 web/app
 fi
 
 ### Fin du script
