@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('bundles/app/bootstrap/css/bootstrap-datepicker.css') }}" />
+    <link rel="stylesheet" href="{{ asset('app/bootstrap/css/bootstrap-datepicker.css') }}" />
 {% endblock %}
 
 {% block body %}
@@ -128,6 +128,7 @@
             </td>
             <td>{{  situation.services }}</td>
             {% else %}
+                <!-- TODO : Problème sur le parcours différencié -->
             <td>{{  situation.codelangage.libelle }}</td>
             <td>{{  situation.codeframework.libelle }}</td>
             {% endif %}

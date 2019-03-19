@@ -47,6 +47,9 @@ class SyntheseController extends Controller
         // Obtention de toutes les activités
         $competences = $this->getCompetenceManager()->loadAllCompetences();
 
+        /* Liste des compétences
+         * Chaque objet Activite contient la liste des situations (voir ActiviteCompetences.getReferenced)
+         */
         $nbCompetences = count($competences);
         $cpt = 0;
         $activites = array();
@@ -57,8 +60,43 @@ class SyntheseController extends Controller
                 $activiteCompetence->addCompetence($competences[$cpt]);
                 $cpt++;
             }
-            $activites[] = $activiteCompetence;
+            $activites[$activiteCompetence->getActivite()->getId()] = $activiteCompetence;
         }
+
+        // Ajout des activités provenant des situations
+        $situations = $this->getSituationManager()->loadSituations($user->getLogin());
+        foreach ($situations as $situation)
+        {
+            $situationActivites = $situation->getIdactivite();
+            foreach ($situationActivites as $situationActivite)
+            {
+                $idActivite = $situationActivite->getId();
+                if (array_key_exists($idActivite, $activites)) {
+                    $activites[$idActivite]->addActiviteStage();
+                } else {
+                    $activiteCompetence = new ActiviteCompetences($user->getLogin(), $idActivite);
+                    $activites[$idActivite] = $activiteCompetence;
+
+                }
+            }
+        }
+
+        // Ajout des activités provenant des stages
+        $repositoryStageintituleactivite = $this->get('doctrine')->getRepository('AppBundle:Stageintituleactivite');
+        // Obtention des activités du stage
+        $stageintituleactivites = $repositoryStageintituleactivite->loadStageIntituleactiviteUser($user->getLogin());
+        foreach ($stageintituleactivites as $stageintituleactivite)
+        {
+            $idActivite = $stageintituleactivite->getIdactivite()->getId();
+            if (array_key_exists($idActivite, $activites)) {
+                $activites[$idActivite]->addActiviteStage();
+            } else {
+                $activiteCompetence = new ActiviteCompetences($user->getLogin(), $idActivite);
+                $activites[$idActivite] = $activiteCompetence;
+
+            }
+        }
+
 
         // Obtention du parcours
         $idParcours = $user->getNumparcours()->getId();

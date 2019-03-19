@@ -17,12 +17,16 @@ class ActiviteCompetences
     private $competences;
     private $activite;
     private $login;
+    private $nbActiviteSituation;
+    private $nbActiviteStage;
 
     public function __construct($login, Activite $activite)
     {
         $this->competences = array();
         $this->activite = $activite;
         $this->login = $login;
+        $this->nbActiviteSituation = 0;
+        $this->nbActiviteStage = 0;
     }
 
     public function addCompetence(Competence $competence)
@@ -47,7 +51,7 @@ class ActiviteCompetences
 
     public function getReferenced()
     {
-        $found = 0;
+        /*$found = 0;
         foreach ($this->activite->getRefsituation() as $situation)
         {
             if ($situation->getLogin()->getLogin() == $this->login)
@@ -55,6 +59,18 @@ class ActiviteCompetences
                 $found++;
             }
         }
-        return $found;
+        return $found + $this->nbActiviteStage;*/
+
+        return $this->nbActiviteSituation +  $this->nbActiviteStage;
+    }
+
+    public function addActiviteStage()
+    {
+        return $this->nbActiviteStage++;
+    }
+
+    public function addActiviteSituation()
+    {
+        return $this->nbActiviteSituation++;
     }
 }

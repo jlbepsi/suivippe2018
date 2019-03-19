@@ -8,7 +8,7 @@ use Doctrine\ORM\Mapping as ORM;
  * Stageintituleactivite
  *
  * @ORM\Table(name="stageintituleactivite", indexes={@ORM\Index(name="IDX_37AB326AD5B8D07464CA0FFD", columns={"idStage", "idIntitule"}), @ORM\Index(name="IDX_37AB326AEBD67F4E", columns={"idActivite"})})
- * @ORM\Entity
+ * @ORM\Entity(repositoryClass="AppBundle\Entity\StageintituleactiviteRepository")
  */
 class Stageintituleactivite
 {
@@ -31,7 +31,7 @@ class Stageintituleactivite
     private $idintitule;
 
     /**
-     * @var \Activite
+     * @var \AppBundle\Entity\Activite
      *
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="NONE")

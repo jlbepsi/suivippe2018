@@ -95,11 +95,21 @@ class SituationManager
         return $utilisateursSituations;
     }
 
+    /**
+     * @param $login
+     * @return /AppBundle/Entity/Situation[]
+     */
     public function loadSituations($login)
     {
         $entities = $this->repository->findBy(array("login" => $login));
         return $entities;
     }
+
+    /**
+     * @param SituationSearchCriteria $situationSearchCriteria
+     * @param $login
+     * @return /AppBundle/Entity/Situation[]
+     */
     public function loadSituationsWhere(SituationSearchCriteria $situationSearchCriteria, $login)
     {
         $qb = $this->repository->createQueryBuilder('s');

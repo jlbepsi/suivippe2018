@@ -6,6 +6,7 @@
 
 
 {% block body %}
+
     <div class="row">
         <div class="col-lg-12">
             <h3 class="page-header">
@@ -239,6 +240,7 @@
                 <input type="hidden" name="radioParcours" id="radioParcours" value="{{ situation.typeSituation }}" />
 
             </form>
+            <br />
         </div>
 
         <div role="tabpanel" class="tab-pane" id="activite">
@@ -247,6 +249,7 @@
                     <input id="showSituationActivitiesOnly" type="checkbox"> Afficher uniquement les activités présentes dans la situation
                 </label>
             </div>
+
             <table id="listeActivites" class="table table-bordered table-striped table-condensed">
                 <thead>
                 <tr>
@@ -259,7 +262,8 @@
                 <tbody>
                 {%  set idDomaine = 0 %}
                 {% for activite in activites %}
-                    {% if (activite.iddomaine.idprocessus.parcourspresent(idParcours)) %}
+                    <!-- L'idParcours== 3 correspond au parcours indifférencié -->
+                    {% if (idParcours==3 or activite.iddomaine.idprocessus.parcourspresent(idParcours)) %}
                         {% if activite.iddomaine.id != idDomaine %}
                             <tr class="tr_caption"><td colspan="4">{{ activite.iddomaine.nomenclature }} - {{ activite.iddomaine.libelle }}</td></tr>
                             {%  set idDomaine = activite.iddomaine.id %}

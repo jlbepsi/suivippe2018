@@ -26,11 +26,17 @@ class CompetenceManager
         $this->repository = $em->getRepository('AppBundle:Competence');
     }
 
+    /**
+     * @return \AppBundle\Entity\Competence[]
+     */
     public function loadAllCompetences()
     {
         return $this->repository->findAll();
     }
 
+    /**
+     * @return \AppBundle\Entity\Competence[]
+     */
     public function loadCompetences($activiteId)
     {
         $entities = $this->repository->findAllByIdAsArray($activiteId);
