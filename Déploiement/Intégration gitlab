@@ -1,0 +1,21 @@
+
+Ajout du fichier  .gitlab-ci.yml à la racine
+
+Le fichier contient :
+# début
+Déploiement en master:
+    stage: deploy
+    image: ruby:2.5
+    script:
+    - eval $(ssh-agent -s)
+    - ssh-add <(echo "$SSH_PRIVATE_KEY")
+    - mkdir -p ~/.ssh
+    - '[[ -f /.dockerenv ]] && echo -e "Host *\n\tStrictHostKeyChecking no\n\n" > ~/.ssh/config'
+    - ssh "$SSH_USER"@"$SSH_HOST" -p$SSH_PORT '/app/scripts/update_suivippe2018_prod.sh'
+    only:
+    - master
+    environment:
+        name: master
+# fin
+
+
