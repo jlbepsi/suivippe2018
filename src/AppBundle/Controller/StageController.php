@@ -141,8 +141,6 @@ class StageController extends Controller
             return $this->render("Exception/error404.html.twig");
         }
 
-        $arrayStagesAnnees = $this->getNbStagesMax($user->getUsername());
-
         // Création du modèle du formulaire
         $model = $this->get('form.factory')->create(StageType::class, $stage);
         // Obtention du manager
@@ -212,7 +210,6 @@ class StageController extends Controller
             'page' => $page,
             'filename' => $filename,
             'intitulesActivites' => $intitulesActivites,
-            'arrayStagesAnnees' => $arrayStagesAnnees,
             'typologies' => $typologies,
             'recommandations' => $recommandations,
             ));
@@ -588,6 +585,17 @@ class StageController extends Controller
 
         $arrayStagesAnnees['stage1'] = ($stage1 < 2);
         $arrayStagesAnnees['stage2'] = ($stage2 < 2);
+        if ($classe == "B1")
+        {
+            // Un B1 ne peut pas créer de stage de 2ème année
+            $arrayStagesAnnees['stage2'] = false;
+        }
+        return $arrayStagesAnnees;
+    }
+    private function getListeStages($classe)
+    {
+
+        $arrayStagesAnnees = array('stage1' => true, 'stage2' => true);
         if ($classe == "B1")
         {
             // Un B1 ne peut pas créer de stage de 2ème année

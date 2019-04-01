@@ -45,10 +45,10 @@ class DefaultController extends Controller
             // L'utilsateur ne peut changer que 3 champs: sexe, datenaissance et adresse
             try
             {
-                $utilisateur->setSexe($request->get('utilisateur_sexe'));
+                /*$utilisateur->setSexe($request->get('utilisateur_sexe'));
                 $dateNaissance = \DateTime::createFromFormat('d/m/Y', $request->get('utilisateur_datenaissance'));
                 $utilisateur->setDateNaissance($dateNaissance);
-                $utilisateur->setAdresse($request->get('utilisateur_adresse'));
+                $utilisateur->setAdresse($request->get('utilisateur_adresse'));*/
                 $utilisateur->setNumexamen($request->get('utilisateur_numexam'));
 
                 // Validation de l'entité
