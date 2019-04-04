@@ -29,7 +29,8 @@ class StageintituleRepository extends EntityRepository
                     FROM AppBundle:Stage s, AppBundle:StageIntitule si, AppBundle:Utilisateur us
                     WHERE us.login = :pLogin
                       AND s.login = us
-                      AND si.idstage = s'
+                      AND si.idstage = s
+                    ORDER BY s.annee, s.datedebut'
         )->setParameter('pLogin', $login);
 
         return $query->getResult();
