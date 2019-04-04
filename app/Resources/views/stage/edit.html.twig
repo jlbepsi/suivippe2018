@@ -91,10 +91,12 @@
                 {{ form_errors(form) }}
                 {{ form_row(form._token) }}
 
+                <input type="hidden" id="stage_annee" name="appbundle_stage[annee]" value="{{ stage.annee }}" />
+
                 <div class="form-row">
                     <div class="form-group col-md-2">
-                        <label for="stage_annee">Stage: </label>
-                        <select id="stage_annee" name="appbundle_stage[annee]" class="form-control" disabled>
+                        <label for="stage_annee_disabled">Stage: </label>
+                        <select id="stage_annee_disabled" class="form-control" disabled>
                             <option value="1" {{ stage.annee==1 ? 'selected="selected"' : '' }} >Stage 1ère année</option>
                             <option value="2" {{ stage.annee==2 ? 'selected="selected"' : '' }} >Stage 2ème année</option>
                         </select>
