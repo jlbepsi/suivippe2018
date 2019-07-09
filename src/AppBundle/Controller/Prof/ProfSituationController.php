@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller\Prof;
 
+use Exception;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
@@ -34,8 +35,11 @@ class ProfSituationController extends Controller
                 $classe = null;
         }
 
+
+        // Obtention du service Ldap
+        $serviceLdap = $this->get('security.user.provider.concrete.ldap_provider');
         // Obtention du manager puis des situations
-        $utilisateursSituations = $this->getManager()->loadUtilisateursSituations(intval($analyseSituationActivite), $classe);
+        $utilisateursSituations = $this->getManager()->loadUtilisateursSituations($serviceLdap, intval($analyseSituationActivite), $classe);
 
         return $this->render('prof/situation/index.html.twig',
             array('utilisateursSituations' => $utilisateursSituations, 'classe' => $classe));
@@ -50,6 +54,16 @@ class ProfSituationController extends Controller
         $manager = $this->getManager();
         // Obtention de l'utilisateur de la situaion
         $userLogin = $request->get('user');
+
+        // Obtention de l'utilisateur Ldap
+        $serviceLdap = $this->get('security.user.provider.concrete.ldap_provider');
+        if (! $userLdap = $serviceLdap->loadUserLdapByLogin($userLogin))
+        {
+            return $this->render("Exception/error404.html.twig");
+        }
+
+
+
         // Recherche de la situation
         if (!$situation = $manager->loadSingleSituation($id))
         {
@@ -61,9 +75,11 @@ class ProfSituationController extends Controller
         // Obtention de l'utilisateur connecté
         $user = $this->getUser();
 
-        return $this->render('prof/situation/edit.html.twig', array('situation' => $situation,
-            'idParcours' => $situation->getLogin()->getNumparcours()->getId(),
-            'commentaires' => $commentaires, 'loginProf' => $user->getUsername()));
+        return $this->render('prof/situation/edit.html.twig', array(
+            'situation' => $situation,
+            'etudiant' => $userLdap,
+            'commentaires' => $commentaires,
+            'loginProf' => $user->getUsername()));
     }
 
 
@@ -85,8 +101,10 @@ class ProfSituationController extends Controller
     public function analyseSituationAction()
     {
         $analyseSituationActivite = $this->getParameter('analyseSituationActivite');
+        // Obtention de l'utilisateur Ldap
+        $serviceLdap = $this->get('security.user.provider.concrete.ldap_provider');
         // Obtention du manager puis des situations
-        $utilisateursSituations = $this->getManager()->loadUtilisateursSituations(intval($analyseSituationActivite));
+        $utilisateursSituations = $this->getManager()->loadUtilisateursSituations($serviceLdap, intval($analyseSituationActivite));
 
         $analyse = $utilisateursSituations->analyseUtilisateursSituations();
 
@@ -123,6 +141,10 @@ class ProfSituationController extends Controller
 
     /**
      * @Route("/prof/situation/addcommentaire", name="situation_commentaire_add")
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws Exception
      */
     public function addCommentaireAction(Request $request) {
 
@@ -152,7 +174,7 @@ class ProfSituationController extends Controller
                 $prof = $user->getUsername();
                 // Création de l'intitulé
                 try {
-                    $id = $manager->addSituationCommentaire($situation, $commentaire, $user, $today);
+                    $id = $manager->addSituationCommentaire($situation, $commentaire, $prof, $today);
                     if ($id == 0) {
                         $message = "Impossible d'ajouter le commentaire";
                         $status = -1;
@@ -180,6 +202,10 @@ class ProfSituationController extends Controller
 
     /**
      * @Route("/prof/situation/modifycommentaire", name="situation_commentaire_modify")
+     *
+     * @param Request $request
+     * @return JsonResponse
+     * @throws Exception
      */
     public function modifyCommentaireAction(Request $request)
     {

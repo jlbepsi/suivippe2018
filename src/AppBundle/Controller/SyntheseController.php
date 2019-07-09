@@ -44,6 +44,13 @@ class SyntheseController extends Controller
     {
         // Obtention de l'utilisateur connecté
         $user = $this->getUser();
+        // Obtention de l'utilisateur Ldap
+        $serviceLdap = $this->get('security.user.provider.concrete.ldap_provider');
+        if (! $userLdap = $serviceLdap->loadUserLdapByLogin($user->getUsername()))
+        {
+            return $this->render("Exception/error404.html.twig");
+        }
+
         // Obtention de toutes les activités
         $competences = $this->getCompetenceManager()->loadAllCompetences();
 
@@ -54,7 +61,7 @@ class SyntheseController extends Controller
         $cpt = 0;
         $activites = array();
         while ($cpt < $nbCompetences) {
-            $activiteCompetence = new ActiviteCompetences($user->getLogin(), $competences[$cpt]->getIdactivite());
+            $activiteCompetence = new ActiviteCompetences($user->getUsername(), $competences[$cpt]->getIdactivite());
 
             while ($cpt < $nbCompetences && $activiteCompetence->getIdActivite() == $competences[$cpt]->getIdactivite()->getId()) {
                 $activiteCompetence->addCompetence($competences[$cpt]);
@@ -64,7 +71,7 @@ class SyntheseController extends Controller
         }
 
         // Ajout des activités provenant des situations
-        $situations = $this->getSituationManager()->loadSituations($user->getLogin());
+        $situations = $this->getSituationManager()->loadSituations($user->getUsername());
         foreach ($situations as $situation)
         {
             $situationActivites = $situation->getIdactivite();
@@ -74,7 +81,7 @@ class SyntheseController extends Controller
                 if (array_key_exists($idActivite, $activites)) {
                     $activites[$idActivite]->addActiviteStage();
                 } else {
-                    $activiteCompetence = new ActiviteCompetences($user->getLogin(), $idActivite);
+                    $activiteCompetence = new ActiviteCompetences($user->getUsername(), $idActivite);
                     $activites[$idActivite] = $activiteCompetence;
 
                 }
@@ -84,14 +91,14 @@ class SyntheseController extends Controller
         // Ajout des activités provenant des stages
         $repositoryStageintituleactivite = $this->get('doctrine')->getRepository('AppBundle:Stageintituleactivite');
         // Obtention des activités du stage
-        $stageintituleactivites = $repositoryStageintituleactivite->loadStageIntituleactiviteUser($user->getLogin());
+        $stageintituleactivites = $repositoryStageintituleactivite->loadStageIntituleactiviteUser($user->getUsername());
         foreach ($stageintituleactivites as $stageintituleactivite)
         {
             $idActivite = $stageintituleactivite->getIdactivite()->getId();
             if (array_key_exists($idActivite, $activites)) {
                 $activites[$idActivite]->addActiviteStage();
             } else {
-                $activiteCompetence = new ActiviteCompetences($user->getLogin(), $idActivite);
+                $activiteCompetence = new ActiviteCompetences($user->getUsername(), $idActivite);
                 $activites[$idActivite] = $activiteCompetence;
 
             }
@@ -99,7 +106,7 @@ class SyntheseController extends Controller
 
 
         // Obtention du parcours
-        $idParcours = $user->getNumparcours()->getId();
+        $idParcours = $userLdap->getNumparcours();
         return $this->render('synthese/index.html.twig', array('activites' => $activites, 'idParcours' => $idParcours));
     }
 
@@ -111,7 +118,16 @@ class SyntheseController extends Controller
     {
         //return $this->render('synthese/tableau.html.twig', array('user' => $user, 'syntheseBuilder' => $syntheseBuilder));
 
-        return $this->generatePDF($this->getUser());
+
+        $user = $this->getUser();
+        // Obtention de l'utilisateur Ldap
+        $serviceLdap = $this->get('security.user.provider.concrete.ldap_provider');
+        if (! $userLdap = $serviceLdap->loadUserLdapByLogin($user->getUsername()))
+        {
+            return $this->render("Exception/error404.html.twig");
+        }
+
+        return $this->generatePDF($userLdap);
 
     }
 
@@ -121,7 +137,7 @@ class SyntheseController extends Controller
          * LES DONNEES
          */
         // Obtention du parcours
-        $idParcours = $user->getNumparcours()->getId();
+        $idParcours = $user->getNumparcours();
         // Obtention de toutes les activités
         $activitesDomaine = $this->getSyntheseManager()->loadActivitesDomaine($idParcours);
 
@@ -135,11 +151,11 @@ class SyntheseController extends Controller
         $typologies = $this->getSyntheseManager()->loadTypologies();
         $syntheseBuilder->addTypologies($typologies);
         // Obtention des situations
-        $situations = $this->getSituationManager()->loadSituations($user->getLogin());
+        $situations = $this->getSituationManager()->loadSituations($user->getUsername());
         $syntheseBuilder->addSituations($situations);
 
         // Obtention des stages
-        $stages = $this->getStageManager()->loadStageIntitulesUser($user);
+        $stages = $this->getStageManager()->loadStageIntitulesUser($user->getUsername());
         $syntheseBuilder->addStagesIntitules($stages);
 
 

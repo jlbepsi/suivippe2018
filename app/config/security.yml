@@ -1,11 +1,11 @@
 # To get started with security, check out the documentation:
 # http://symfony.com/doc/current/security.html
 security:
-    encoders:
-        AppBundle\Entity\Utilisateur:
-            algorithm: sha512
-            encode_as_base64: false
-            iterations: 1
+    #encoders:
+    #    AppBundle\Entity\Utilisateur:
+    #        algorithm: sha512
+    #        encode_as_base64: false
+    #        iterations: 1
 
     role_hierarchy:
         ROLE_PROF:     ROLE_USER
@@ -13,10 +13,19 @@ security:
         ROLE_SUPER_ADMIN: [ROLE_USER, ROLE_ADMIN, ROLE_ALLOWED_TO_SWITCH]
 
     providers:
-        internal_provider:
-            entity:
-                class: AppBundle:Utilisateur
-                property: login
+        #internal_provider:
+        #    entity:
+        #        class: AppBundle:Utilisateur
+        #        property: login
+
+        ldap_provider:
+            ldap:
+                service: Symfony\Component\Ldap\Ldap
+                base_dn: 'ou=Pedago,ou=Utilisateurs,dc=montpellier,dc=lan'
+                search_dn: "cn=admin,dc=montpellier,dc=lan"
+                search_password: 'citK19c3'
+                default_roles: ROLE_USER
+                uid_key: uid
 
     firewalls:
         # disables authentication for assets and the profiler, adapt it according to your needs
@@ -26,11 +35,18 @@ security:
 
         main:
             anonymous: ~
-            provider: internal_provider
-            form_login:
+            #provider: internal_provider
+            #form_login:
+
+            form_login_ldap:
                 login_path: login
                 check_path: login
                 success_handler: redirect.after.login
+                service: Symfony\Component\Ldap\Ldap
+                dn_string: 'ou=Pedago,ou=Utilisateurs,dc=montpellier,dc=lan'
+                query_string: '(uid={username})'
+                #dn_string: 'uid={username},ou=Pedago,ou=Utilisateurs,dc=montpellier,dc=lan'
+                #dn_string: 'MONTPELLIER\{username}'
             logout:
                 path:   /logout
                 target: /

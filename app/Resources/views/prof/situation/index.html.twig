@@ -30,6 +30,9 @@
     </form>
     <br />
 
+    <div class="row">
+        <div id="update-message" style="display: none" class="col-md-12"></div>
+    </div>
 
     <table class="table table-condensed table-bordered table-striped">
         <thead>
@@ -57,9 +60,9 @@
             <tr class="tr_caption">
                 <td colspan="10" {{ (nbSituations==0 ? "class='td_warning'" : "") }}>
                     {%  if nbSituations == 0 %}
-                        <i class="fas fa-exclamation-triangle fa-2x"></i>&nbsp;{{  utilisateurSituations.utilisateur.nomlong }} ({{  utilisateurSituations.utilisateur.numparcours.nomenclature }}): AUCUNE SITUATION
+                        <i class="fas fa-exclamation-triangle fa-2x"></i>&nbsp;{{  utilisateurSituations.utilisateur.nomlong }} ({{  utilisateurSituations.utilisateur.parcoursnomenclature }}): AUCUNE SITUATION
                     {% else %}
-                        {{  utilisateurSituations.utilisateur.nomlong }} ({{  utilisateurSituations.utilisateur.numparcours.nomenclature }})
+                        {{  utilisateurSituations.utilisateur.nomlong }} ({{  utilisateurSituations.utilisateur.parcoursnomenclature }})
                     {% endif %}
                 </td>
             </tr>
@@ -79,8 +82,7 @@
                     <td>{{  situation.descriptif }}</td>
                     <td>{% if situation.refe4 %} <b>Oui</b> {% else %} Non {% endif %}</td>
 
-                    {%  set activiteCount = situation.activiteCount %}
-                    <td {% if activiteCount==0 %} class="nonnote" {% endif %}>{{ activiteCount }}
+                    <td {% if situation.activiteCount < 5 %} class="td_warning" {% endif %}>{{ situation.activiteCount }}
                     </td>
                     <!-- SISR -->
                     <td>{%  if situation.codeos %} {{  situation.codeos.libelle }} {% else %} - {% endif %}</td>

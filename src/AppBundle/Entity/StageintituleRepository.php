@@ -26,9 +26,8 @@ class StageintituleRepository extends EntityRepository
     {
         $query = $this->getEntityManager()->createQuery(
             'SELECT si
-                    FROM AppBundle:Stage s, AppBundle:StageIntitule si, AppBundle:Utilisateur us
-                    WHERE us.login = :pLogin
-                      AND s.login = us
+                    FROM AppBundle:Stage s, AppBundle:StageIntitule si
+                    WHERE s.login = :pLogin
                       AND si.idstage = s
                     ORDER BY s.annee, s.datedebut'
         )->setParameter('pLogin', $login);

@@ -10,7 +10,7 @@ namespace AppBundle\Controller\Prof\Utils;
 
 
 use AppBundle\Entity\Stage;
-use AppBundle\Entity\Utilisateur;
+use AppBundle\Entity\UserLdap;
 
 class UtilisateurStages
 {
@@ -19,24 +19,27 @@ class UtilisateurStages
      */
     private $stages = array();
     /**
-     * @var \AppBundle\Entity\Utilisateur
+     * @var UserLdap
      */
     private $utilisateur;
 
+
     /**
-     * @return \AppBundle\Entity\Utilisateur
+     * UtilisateurStages constructor.
+     * @param UserLdap|null $utilisateur
+     */
+    public function __construct(UserLdap $utilisateur = null)
+    {
+        $this->utilisateur = $utilisateur;
+    }
+
+
+    /**
+     * @return UserLdap
      */
     public function getUtilisateur()
     {
         return $this->utilisateur;
-    }
-
-    /**
-     * @param \AppBundle\Entity\Utilisateur $utilisateur
-     */
-    public function setUtilisateur(Utilisateur $utilisateur)
-    {
-        $this->utilisateur = $utilisateur;
     }
 
     /**
@@ -45,6 +48,14 @@ class UtilisateurStages
     public function getStages()
     {
         return $this->stages;
+    }
+
+    /**
+     * @param $stages \AppBundle\Entity\Stage[]
+     */
+    public function setStage($stages)
+    {
+        $this->stages = $stages;
     }
 
     /**
@@ -59,14 +70,6 @@ class UtilisateurStages
                 return $stage;
         }
         return null;
-    }
-
-    /**
-     * @param $stages \AppBundle\Entity\Stage[]
-     */
-    public function setStage($stages)
-    {
-        $this->stages = $stages;
     }
 
     /**
@@ -95,15 +98,15 @@ class UtilisateurStages
                     if ($nbIntitules < 3)
                         $recommandations[] = "Un stage doit avoir au moins 3 intitulés";
                     foreach ($arrayIntitulesActivites as $intitulesActivite) {
-                        if ($intitulesActivite["nbActivite"] < 4) {
-                            $recommandations[] = "Un stage doit avoir au moins 4 activités pour chaque intitulé";
+                        if ($intitulesActivite["nbActivite"] < 2) {
+                            $recommandations[] = "Un stage doit avoir au moins 2 activités pour chaque intitulé";
                             break;
                         }
                     }
                 }
             }
             if ($stageVide)
-                array_unshift($recommandations, "Un stage doit avoir au moins 3 intitulés et  4 activités pour chaque intitulé");
+                array_unshift($recommandations, "Un stage doit avoir au moins 3 intitulés et  2 activités pour chaque intitulé");
         }
 
         return $recommandations;

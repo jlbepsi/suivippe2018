@@ -9,7 +9,7 @@ $(function () {
         var oTD = oDiv.find('#libcourt');
         var libelle = oTD.html();
 
-        if (id != '' && confirm("La suppression du stage '" + libelle + "' supprimera aussi les initulés et activités.\nConfirmer la suppression ?")) {
+        if (id !== '' && confirm("La suppression du stage '" + libelle + "' supprimera aussi les initulés et activités.\nConfirmer la suppression ?")) {
             $('#loader').show('slow', null);
             // Perform the ajax post
             $.post("/app_dev.php/stage/delete", { "idStage": id },

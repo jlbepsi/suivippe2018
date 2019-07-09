@@ -10,7 +10,7 @@ namespace AppBundle\Controller\Prof\Utils;
 
 
 use AppBundle\Entity\Situation;
-use AppBundle\Entity\Utilisateur;
+use AppBundle\Entity\UserLdap;
 
 class UtilisateurSituations
 {
@@ -19,13 +19,22 @@ class UtilisateurSituations
      */
     private $situations = array();
     /**
-     * @var \AppBundle\Entity\Utilisateur
+     * @var UserLdap
      */
     private $utilisateur;
     /**
      * @var integer
      */
     private $analyseSituationActivite;
+
+    /**
+     * UtilisateurStages constructor.
+     * @param UserLdap|null $utilisateur
+     */
+    public function __construct(UserLdap $utilisateur = null)
+    {
+        $this->utilisateur = $utilisateur;
+    }
 
     /**
      * @return int
@@ -44,19 +53,11 @@ class UtilisateurSituations
     }
 
     /**
-     * @return Utilisateur
+     * @return UserLdap
      */
     public function getUtilisateur()
     {
         return $this->utilisateur;
-    }
-
-    /**
-     * @param Utilisateur $utilisateur
-     */
-    public function setUtilisateur(Utilisateur $utilisateur)
-    {
-        $this->utilisateur = $utilisateur;
     }
 
     /**
@@ -94,7 +95,7 @@ class UtilisateurSituations
 
         $nbE4 = 0;
         // Obtention du parcours
-        $numParcours = $this->getUtilisateur()->getNumparcours()->getId();
+        $numParcours = $this->getUtilisateur()->getNumparcours();
 
         $recommandations = null;
         if (count($this->situations) > 0) {
@@ -192,7 +193,8 @@ class UtilisateurSituations
         $nbSituationsActivitesIncompletes = 0;
 
         $nbE4ToFind = 2;
-        if (count($this->situations) > 0) {
+        if (count($this->situations) > 0)
+        {
             $nbE4 = 0;
             foreach ($this->situations as $situation) {
                 // Situation E4

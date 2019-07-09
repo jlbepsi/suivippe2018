@@ -7,19 +7,26 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * Situation
  *
- * @ORM\Table(name="situation", indexes={@ORM\Index(name="FK_Situation_Cadre", columns={"codeCadre"}), @ORM\Index(name="FK_Situation_Localisation", columns={"codeLocalisation"}), @ORM\Index(name="FK_Situation_Source", columns={"codeLangage"}), @ORM\Index(name="FK_Situation_TypeSituation", columns={"codeFramework"}), @ORM\Index(name="FK_Situation_Utilisateur", columns={"login"}), @ORM\Index(name="codeOS", columns={"codeOS", "codeService"}), @ORM\Index(name="codeService", columns={"codeService"}), @ORM\Index(name="refe4", columns={"refe4"}), @ORM\Index(name="IDX_EC2D9ACA5B1B06D0", columns={"codeOS"})})
+ * @ORM\Table(name="situation", indexes={@ORM\Index(name="FK_Situation_Cadre", columns={"codeCadre"}), @ORM\Index(name="FK_Situation_Source", columns={"codeLangage"}), @ORM\Index(name="FK_Situation_Utilisateur", columns={"login"}), @ORM\Index(name="refe4", columns={"refe4"}), @ORM\Index(name="FK_Situation_Localisation", columns={"codeLocalisation"}), @ORM\Index(name="FK_Situation_TypeSituation", columns={"codeFramework"}), @ORM\Index(name="codeOS", columns={"codeOS", "codeService"}), @ORM\Index(name="codeService", columns={"codeService"}), @ORM\Index(name="IDX_EC2D9ACA5B1B06D0", columns={"codeOS"})})
  * @ORM\Entity
  */
 class Situation
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="reference", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $reference;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(name="login", type="string", length=30, nullable=false)
+     */
+    private $login;
 
     /**
      * @var string
@@ -31,40 +38,58 @@ class Situation
     /**
      * @var string
      *
-     * @ORM\Column(name="descriptif", type="string", length=250, nullable=false)
+     * @ORM\Column(name="descriptif", type="string", length=255, nullable=false)
      */
     private $descriptif;
 
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      *
      * @ORM\Column(name="datedebut", type="datetime", nullable=true)
      */
     private $datedebut;
 
     /**
-     * @var \DateTime
+     * @var \DateTime|null
      *
      * @ORM\Column(name="datefin", type="datetime", nullable=true)
      */
     private $datefin;
 
     /**
-     * @var integer
+     * @var int
+     *
+     * @ORM\Column(name="typesituation", type="integer", nullable=false)
+     */
+    private $typesituation;
+
+    /**
+     * @var int|null
      *
      * @ORM\Column(name="codeLocalisation", type="integer", nullable=true)
      */
     private $codelocalisation;
 
     /**
-     * @var \AppBundle\Entity\Utilisateur
+     * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Utilisateur")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="login", referencedColumnName="login")
-     * })
+     * @ORM\Column(name="typeos", type="integer", nullable=false, options={"default"="-1"})
      */
-    private $login;
+    private $typeos = '-1';
+
+    /**
+     * @var string|null
+     *
+     * @ORM\Column(name="services", type="string", length=200, nullable=true)
+     */
+    private $services;
+
+    /**
+     * @var int|null
+     *
+     * @ORM\Column(name="port_ref", type="integer", nullable=true)
+     */
+    private $portRef;
 
     /**
      * @var \AppBundle\Entity\Cadre
@@ -75,13 +100,6 @@ class Situation
      * })
      */
     private $codecadre;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="typesituation", type="integer", nullable=true)
-     */
-    private $typesituation;
 
     /**
      * @var \AppBundle\Entity\Langage
@@ -122,20 +140,6 @@ class Situation
      * })
      */
     private $codeservice;
-
-    /**
-     * @var integer
-     *
-     * @ORM\Column(name="typeos", type="integer", nullable=true)
-     */
-    private $typeos;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(name="services", type="string", length=200, nullable=true)
-     */
-    private $services;
 
     /**
      * @var \AppBundle\Entity\Situatione4
@@ -180,9 +184,9 @@ class Situation
 
 
     /**
-     * Get reference
+     * Get reference.
      *
-     * @return integer
+     * @return int
      */
     public function getReference()
     {
@@ -190,7 +194,31 @@ class Situation
     }
 
     /**
-     * Set libelle
+     * Set login.
+     *
+     * @param string $login
+     *
+     * @return Situation
+     */
+    public function setLogin($login)
+    {
+        $this->login = $login;
+
+        return $this;
+    }
+
+    /**
+     * Get login.
+     *
+     * @return string
+     */
+    public function getLogin()
+    {
+        return $this->login;
+    }
+
+    /**
+     * Set libelle.
      *
      * @param string $libelle
      *
@@ -204,7 +232,7 @@ class Situation
     }
 
     /**
-     * Get libelle
+     * Get libelle.
      *
      * @return string
      */
@@ -224,7 +252,7 @@ class Situation
     }
 
     /**
-     * Set descriptif
+     * Set descriptif.
      *
      * @param string $descriptif
      *
@@ -238,7 +266,7 @@ class Situation
     }
 
     /**
-     * Get descriptif
+     * Get descriptif.
      *
      * @return string
      */
@@ -248,13 +276,13 @@ class Situation
     }
 
     /**
-     * Set datedebut
+     * Set datedebut.
      *
-     * @param \DateTime $datedebut
+     * @param \DateTime|null $datedebut
      *
      * @return Situation
      */
-    public function setDatedebut($datedebut)
+    public function setDatedebut($datedebut = null)
     {
         $this->datedebut = $datedebut;
 
@@ -262,9 +290,9 @@ class Situation
     }
 
     /**
-     * Get datedebut
+     * Get datedebut.
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
     public function getDatedebut()
     {
@@ -272,13 +300,13 @@ class Situation
     }
 
     /**
-     * Set datefin
+     * Set datefin.
      *
-     * @param \DateTime $datefin
+     * @param \DateTime|null $datefin
      *
      * @return Situation
      */
-    public function setDatefin($datefin)
+    public function setDatefin($datefin = null)
     {
         $this->datefin = $datefin;
 
@@ -286,9 +314,9 @@ class Situation
     }
 
     /**
-     * Get datefin
+     * Get datefin.
      *
-     * @return \DateTime
+     * @return \DateTime|null
      */
     public function getDatefin()
     {
@@ -296,13 +324,37 @@ class Situation
     }
 
     /**
-     * Set codelocalisation
+     * Set typesituation.
      *
-     * @param integer $codelocalisation
+     * @param int $typesituation
      *
      * @return Situation
      */
-    public function setCodelocalisation($codelocalisation)
+    public function setTypesituation($typesituation)
+    {
+        $this->typesituation = $typesituation;
+
+        return $this;
+    }
+
+    /**
+     * Get typesituation.
+     *
+     * @return int
+     */
+    public function getTypesituation()
+    {
+        return $this->typesituation;
+    }
+
+    /**
+     * Set codelocalisation.
+     *
+     * @param int|null $codelocalisation
+     *
+     * @return Situation
+     */
+    public function setCodelocalisation($codelocalisation = null)
     {
         $this->codelocalisation = $codelocalisation;
 
@@ -310,9 +362,9 @@ class Situation
     }
 
     /**
-     * Get codelocalisation
+     * Get codelocalisation.
      *
-     * @return integer
+     * @return int|null
      */
     public function getCodelocalisation()
     {
@@ -320,33 +372,81 @@ class Situation
     }
 
     /**
-     * Set login
+     * Set typeos.
      *
-     * @param \AppBundle\Entity\Utilisateur $login
+     * @param int $typeos
      *
      * @return Situation
      */
-    public function setLogin(\AppBundle\Entity\Utilisateur $login = null)
+    public function setTypeos($typeos)
     {
-        $this->login = $login;
+        $this->typeos = $typeos;
 
         return $this;
     }
 
     /**
-     * Get login
+     * Get typeos.
      *
-     * @return \AppBundle\Entity\Utilisateur
+     * @return int
      */
-    public function getLogin()
+    public function getTypeos()
     {
-        return $this->login;
+        return $this->typeos;
     }
 
     /**
-     * Set codecadre
+     * Set services.
      *
-     * @param \AppBundle\Entity\Cadre $codecadre
+     * @param string|null $services
+     *
+     * @return Situation
+     */
+    public function setServices($services = null)
+    {
+        $this->services = $services;
+
+        return $this;
+    }
+
+    /**
+     * Get services.
+     *
+     * @return string|null
+     */
+    public function getServices()
+    {
+        return $this->services;
+    }
+
+    /**
+     * Set portRef.
+     *
+     * @param int|null $portRef
+     *
+     * @return Situation
+     */
+    public function setPortRef($portRef = null)
+    {
+        $this->portRef = $portRef;
+
+        return $this;
+    }
+
+    /**
+     * Get portRef.
+     *
+     * @return int|null
+     */
+    public function getPortRef()
+    {
+        return $this->portRef;
+    }
+
+    /**
+     * Set codecadre.
+     *
+     * @param \AppBundle\Entity\Cadre|null $codecadre
      *
      * @return Situation
      */
@@ -358,9 +458,9 @@ class Situation
     }
 
     /**
-     * Get codecadre
+     * Get codecadre.
      *
-     * @return \AppBundle\Entity\Cadre
+     * @return \AppBundle\Entity\Cadre|null
      */
     public function getCodecadre()
     {
@@ -368,9 +468,9 @@ class Situation
     }
 
     /**
-     * Set codelangage
+     * Set codelangage.
      *
-     * @param \AppBundle\Entity\Langage $codelangage
+     * @param \AppBundle\Entity\Langage|null $codelangage
      *
      * @return Situation
      */
@@ -382,9 +482,9 @@ class Situation
     }
 
     /**
-     * Get codelangage
+     * Get codelangage.
      *
-     * @return \AppBundle\Entity\Langage
+     * @return \AppBundle\Entity\Langage|null
      */
     public function getCodelangage()
     {
@@ -392,9 +492,9 @@ class Situation
     }
 
     /**
-     * Set codeframework
+     * Set codeframework.
      *
-     * @param \AppBundle\Entity\Framework $codeframework
+     * @param \AppBundle\Entity\Framework|null $codeframework
      *
      * @return Situation
      */
@@ -406,9 +506,9 @@ class Situation
     }
 
     /**
-     * Get codeframework
+     * Get codeframework.
      *
-     * @return \AppBundle\Entity\Framework
+     * @return \AppBundle\Entity\Framework|null
      */
     public function getCodeframework()
     {
@@ -416,9 +516,9 @@ class Situation
     }
 
     /**
-     * Set codeos
+     * Set codeos.
      *
-     * @param \AppBundle\Entity\Operatingsystem $codeos
+     * @param \AppBundle\Entity\Operatingsystem|null $codeos
      *
      * @return Situation
      */
@@ -430,9 +530,9 @@ class Situation
     }
 
     /**
-     * Get codeos
+     * Get codeos.
      *
-     * @return \AppBundle\Entity\Operatingsystem
+     * @return \AppBundle\Entity\Operatingsystem|null
      */
     public function getCodeos()
     {
@@ -440,9 +540,9 @@ class Situation
     }
 
     /**
-     * Set codeservice
+     * Set codeservice.
      *
-     * @param \AppBundle\Entity\Services $codeservice
+     * @param \AppBundle\Entity\Services|null $codeservice
      *
      * @return Situation
      */
@@ -454,72 +554,19 @@ class Situation
     }
 
     /**
-     * Get codeservice
+     * Get codeservice.
      *
-     * @return \AppBundle\Entity\Services
+     * @return \AppBundle\Entity\Services|null
      */
     public function getCodeservice()
     {
         return $this->codeservice;
     }
 
-
-
     /**
-     * @return int
-     */
-    public function getTypeos()
-    {
-        return $this->typeos;
-    }
-
-    /**
-     * @param int $typeos
-     */
-    public function setTypeos($typeos)
-    {
-        $this->typeos = $typeos;
-    }
-
-    /**
-     * @return string
-     */
-    public function getServices()
-    {
-        return $this->services;
-    }
-
-    /**
-     * @param string $services
-     */
-    public function setServices($services)
-    {
-        $this->services = $services;
-    }
-
-
-
-    /**
-     * @param string $services
-     */
-    public function setTypeSituation($typesituation)
-    {
-        $this->typesituation = $typesituation;
-    }
-    /**
-     * Get type de situation : SISR :1, SLAM : 2
+     * Set refe4.
      *
-     * @return integer
-     */
-    public function getTypeSituation()
-    {
-        return $this->typesituation;
-    }
-
-    /**
-     * Set refe4
-     *
-     * @param \AppBundle\Entity\Situatione4 $refe4
+     * @param \AppBundle\Entity\Situatione4|null $refe4
      *
      * @return Situation
      */
@@ -531,9 +578,9 @@ class Situation
     }
 
     /**
-     * Get refe4
+     * Get refe4.
      *
-     * @return \AppBundle\Entity\Situatione4
+     * @return \AppBundle\Entity\Situatione4|null
      */
     public function getRefe4()
     {
@@ -541,7 +588,7 @@ class Situation
     }
 
     /**
-     * Add idactivite
+     * Add idactivite.
      *
      * @param \AppBundle\Entity\Activite $idactivite
      *
@@ -554,7 +601,6 @@ class Situation
             $this->idactivite->add($idactivite);
         }
 
-
         return $this;
     }
 
@@ -562,14 +608,16 @@ class Situation
      * Remove idactivite
      *
      * @param \AppBundle\Entity\Activite $idactivite
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
     public function removeIdactivite(\AppBundle\Entity\Activite $idactivite)
     {
-        $this->idactivite->removeElement($idactivite);
+        return $this->idactivite->removeElement($idactivite);
     }
 
     /**
-     * Get idactivite
+     * Get idactivite.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
@@ -589,7 +637,7 @@ class Situation
     }
 
     /**
-     * Add code
+     * Add code.
      *
      * @param \AppBundle\Entity\Typologie $code
      *
@@ -602,18 +650,29 @@ class Situation
             $this->code->add($code);
         }
 
-
         return $this;
     }
 
     /**
-     * Remove code
+     * Remove code.
      *
      * @param \AppBundle\Entity\Typologie $code
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
     public function removeCode(\AppBundle\Entity\Typologie $code)
     {
-        $this->code->removeElement($code);
+        return $this->code->removeElement($code);
+    }
+
+    /**
+     * Get code.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCode()
+    {
+        return $this->code;
     }
 
     /**
@@ -624,16 +683,6 @@ class Situation
     public function removeAllCodes()
     {
         $this->code->clear();
-    }
-
-    /**
-     * Get code
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getCode()
-    {
-        return $this->code;
     }
 
     /**
@@ -665,4 +714,5 @@ class Situation
     {
         return $this->arraySituationActiviteCites;
     }
+
 }

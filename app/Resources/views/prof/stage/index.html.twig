@@ -33,11 +33,11 @@
     <table class="table table-condensed table-bordered table-striped">
         <thead>
         <tr>
-            <th width="24%">Vérification</th>
+            <th width="20%">Vérification</th>
             <th width="20">Année</th>
-            <th>Libellé</th>
-            <th>Descriptif</th>
-            <th>Intitulés et activités</th>
+            <th width="24%">Libellé</th>
+            <th width="20%">Descriptif</th>
+            <th width="25%">Intitulés et activités</th>
             <th></th>
         </tr>
 
@@ -49,9 +49,9 @@
             <tr class='tr_caption'>
                 <td colspan="6" {{ (nbStages==0 ? "class='td_warning'" : "") }}>
                     {%  if nbStages == 0 %}
-                        <i class="fa fa-exclamation-triangle fa-2x"></i>&nbsp;{{  utilisateurStages.utilisateur.nomlong }} ({{  utilisateurStages.utilisateur.numparcours.nomenclature }}) : AUCUN STAGE
+                        <i class="fa fa-exclamation-triangle fa-2x"></i>&nbsp;{{  utilisateurStages.utilisateur.nomlong }} ({{  utilisateurStages.utilisateur.parcoursnomenclature }}) : AUCUN STAGE
                     {% else %}
-                        {{  utilisateurStages.utilisateur.nomlong }} ({{  utilisateurStages.utilisateur.numparcours.nomenclature }})
+                        {{  utilisateurStages.utilisateur.nomlong }} ({{  utilisateurStages.utilisateur.parcoursnomenclature }})
                     {% endif %}
                 </td>
             </tr>

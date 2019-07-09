@@ -31,8 +31,9 @@ class ProfStageController extends Controller
                 $classe = null;
         }
 
-        // Obtention des situations
-        $utilisateursStages = $this->getManager()->loadUtilisateursStages($classe);
+        // Obtention du service Ldap
+        $serviceLdap = $this->get('security.user.provider.concrete.ldap_provider');
+        $utilisateursStages = $this->getManager()->loadUtilisateursStages($serviceLdap, $classe);
 
         return $this->render('prof/stage/index.html.twig',
             array('utilisateursStages' => $utilisateursStages, 'classe' => $classe));
@@ -47,6 +48,14 @@ class ProfStageController extends Controller
         $manager = $this->getManager();
         // Obtention de l'utilisateur
         $userLogin = $request->get('user');
+
+        // Obtention de l'utilisateur Ldap
+        $serviceLdap = $this->get('security.user.provider.concrete.ldap_provider');
+        if (! $userLdap = $serviceLdap->loadUserLdapByLogin($userLogin))
+        {
+            return $this->render("Exception/error404.html.twig");
+        }
+
         // Recherche du film
         if (!$stage = $manager->loadSingleStage($id))
         {
@@ -64,8 +73,12 @@ class ProfStageController extends Controller
         $utilisateurStages->addStage($stage);
         $recommandations = $utilisateurStages->verifierStage();
 
-        return $this->render('prof/stage/edit.html.twig', array('stage' => $stage, 'recommandations' => $recommandations,
-                    'intitulesActivites' => $intitulesActivites, 'typologies' => $typologies));
+        return $this->render('prof/stage/edit.html.twig', array(
+            'stage' => $stage,
+            'etudiant' => $userLdap,
+            'recommandations' => $recommandations,
+            'intitulesActivites' => $intitulesActivites,
+            'typologies' => $typologies));
     }
 
     /**
@@ -73,8 +86,9 @@ class ProfStageController extends Controller
      */
     public function analyseStageAction()
     {
+        $serviceLdap = $this->get('security.user.provider.concrete.ldap_provider');
         // Obtention du manager puis des stages
-        $utilisateursStages = $this->getManager()->loadUtilisateursStages();
+        $utilisateursStages = $this->getManager()->loadUtilisateursStages($serviceLdap);
 
         $analyse = $utilisateursStages->analyseUtilisateursStages();
 

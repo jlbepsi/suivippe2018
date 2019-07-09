@@ -8,27 +8,66 @@
 
 namespace AppBundle\Controller\Prof\Utils;
 
-use AppBundle\Controller\Prof\Utils\UtilisateurStages;
-use AppBundle\Entity\Utilisateur;
+use AppBundle\Entity\UserLdap;
 
 class UtilisateursStages
 {
     /**
-     * @var UtilisateurStages[]
+     * tableau clé (login), valeur (UserLdap)
+     *
+     * @var \Doctrine\Common\Collections\Collection
      */
-    private $utilisateurs = array();
+    private $utilisateurs;
+
+
+    public function __construct()
+    {
+        $this->utilisateurs = new \Doctrine\Common\Collections\ArrayCollection();
+    }
 
     /**
-     * @return UtilisateurStages[]
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getUtilisateurs()
     {
         return $this->utilisateurs;
     }
 
+
     /**
+     * Ajoute les utilisateurs et créé la listes des stages associés aux utilisateurs
+     *
+     * @param $utilisateurs UserLdap[]
      * @param $stages \AppBundle\Entity\Stage[]
      */
+    public function compute($utilisateurs, $stages)
+    {
+        // Fixe les utilisateurs par clé: login
+        foreach ($utilisateurs as $utilisateur)
+        {
+            if (! $this->utilisateurs->containsKey($utilisateur->getLogin())) {
+                $this->utilisateurs->set($utilisateur->getLogin(), new UtilisateurStages($utilisateur));
+            }
+        }
+
+        // Répartis les stages par utilisateurs
+
+        // Parcours des stages
+        foreach ($stages as $stage)
+        {
+            // Obtention de l'objet UtilisateurStages
+            $utilisateurStages = $this->utilisateurs->get($stage->getLogin());
+            if ($utilisateurStages != null)
+            {
+                $utilisateurStages->addStage($stage);
+
+            } // Sinon l'utilisateur du stage n'existe plus, voir Liste des utilisateurs du contrôleur Prof???Controller
+        }
+    }
+
+
+
+    /**
     public function setStages($stages)
     {
         $count = count($stages);
@@ -36,12 +75,12 @@ class UtilisateursStages
         while ($i < $count)
         {
             $stage = $stages[$i];
-            $loginUtilisateur = $stage->getLogin()->getLogin();
+            $loginUtilisateur = $stage->getLogin();
 
             $utilisateurStages = new UtilisateurStages();
             $utilisateurStages->setUtilisateur($stage->getLogin());
 
-            while ($i < $count && $stages[$i]->getLogin()->getLogin() == $loginUtilisateur)
+            while ($i < $count && $stages[$i]->getLogin() == $loginUtilisateur)
             {
                 $utilisateurStages->addStage($stages[$i]);
                 $i++;
@@ -52,8 +91,6 @@ class UtilisateursStages
     }
 
     /**
-     * @param $utilisateurs \AppBundle\Entity\Utilisateur[]
-     */
     public function setUtilisateursSansStage($utilisateurs)
     {
         foreach ($utilisateurs as $utilisateur)
@@ -66,18 +103,15 @@ class UtilisateursStages
                 $this->utilisateurs[] = $utilisateurStages;
             }
         }
-        /*// Tri sur le nom puis prénom
+        // Tri sur le nom puis prénom
         usort($this->utilisateurs, function($e1, $e2)
         {
             return ($e1->getUtilisateur()->getNom() . ' ' . $e1->getUtilisateur()->getPrenom() >
                 $e2->getUtilisateur()->getNom() . ' ' . $e1->getUtilisateur()->getPrenom());
-        });*/
+        });
     }
 
     /**
-     * @param $login string
-     * @return UtilisateurStages|null
-     */
     private function findUtilisateur($login)
     {
         foreach ($this->utilisateurs as $utilisateurStages)
@@ -87,20 +121,26 @@ class UtilisateursStages
         }
         return null;
     }
+     */
 
     /**
-     * @param $stagesIntitule \AppBundle\Entity\Stageintitule
+     * @param $stagesIntitule \AppBundle\Entity\Stageintitule[]
      */
-    public function addStageIntitule($stagesIntitule)
+    public function addStagesIntitules($stagesIntitules)
     {
-        // On recherche le stage d'après l'utilisateur
-        $utilisateurStages = $this->findUtilisateur($stagesIntitule->getIdstage()->getLogin()->getLogin());
-        if ($utilisateurStages)
+
+        foreach ($stagesIntitules as $stagesIntitule)
         {
-            $stage = $utilisateurStages->getStage($stagesIntitule->getIdstage()->getId());
-            if ($stage)
+            // On recherche le stage d'après l'utilisateur
+            $utilisateurStages = $this->utilisateurs->get($stagesIntitule->getIdstage()->getLogin());
+
+            if ($utilisateurStages)
             {
-                $stage->addIntitulesActivites($stagesIntitule);
+                $stage = $utilisateurStages->getStage($stagesIntitule->getIdstage()->getId());
+                if ($stage)
+                {
+                    $stage->addIntitulesActivites($stagesIntitule);
+                }
             }
         }
     }

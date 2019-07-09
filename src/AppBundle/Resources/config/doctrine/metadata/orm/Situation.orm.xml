@@ -1,42 +1,63 @@
 <?xml version="1.0" encoding="utf-8"?>
-<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping http://doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
+<doctrine-mapping xmlns="http://doctrine-project.org/schemas/orm/doctrine-mapping" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://doctrine-project.org/schemas/orm/doctrine-mapping https://www.doctrine-project.org/schemas/orm/doctrine-mapping.xsd">
   <entity name="Situation" table="situation">
     <indexes>
-      <index name="FK_Situation_Cadre" columns="codeCadre"/>
-      <index name="FK_Situation_Localisation" columns="codeLocalisation"/>
-      <index name="FK_Situation_Source" columns="codeLangage"/>
-      <index name="FK_Situation_TypeSituation" columns="codeFramework"/>
       <index name="FK_Situation_Utilisateur" columns="login"/>
+      <index name="refe4" columns="refe4"/>
+      <index name="FK_Situation_Cadre" columns="codeCadre"/>
+      <index name="FK_Situation_Source" columns="codeLangage"/>
       <index name="codeOS" columns="codeOS,codeService"/>
       <index name="codeService" columns="codeService"/>
-      <index name="refe4" columns="refe4"/>
+      <index name="FK_Situation_Localisation" columns="codeLocalisation"/>
+      <index name="FK_Situation_TypeSituation" columns="codeFramework"/>
       <index name="IDX_EC2D9ACA5B1B06D0" columns="codeOS"/>
     </indexes>
     <id name="reference" type="integer" column="reference">
       <generator strategy="IDENTITY"/>
     </id>
+    <field name="login" type="string" column="login" length="30" nullable="false">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
     <field name="libelle" type="string" column="libelle" length="80" nullable="false">
       <options>
         <option name="fixed"/>
       </options>
     </field>
-    <field name="descriptif" type="string" column="descriptif" length="250" nullable="false">
+    <field name="descriptif" type="string" column="descriptif" length="255" nullable="false">
       <options>
         <option name="fixed"/>
       </options>
     </field>
     <field name="datedebut" type="datetime" column="datedebut" nullable="true"/>
     <field name="datefin" type="datetime" column="datefin" nullable="true"/>
+    <field name="typesituation" type="integer" column="typesituation" nullable="false">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
     <field name="codelocalisation" type="integer" column="codeLocalisation" nullable="true">
       <options>
         <option name="unsigned"/>
       </options>
     </field>
-    <many-to-one field="login" target-entity="Utilisateur" fetch="LAZY">
-      <join-columns>
-        <join-column name="login" referenced-column-name="login"/>
-      </join-columns>
-    </many-to-one>
+    <field name="typeos" type="integer" column="typeos" nullable="false">
+      <options>
+        <option name="unsigned"/>
+        <option name="default">-1</option>
+      </options>
+    </field>
+    <field name="services" type="string" column="services" length="200" nullable="true">
+      <options>
+        <option name="fixed"/>
+      </options>
+    </field>
+    <field name="portRef" type="integer" column="port_ref" nullable="true">
+      <options>
+        <option name="unsigned"/>
+      </options>
+    </field>
     <many-to-one field="codecadre" target-entity="Cadre" fetch="LAZY">
       <join-columns>
         <join-column name="codeCadre" referenced-column-name="code"/>

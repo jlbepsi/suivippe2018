@@ -13,22 +13,23 @@ use Doctrine\ORM\Mapping as ORM;
 class Situatione4
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="referencee4", type="integer", nullable=false)
      * @ORM\Id
+     * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $referencee4;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="competenceApplication", type="integer", nullable=false)
      */
     private $competenceapplication = '0';
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="competenceSGBD", type="integer", nullable=false)
      */
@@ -49,7 +50,7 @@ class Situatione4
     private $intitule;
 
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="equipe", type="integer", nullable=false)
      */
@@ -65,23 +66,9 @@ class Situatione4
 
 
     /**
-     * Set referencee4
+     * Get referencee4.
      *
-     * @param integer $referencee4
-     *
-     * @return Situatione4
-     */
-    public function setReferencee4($referencee4)
-    {
-        $this->referencee4 = $referencee4;
-
-        return $this;
-    }
-
-    /**
-     * Get referencee4
-     *
-     * @return integer
+     * @return int
      */
     public function getReferencee4()
     {
@@ -89,9 +76,9 @@ class Situatione4
     }
 
     /**
-     * Set competenceapplication
+     * Set competenceapplication.
      *
-     * @param integer $competenceapplication
+     * @param int $competenceapplication
      *
      * @return Situatione4
      */
@@ -103,9 +90,9 @@ class Situatione4
     }
 
     /**
-     * Get competenceapplication
+     * Get competenceapplication.
      *
-     * @return integer
+     * @return int
      */
     public function getCompetenceapplication()
     {
@@ -113,9 +100,9 @@ class Situatione4
     }
 
     /**
-     * Set competencesgbd
+     * Set competencesgbd.
      *
-     * @param integer $competencesgbd
+     * @param int $competencesgbd
      *
      * @return Situatione4
      */
@@ -127,9 +114,9 @@ class Situatione4
     }
 
     /**
-     * Get competencesgbd
+     * Get competencesgbd.
      *
-     * @return integer
+     * @return int
      */
     public function getCompetencesgbd()
     {
@@ -137,7 +124,7 @@ class Situatione4
     }
 
     /**
-     * Set contexte
+     * Set contexte.
      *
      * @param string $contexte
      *
@@ -151,7 +138,7 @@ class Situatione4
     }
 
     /**
-     * Get contexte
+     * Get contexte.
      *
      * @return string
      */
@@ -161,7 +148,7 @@ class Situatione4
     }
 
     /**
-     * Set intitule
+     * Set intitule.
      *
      * @param string $intitule
      *
@@ -175,7 +162,7 @@ class Situatione4
     }
 
     /**
-     * Get intitule
+     * Get intitule.
      *
      * @return string
      */
@@ -185,9 +172,9 @@ class Situatione4
     }
 
     /**
-     * Set equipe
+     * Set equipe.
      *
-     * @param integer $equipe
+     * @param int $equipe
      *
      * @return Situatione4
      */
@@ -199,9 +186,9 @@ class Situatione4
     }
 
     /**
-     * Get equipe
+     * Get equipe.
      *
-     * @return integer
+     * @return int
      */
     public function getEquipe()
     {
@@ -209,7 +196,7 @@ class Situatione4
     }
 
     /**
-     * Set realisation
+     * Set realisation.
      *
      * @param string $realisation
      *
@@ -223,7 +210,7 @@ class Situatione4
     }
 
     /**
-     * Get realisation
+     * Get realisation.
      *
      * @return string
      */

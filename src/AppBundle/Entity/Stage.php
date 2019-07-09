@@ -3,7 +3,6 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use AppBundle\Validator\Constraints as AppConstraints;
 
 /**
  * Stage
@@ -14,7 +13,7 @@ use AppBundle\Validator\Constraints as AppConstraints;
 class Stage
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
@@ -23,7 +22,14 @@ class Stage
     private $id;
 
     /**
-     * @var integer
+     * @var string
+     *
+     * @ORM\Column(name="login", type="string", length=30, nullable=false)
+     */
+    private $login;
+
+    /**
+     * @var int
      *
      * @ORM\Column(name="annee", type="integer", nullable=false)
      */
@@ -37,35 +43,35 @@ class Stage
     private $libellecourt;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="descriptif", type="string", length=250, nullable=true)
      */
     private $descriptif;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="entrepriseNom", type="string", length=100, nullable=true)
      */
     private $entreprisenom;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="entrepriseAdresse", type="string", length=250, nullable=true)
      */
     private $entrepriseadresse;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="entrepriseContact", type="string", length=200, nullable=true)
      */
     private $entreprisecontact;
 
     /**
-     * @var string
+     * @var string|null
      *
      * @ORM\Column(name="entrepriseLogo", type="string", length=100, nullable=true)
      */
@@ -74,7 +80,7 @@ class Stage
     /**
      * @var float
      *
-     * @ORM\Column(name="montant", type="float", precision=10, scale=0, nullable=true)
+     * @ORM\Column(name="montant", type="float", precision=10, scale=0, nullable=false)
      */
     private $montant;
 
@@ -82,7 +88,6 @@ class Stage
      * @var \DateTime
      *
      * @ORM\Column(name="dateDebut", type="date", nullable=false)
-     * @AppConstraints\StageDatesValidator
      */
     private $datedebut;
 
@@ -90,7 +95,6 @@ class Stage
      * @var \DateTime
      *
      * @ORM\Column(name="dateFin", type="date", nullable=false)
-     * @AppConstraints\StageDates
      */
     private $datefin;
 
@@ -100,16 +104,6 @@ class Stage
      * @ORM\Column(name="dateModif", type="datetime", nullable=false)
      */
     private $datemodif;
-
-    /**
-     * @var \AppBundle\Entity\Utilisateur
-     *
-     * @ORM\ManyToOne(targetEntity="Utilisateur")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="login", referencedColumnName="login")
-     * })
-     */
-    private $login;
 
     /**
      * @var \Doctrine\Common\Collections\Collection
@@ -416,10 +410,10 @@ class Stage
     /**
      * Set login
      *
-     * @param \AppBundle\Entity\Utilisateur $login     *
+     * @param string $login     *
      * @return Stage
      */
-    public function setLogin(\AppBundle\Entity\Utilisateur $login = null)
+    public function setLogin($login = null)
     {
         $this->login = $login;
 
@@ -429,7 +423,7 @@ class Stage
     /**
      * Get login
      *
-     * @return \AppBundle\Entity\Utilisateur
+     * @return string
      */
     public function getLogin()
     {
@@ -543,26 +537,26 @@ class Stage
 
     public function analyseActivites()
     {
-        $nbStagesActivitesIncomplets = 0;
+        $stageIncomplet = false;
         if ($this->arrayIntitulesActivites == null)
         {
-            $nbStagesActivitesIncomplets++;
+            $stageIncomplet = true;
         }
         else
         {
             $nbIntitules = count($this->arrayIntitulesActivites);
             if ($nbIntitules < 3)
-                $nbStagesActivitesIncomplets++;
+                $stageIncomplet = true;
             else {
                 foreach ($this->arrayIntitulesActivites as $intitulesActivite) {
-                    if ($intitulesActivite["nbActivite"] < 4) {
-                        $nbStagesActivitesIncomplets++;
+                    if ($intitulesActivite["nbActivite"] < 2) {
+                        $stageIncomplet = true;
                         break;
                     }
                 }
             }
         }
 
-        return $nbStagesActivitesIncomplets;
+        return ($stageIncomplet ? 1 : 0);
     }
 }

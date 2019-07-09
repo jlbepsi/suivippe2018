@@ -8,6 +8,8 @@
 
 namespace AppBundle\Manager;
 
+use AppBundle\Entity\UserLdap;
+
 class SyntheseBuilder
 {
     private $utilisateur;
@@ -96,10 +98,14 @@ class SyntheseBuilder
         }
     }
 
-    public function setUtilisateur($user)
+    public function setUtilisateur(UserLdap $user)
     {
         $this->utilisateur = $user;
     }
+
+    /**
+     * @return UserLdap
+     */
     public function getUtilisateur()
     {
         return $this->utilisateur;

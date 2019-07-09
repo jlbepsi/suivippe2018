@@ -14,6 +14,7 @@ use AppBundle\Entity\Stage;
 use AppBundle\Entity\Stageintitule;
 use AppBundle\Entity\Stageintituleactivite;
 use AppBundle\Entity\Utilisateur;
+use AppBundle\Security\LdapUserProvider;
 use Doctrine\ORM\EntityManager;
 
 class StageManager
@@ -60,7 +61,7 @@ class StageManager
      */
     public function loadAllStages()
     {
-        return $this->repository->findAll();
+        return $this->repository->findBy(array(), array('login' => 'ASC', 'annee' => 'ASC'));
     }
 
     /**
@@ -119,8 +120,6 @@ class StageManager
      */
     public function removeStage(Stage $stage)
     {
-        /*$this->entityManager->remove($stage);
-        $this->entityManager->flush();*/
         $stmt = $this->entityManager
             ->getConnection()
             ->prepare('CALL deleteStage (:idstage);');
@@ -159,10 +158,10 @@ class StageManager
     }
 
     /**
-     * @param \AppBundle\Entity\Utilisateur $login
+     * @param string $login
      * @return Stageintitule[]|array
      */
-    public function loadStageIntitulesUser(Utilisateur $login)
+    public function loadStageIntitulesUser($login)
     {
         if ($this->repositoryStageintitule == null)
             $this->repositoryStageintitule = $this->entityManager->getRepository('AppBundle:Stageintitule');
@@ -330,57 +329,27 @@ class StageManager
      */
 
     /**
+     * @param LdapUserProvider $serviceLdap
+     * @param null $classe
      * @return UtilisateursStages
      */
-    public function loadUtilisateursStages($classe = null)
+    public function loadUtilisateursStages(LdapUserProvider $serviceLdap, $classe = null)
     {
-        /**
-         *
-         * SELECT * FROM utilisateur us LEFT JOIN stage st ON (st.login = us.login) WHERE us.classe ='B1' OR us.classe ='B2'
-         *
-         */
-
+        // Liste des utilisateurs et de leurs stages
         $utilisateursStages = new UtilisateursStages();
-        // On charge toutes les stages
-        //$stages = $this->loadAllStages();
-        if ($classe != null)
-        {
-            $query = $this->getEntityManager()->createQuery(
-                'SELECT st
-                    FROM AppBundle:Stage st, AppBundle:Utilisateur us
-                    WHERE st.login = us
-                      AND us.classe = :pClasse
-                      AND us.actif = 1
-                      AND us.type = 1
-                    ORDER BY us.nom, us.prenom'
-            )->setParameter('pClasse', $classe);
-        }
-        else
-        {
 
-            $query = $this->getEntityManager()->createQuery(
-                'SELECT st
-                    FROM AppBundle:Stage st, AppBundle:Utilisateur us
-                    WHERE st.login = us
-                      AND us.actif = 1
-                      AND us.type = 1
-                    ORDER BY us.nom, us.prenom'
-            );
-        }
-        $stages = $query->getResult();
+        // Obtention de tous les stages
+        $stages = $this->loadAllStages();
+        // Obtention des utilisateurs Ldap
+        $users = $serviceLdap->loadUsersByClasse($classe);
 
-        $utilisateursStages->setStages($stages);
+
+        // Répartition utilisateurs / stages
+        $utilisateursStages->compute($users, $stages);
+
         // On charge toutes les intitulés de stage
         $stagesIntitules = $this->loadStagesIntitules();
-        foreach ($stagesIntitules as $stagesIntitule) {
-            $utilisateursStages->addStageIntitule($stagesIntitule);
-        }
-
-
-        // On charge tous les utilisateurs qui n'ont pas de stages
-        $repositoryUtilisateur = $this->entityManager->getRepository('AppBundle:Utilisateur');
-        $utilisateurs = $repositoryUtilisateur->findActiveEtudiants($classe);
-        $utilisateursStages->setUtilisateursSansStage($utilisateurs);
+        $utilisateursStages->addStagesIntitules($stagesIntitules);
 
         return $utilisateursStages;
     }

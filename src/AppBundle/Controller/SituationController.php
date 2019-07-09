@@ -34,6 +34,12 @@ class SituationController extends Controller
 
         // Obtention de l'utilisateur connecté
         $user = $this->getUser();
+        // Obtention de l'utilisateur Ldap
+        $serviceLdap = $this->get('security.user.provider.concrete.ldap_provider');
+        if (! $userLdap = $serviceLdap->loadUserLdapByLogin($user->getUsername()))
+        {
+            return $this->render("Exception/error404.html.twig");
+        }
 
         $doAnalyse = true;
         if ($request->getMethod() == 'POST') {
@@ -49,14 +55,13 @@ class SituationController extends Controller
             $situations = $this->getManager()->loadSituations($user->getUsername());
         }
         // Obtention du parcours
-        $idParcours = $user->getNumparcours()->getId();
+        $idParcours = $userLdap->getNumparcours();
 
         // Analyse des situations
         if ($doAnalyse && count($situations) > 0) {
             $analyseSituationActivite = $this->getParameter('analyseSituationActivite');
-            $utilisateurSituations = new UtilisateurSituations();
+            $utilisateurSituations = new UtilisateurSituations($userLdap);
             $utilisateurSituations->setAnalyseSituationActivite($analyseSituationActivite);
-            $utilisateurSituations->setUtilisateur($user);
             $utilisateurSituations->setSituation($situations);
             $recommandations = $utilisateurSituations->verifierSituation();
             if (count($recommandations) == 0)
@@ -68,7 +73,7 @@ class SituationController extends Controller
 
 
         return $this->render('situation/index.html.twig', array('arraySituations' => $situations, 'count' => count($situations),
-            'form' => $form->createView(), 'idParcours' => $idParcours, 'classe' => $user->getClasse(),
+            'form' => $form->createView(), 'idParcours' => $idParcours, 'classe' => $userLdap->getClasse(),
             'recommandations' => $recommandations));
     }
 
@@ -100,6 +105,13 @@ class SituationController extends Controller
 
         // Obtention de l'utilisateur connecté
         $user = $this->getUser();
+        // Obtention de l'utilisateur Ldap
+        $serviceLdap = $this->get('security.user.provider.concrete.ldap_provider');
+        if (! $userLdap = $serviceLdap->loadUserLdapByLogin($user->getUsername()))
+        {
+            return $this->render("Exception/error404.html.twig");
+        }
+
         // Si l'utilisateur soumet le formulaire
         if ($request->getMethod() == 'POST')
         {
@@ -116,7 +128,7 @@ class SituationController extends Controller
                 if ($radioParcours == null)
                 {
                     // Obtention du parcours comme type de situation
-                    $typeSituation = $user->getNumparcours()->getId();
+                    $typeSituation = $userLdap->getNumparcours();
                 }
                 else
                 {
@@ -148,7 +160,7 @@ class SituationController extends Controller
 
         $typologies = $manager->loadTypologies();
         // Obtention du parcours
-        $idParcours = $user->getNumparcours()->getId();
+        $idParcours = $userLdap->getNumparcours();
         // Obtention des frameworks
         $listeframework = $manager->loadFramework();
 
@@ -167,6 +179,13 @@ class SituationController extends Controller
         $manager = $this->getManager();
         // Obtention de l'utilisateur connecté
         $user = $this->getUser();
+        // Obtention de l'utilisateur Ldap
+        $serviceLdap = $this->get('security.user.provider.concrete.ldap_provider');
+        if (! $userLdap = $serviceLdap->loadUserLdapByLogin($user->getUsername()))
+        {
+            return $this->render("Exception/error404.html.twig");
+        }
+
         // Recherche de la situation
         if (!$situation = $manager->loadSituation($id, $user->getUsername()))
         {
@@ -262,7 +281,7 @@ class SituationController extends Controller
         // Commentaires
         $commentaires = $manager->loadCommentaires($id);
         // Obtention du parcours
-        $idParcours = $situation->getLogin()->getNumparcours()->getId();
+        $idParcours = $userLdap->getNumparcours();
         // Obtention des frameworks
         $listeframework = $manager->loadFramework();
 
@@ -276,7 +295,9 @@ class SituationController extends Controller
                                 'situation' => $situation, 'typologies' => $typologies,
                                 'commentaires' => $commentaires, 'recommandations' => $recommandations,
                                 'listeframework' => $listeframework,
-                                'activites' => $activites,'idParcours' => $idParcours));
+                                'activites' => $activites,'idParcours' => $idParcours,
+                                'classe' => $userLdap->getClasse())
+        );
     }
 
     /**

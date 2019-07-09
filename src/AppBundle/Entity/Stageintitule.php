@@ -13,7 +13,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Stageintitule
 {
     /**
-     * @var integer
+     * @var int
      *
      * @ORM\Column(name="idIntitule", type="integer", nullable=false)
      * @ORM\Id
@@ -81,7 +81,7 @@ class Stageintitule
     /**
      * Get idintitule
      *
-     * @return integer 
+     * @return integer
      */
     public function getIdintitule()
     {
@@ -104,7 +104,7 @@ class Stageintitule
     /**
      * Get intitule
      *
-     * @return string 
+     * @return string
      */
     public function getIntitule()
     {
@@ -127,7 +127,7 @@ class Stageintitule
     /**
      * Get idstage
      *
-     * @return \AppBundle\Entity\Stage 
+     * @return \AppBundle\Entity\Stage
      */
     public function getIdstage()
     {
@@ -173,7 +173,7 @@ class Stageintitule
     /**
      * Get idactivite
      *
-     * @return \Doctrine\Common\Collections\Collection 
+     * @return \Doctrine\Common\Collections\Collection
      */
     public function getIdactivite()
     {

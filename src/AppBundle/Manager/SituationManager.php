@@ -14,6 +14,7 @@ use AppBundle\Entity\Situation;
 use AppBundle\Entity\Situatione4;
 use AppBundle\Entity\Utilisateur;
 use AppBundle\Form\SituationSearchCriteria;
+use AppBundle\Security\LdapUserProvider;
 use Doctrine\ORM\EntityManager;
 
 
@@ -44,55 +45,64 @@ class SituationManager
     }
 
     /**
+     * @param LdapUserProvider $serviceLdap
      * @param $analyseSituationActivite integer
      * @return UtilisateursSituations
      */
-    public function loadUtilisateursSituations($analyseSituationActivite, $classe = null)
+    public function loadUtilisateursSituations($serviceLdap, $analyseSituationActivite, $classe = null)
     {
-        /**
-         *
-         * SELECT * FROM utilisateur us LEFT JOIN situation si ON (si.login = us.login) WHERE us.classe ='B1' OR us.classe ='B2'
-         *
-         */
-
+        // Liste des utilisateurs et de leurs situations
         $utilisateursSituations = new UtilisateursSituations();
+
+        // Obtention de tous les situations
+        $situations = $this->loadAllSituations();
+        // Obtention des utilisateurs Ldap
+        $users = $serviceLdap->loadUsersByClasse($classe);
+
+
+        // Répartition utilisateurs / stages
+        $utilisateursSituations->compute($users, $situations);
+
         $utilisateursSituations->setAnalyseSituationActivite($analyseSituationActivite);
 
-        // On charge toutes les situations
-        if ($classe != null)
-        {
-            $query = $this->getEntityManager()->createQuery(
-                'SELECT si
-                    FROM AppBundle:Situation si, AppBundle:Utilisateur us
-                    WHERE si.login = us
-                      AND us.classe = :pClasse
-                      AND us.actif = 1
-                      AND us.type = 1
-                    ORDER BY us.nom, us.prenom'
-            )->setParameter('pClasse', $classe);
-        }
-        else
-        {
-
-            $query = $this->getEntityManager()->createQuery(
-                'SELECT si
-                    FROM AppBundle:Situation si, AppBundle:Utilisateur us
-                    WHERE si.login = us
-                      AND us.actif = 1
-                      AND us.type = 1
-                    ORDER BY us.nom, us.prenom'
-            );
-        }
-        $situations = $query->getResult();
-
-        $utilisateursSituations->setSituations($situations);
-
-        // On charge tous les utilisateurs qui n'ont pas de situations
-        $repositoryUtilisateur = $this->entityManager->getRepository('AppBundle:Utilisateur');
-        $utilisateurs = $repositoryUtilisateur->findActiveEtudiants($classe);
-        $utilisateursSituations->setUtilisateursSansSituation($utilisateurs);
-
         return $utilisateursSituations;
+    }
+
+
+    public function countAllSituations()
+    {
+        $qb = $this->repository->createQueryBuilder('s');
+        $qb->select('COUNT(s)');
+
+        return $qb
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    /**
+     * @param $login string
+     * @return integer
+     * @throws \Doctrine\ORM\NoResultException
+     * @throws \Doctrine\ORM\NonUniqueResultException
+     */
+    public function countSituations($login)
+    {
+        $qb = $this->repository->createQueryBuilder('s');
+        $qb->select('COUNT(s)');
+        $qb->where('s.login=:userLogin');
+
+        return $qb
+            ->getQuery()
+            ->setParameter(":userLogin", $login)
+            ->getSingleScalarResult();
+    }
+
+    /**
+     * @return /AppBundle/Entity/Situation[]
+     */
+    public function loadAllSituations()
+    {
+        return $this->repository->findAll();
     }
 
     /**
@@ -139,38 +149,11 @@ class SituationManager
             ->getResult();
     }
 
-    public function countAllSituations()
-    {
-        $qb = $this->repository->createQueryBuilder('s');
-        $qb->select('COUNT(s)');
-
-        return $qb
-            ->getQuery()
-            ->getSingleScalarResult();
-    }
-
-    /**
-     * @param $login string
-     * @return integer
-     * @throws \Doctrine\ORM\NoResultException
-     * @throws \Doctrine\ORM\NonUniqueResultException
-     */
-    public function countSituations($login)
-    {
-        $qb = $this->repository->createQueryBuilder('s');
-        $qb->select('COUNT(s)');
-        $qb->where('s.login=:userLogin');
-
-        return $qb
-            ->getQuery()
-            ->setParameter(":userLogin", $login)
-            ->getSingleScalarResult();
-    }
-
     /**
      * Load Situation entity
      *
      * @param Integer $situationId
+     * @return Situation|object|null
      */
     public function loadSituation($situationId, $login)
     {
@@ -192,6 +175,8 @@ class SituationManager
      * Save Situation entity
      *
      * @param Situation $situation
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function saveSituation(Situation $situation)
     {
@@ -202,7 +187,9 @@ class SituationManager
     /**
      * Save Situation entity
      *
-     * @param Situation $situatione4
+     * @param Situatione4 $situatione4
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function saveSituationE4(Situatione4 $situatione4)
     {
@@ -214,6 +201,8 @@ class SituationManager
      * Remove Situation entity
      *
      * @param Situation $situation
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function removeSituation(Situation $situation)
     {
@@ -226,6 +215,8 @@ class SituationManager
      * Remove Situatione4 entity
      *
      * @param Situatione4|null $situatione4
+     * @throws \Doctrine\ORM\ORMException
+     * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function removeSituationE4(Situatione4 $situatione4)
     {
@@ -346,13 +337,14 @@ class SituationManager
     /**
      * @param Situation $situation
      * @param $commentaire string
-     * @param Utilisateur $prof
+     * @param string $prof
      * @param $date \DateTime
+     * @return int
+     * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
-    public function addSituationCommentaire(Situation $situation, $commentaire, Utilisateur $prof, $date)
+    public function addSituationCommentaire(Situation $situation, $commentaire, $prof, $date)
     {
-        $repository = $this->repositoryCommentaires;
         $entity = new Commentaire();
         $entity->setRefsituation($situation);
         $entity->setCommentaire($commentaire);
@@ -367,6 +359,7 @@ class SituationManager
 
     /**
      * @param \AppBundle\Entity\Commentaire $commentaire
+     * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function saveCommentaire($commentaire)
@@ -377,6 +370,7 @@ class SituationManager
 
     /**
      * @param \AppBundle\Entity\Commentaire $commentaire
+     * @throws \Doctrine\ORM\ORMException
      * @throws \Doctrine\ORM\OptimisticLockException
      */
     public function removeCommentaire($commentaire)

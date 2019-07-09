@@ -34,9 +34,13 @@ Mon profil
     </div>
 
     <div class="form-row">
+        <div class="form-group col-md-3">
+            <label for="classe">Sexe:</label>
+            <input type="text" disabled="disabled" class="form-control" value="{% if utilisateur.sexe == 1 %} Féminin {%  else %} Masculin {% endif %}" />
+        </div>
         <div class="form-group col-md-6">
             <label for="situation_codelangage">Parcours: </label>
-            <input type="text" disabled="disabled" class="form-control" value="{{ utilisateur.numparcours.libelle }}" />
+            <input type="text" disabled="disabled" class="form-control" value="{{ utilisateur.parcoursLibelle }}" />
         </div>
         <div class="form-group col-md-3">
             <label for="utilisateur_numexam">Numéro examen:</label>
@@ -44,33 +48,6 @@ Mon profil
         </div>
     </div>
 
-    <!--
-    <div class="form-row">
-        <div class="form-group col-md-2">
-            <label>Sexe: </label>
-            <div>
-                <input name="utilisateur_sexe"
-                        {% if utilisateur.sexe == 1 %} checked {% endif %}
-                       type="radio" value="1">&nbsp;F
-                <input name="utilisateur_sexe"
-                        {% if utilisateur.sexe == 2 %} checked {% endif %}
-                       type="radio" value="2">&nbsp;M
-            </div>
-        </div>
-
-        <div class="form-group col-md-4">
-            <label for="utilisateur_datenaissance">Date de naissance</label>
-            <input type="text" id="utilisateur_datenaissance" name="utilisateur_datenaissance" required="required" class="form-control" value="{{  utilisateur.datenaissance | date("d/m/Y") }}" />
-        </div>
-    </div>
-
-    <div class="form-row">
-        <div class="form-group col-md-12">
-            <label for="utilisateur_adresse">Adresse complète:</label>
-            <textarea id="utilisateur_adresse" name="utilisateur_adresse" required="required" class="form-control">{{ utilisateur.adresse }}</textarea>
-        </div>
-    </div>
-    -->
 
     <input type="submit" id="submit" name="submit" class="btn btn-success" value="Valider" />
 </form>

@@ -37,3 +37,16 @@ services:
     redirect.after.login:
         class: AppBundle\Redirection\AfterLoginRedirection
         arguments: ['@router']
+
+    # LDAP Support
+    Symfony\Component\Ldap\Ldap:
+        arguments: ['@Symfony\Component\Ldap\Adapter\ExtLdap\Adapter']
+        public: true
+    Symfony\Component\Ldap\Adapter\ExtLdap\Adapter:
+        arguments:
+            -   host: localhost
+                port: 389
+                #encryption: tls
+                options:
+                    protocol_version: 3
+                    referrals: false

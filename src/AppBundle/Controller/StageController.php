@@ -71,10 +71,17 @@ class StageController extends Controller
 
         $user = $this->getUser();
 
+        // Obtention de l'utilisateur Ldap
+        $serviceLdap = $this->get('security.user.provider.concrete.ldap_provider');
+        if (! $userLdap = $serviceLdap->loadUserLdapByLogin($user->getUsername()))
+        {
+            return $this->render("Exception/error404.html.twig");
+        }
+
         // Typologies
         $typologies = $manager->loadTypologies();
         // Nombre de stages par année
-        $arrayStagesAnnees = $this->getNbStagesMax($user->getUsername(), $user->getClasse());
+        $arrayStagesAnnees = $this->getNbStagesMax($userLdap->getUsername(), $userLdap->getClasse());
 
         // Si l'utilisateur soumet le formulaire
         if ($request->getMethod() == 'POST')
@@ -85,7 +92,7 @@ class StageController extends Controller
             if ($model->isValid())
             {
                 // Le login est celui de l'utilisateur connecté
-                $stage->setLogin($user);
+                $stage->setLogin($userLdap->getLogin());
                 // La date de modification
                 $stage->setDatemodif(new \DateTime('now'));
 
@@ -365,6 +372,14 @@ class StageController extends Controller
         $manager = $this->getManager();
         // Obtention de l'utilisateur connecté
         $user = $this->getUser();
+
+        // Obtention de l'utilisateur Ldap
+        $serviceLdap = $this->get('security.user.provider.concrete.ldap_provider');
+        if (! $userLdap = $serviceLdap->loadUserLdapByLogin($user->getUsername()))
+        {
+            return $this->render("Exception/error404.html.twig");
+        }
+
         // Recherche du stage
         if (!$stage = $manager->loadStage($id, $user->getUsername()))
         {
@@ -389,7 +404,7 @@ class StageController extends Controller
         }
 
         return $this->render('stage/editintitule.html.twig', array('stage' => $stage, 'intitule' => $intitule,
-            'activites' => $activites, 'idParcours' => $user->getNumparcours()->getId()));
+            'activites' => $activites, 'idParcours' => $userLdap->getNumparcours()));
     }
 
 
@@ -481,9 +496,17 @@ class StageController extends Controller
         // Obtention du manager
         $manager = $this->getManager();
         // Obtention de l'utilisateur connecté
-        $utilisateur = $this->getUser();
+        $user = $this->getUser();
+
+        // Obtention de l'utilisateur Ldap
+        $serviceLdap = $this->get('security.user.provider.concrete.ldap_provider');
+        if (! $userLdap = $serviceLdap->loadUserLdapByLogin($user->getUsername()))
+        {
+            return $this->render("Exception/error404.html.twig");
+        }
+
         // Recherche du stage
-        if (!$stage = $manager->loadStage($id, $utilisateur->getUsername()))
+        if (!$stage = $manager->loadStage($id, $userLdap->getUsername()))
         {
             return $this->render("TException/error404.html.twig");
         }
@@ -496,10 +519,10 @@ class StageController extends Controller
 
         // On charge le valeurs dans le document
         /** VALEURS A RECUPERER **/
-        $userNom = $utilisateur->getNom();
-        $userPrenom = $utilisateur->getPrenom();
-        $userMail = $utilisateur->getMail();
-        $userParcours = $utilisateur->getNumparcours()->getLibelle();
+        $userNom = $userLdap->getNom();
+        $userPrenom = $userLdap->getPrenom();
+        $userMail = $userLdap->getMail();
+        $userParcours = $userLdap->getParcoursLibelle();
         $templateProcessor->setValue('userNom', $userNom);
         $templateProcessor->setValue('userPrenom', $userPrenom);
         $templateProcessor->setValue('userMail', $userMail);
@@ -509,14 +532,14 @@ class StageController extends Controller
         $templateProcessor->setValue('userDateNaissance', '');
         $templateProcessor->setValue('userSexe', '');
         $templateProcessor->setValue('userAdresse', '');
+        $userSexe = ($userLdap->getSexe()==2 ? "M" : "F");
+        $templateProcessor->setValue('userSexe', $userSexe);
         /*
         $userDateNaissance = $utilisateur->getDateNaissance()->format("d/m/Y");
-        $userSexe = ($utilisateur->getSexe()==1 ? "M" : "F");
         $userAdresse = $utilisateur->getAdresse();
         */
         /*
         $templateProcessor->setValue('userDateNaissance', $userDateNaissance);
-        $templateProcessor->setValue('userSexe', $userSexe);
         $templateProcessor->setValue('userAdresse', $userAdresse);
         */
 

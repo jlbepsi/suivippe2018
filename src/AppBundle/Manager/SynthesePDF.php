@@ -72,7 +72,7 @@ class SynthesePDF extends \FPDF
         $txt="Nom et prénom du candidat : ".$user->getNom()." ".$user->getPrenom();
         $this->Cell(60, $hauteurTexte,"",0,0);
         $this->Cell(160,$hauteurTexte,$txt,0,0);
-        $txt="Parcours : ".$user->getNumparcours()->getNomenclature();
+        $txt="Parcours : ".$user->getParcoursNomenclature();
         $this->Cell(60,$hauteurTexte,$txt,0,0);
         $txt="Numéro du candidat : ".($user->getNumexamen() > 0 ? $user->getNumexamen(): "");
         $this->Cell(0,$hauteurTexte,$txt,0,1);

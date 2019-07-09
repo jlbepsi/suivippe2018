@@ -9,17 +9,29 @@
 namespace AppBundle\Controller\Prof\Utils;
 
 use AppBundle\Controller\Prof\Utils\UtilisateurSituations;
+use AppBundle\Entity\Situation;
+use AppBundle\Entity\UserLdap;
 
 class UtilisateursSituations
 {
     /**
-     * @var UtilisateurSituations[]
+     * tableau clé (login), valeur (UserLdap)
+     *
+     * @var \Doctrine\Common\Collections\Collection
      */
     private $utilisateurs = array();
     /**
      * @var integer
      */
     private $analyseSituationActivite;
+
+
+
+    public function __construct()
+    {
+        $this->utilisateurs = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
 
     /**
      * @return int
@@ -46,8 +58,39 @@ class UtilisateursSituations
     }
 
     /**
-     * @param $situations \AppBundle\Entity\Situation[]
+     * Ajoute les utilisateurs et créé la listes des situations associés aux utilisateurs
+     *
+     * @param UserLdap[] $utilisateurs
+     * @param $situations Situation[]
      */
+    public function compute($utilisateurs, $situations)
+    {
+        // Fixe les utilisateurs par clé: login
+        foreach ($utilisateurs as $utilisateur)
+        {
+            if (! $this->utilisateurs->containsKey($utilisateur->getLogin())) {
+                $this->utilisateurs->set($utilisateur->getLogin(), new UtilisateurSituations($utilisateur));
+            }
+        }
+
+        // Répartis les situations par utilisateurs
+        // Trie par utilisateur et année
+
+        // Parcours des situations
+        foreach ($situations as $situation)
+        {
+            // Obtention de l'objet UtilisateurStages
+            $utilisateurSituations = $this->utilisateurs->get($situation->getLogin());
+            if ($utilisateurSituations != null)
+            {
+                $utilisateurSituations->addSituation($situation);
+
+            } // Sinon l'utilisateur de la situation n'existe plus, voir Liste des utilisateurs du contrôleur Prof??Controller
+        }
+    }
+
+
+    /**
     public function setSituations($situations)
     {
         $count = count($situations);
@@ -72,8 +115,6 @@ class UtilisateursSituations
     }
 
     /**
-     * @param $utilisateurs \AppBundle\Entity\Utilisateur[]
-     */
     public function setUtilisateursSansSituation($utilisateurs)
     {
         foreach ($utilisateurs as $utilisateur)
@@ -87,13 +128,13 @@ class UtilisateursSituations
                 $this->utilisateurs[] = $utilisateurSituations;
             }
         }
-        /*// Tri sur le nom puis prénom
+        // Tri sur le nom puis prénom
         usort($this->utilisateurs, function($e1, $e2)
         {
             return ($e1->getUtilisateur()->getNom() . ' ' . $e1->getUtilisateur()->getPrenom() >
                     $e2->getUtilisateur()->getNom() . ' ' . $e1->getUtilisateur()->getPrenom());
-        });*/
-    }
+        });
+    }*/
 
     /**
      * @return array
@@ -124,17 +165,4 @@ class UtilisateursSituations
                      'nbSituationsIncompletes' => $cptSituationsIncompletes);
     }
 
-    /**
-     * @param $login string
-     * @return bool
-     */
-    private function findLogin($login)
-    {
-        foreach ($this->utilisateurs as $utilisateurSituations)
-        {
-            if ($utilisateurSituations->getUtilisateur()->getLogin() === $login)
-                return true;
-        }
-        return false;
-    }
 }

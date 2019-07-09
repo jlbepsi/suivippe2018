@@ -46,12 +46,10 @@ class Commentaire
     private $refsituation;
 
     /**
-     * @var \AppBundle\Entity\Utilisateur
+     * @var string
      *
-     * @ORM\ManyToOne(targetEntity="Utilisateur")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="loginProfesseur", referencedColumnName="login")
-     * })
+     * @ORM\Column(name="loginprofesseur", type="string", length=30, nullable=false)
+     *
      */
     private $loginprofesseur;
 
@@ -139,10 +137,10 @@ class Commentaire
     /**
      * Set loginprofesseur
      *
-     * @param \AppBundle\Entity\Utilisateur $loginprofesseur
+     * @param string $loginprofesseur
      * @return Commentaire
      */
-    public function setLoginprofesseur(\AppBundle\Entity\Utilisateur $loginprofesseur = null)
+    public function setLoginprofesseur($loginprofesseur)
     {
         $this->loginprofesseur = $loginprofesseur;
 
@@ -152,7 +150,7 @@ class Commentaire
     /**
      * Get loginprofesseur
      *
-     * @return \AppBundle\Entity\Utilisateur 
+     * @return string
      */
     public function getLoginprofesseur()
     {
