@@ -14,24 +14,26 @@ $(function () {
             // Perform the ajax post
             $.post("/app_dev.php/stage/delete", { "idStage": id },
                 function (data) {
-                    // Successful requests get here
+                    var oUpdateMessage = $('#update-message');
                     // Update the page elements
-                    if (data.status == 1) {
+                    if (data.status === 1) {
                         $('#stage' + data.id).fadeOut('slow');
-                        $('#update-message').attr("class", 'label label-success');
+                        oUpdateMessage.attr("class", 'label label-success');
 
                         // Si le message "impossible d'ajouter des stages est présent, on l'enlève.
                         var oMessage = $('#maxStage');
                         if (oMessage.length) {
                             oMessage.hide();
                         }
-
+                        // On (ré)affiche le bouton pour ajouter un stage
+                        var oBtnAddStage = $('#btnAddStage');
+                        oBtnAddStage.show();
                     }
                     else
-                        $('#update-message').attr("class", 'label label-danger');
+                        oUpdateMessage.attr("class", 'label label-danger');
                     $('#loader').hide();
-                    $('#update-message').text(data.message);
-                    $('#update-message').show('slow', null).delay(3000).hide('slow');
+                    oUpdateMessage.text(data.message);
+                    oUpdateMessage.show('slow', null).delay(3000).hide('slow');
                 }
             );
         }

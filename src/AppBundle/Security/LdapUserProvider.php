@@ -133,6 +133,48 @@ class LdapUserProvider implements UserProviderInterface
         return 'Symfony\Component\Security\Core\User\User' === $class;
     }
 
+    /**
+     * @param string    $login
+     * @param string    $numExamen
+     * @return boolean
+     */
+    public function updateUserNumExam($login, $numExamen)
+    {
+        try {
+            $this->ldap->bind($this->searchDn, $this->searchPassword);
+            $login = $this->ldap->escape($login, '', LdapInterface::ESCAPE_FILTER);
+            $query = str_replace('{username}', $login, $this->defaultSearch);
+            $search = $this->ldap->query($this->baseDn, $query);
+        } catch (ConnectionException $e) {
+            throw new UsernameNotFoundException(sprintf('User "%s" not found.', $login), 0, $e);
+        }
+
+        $entries = $search->execute();
+        $count = \count($entries);
+
+        if (!$count) {
+            throw new UsernameNotFoundException(sprintf('User "%s" not found.', $login));
+        }
+
+        if ($count > 1) {
+            throw new UsernameNotFoundException('More than one user found');
+        }
+
+        $entry = $entries[0];
+
+        try
+        {
+            $entryManager = $this->ldap->getEntryManager();
+            $entry->setAttribute('carLicense', array($numExamen));
+            $entryManager->update($entry);
+            return true;
+        }
+        catch (InvalidArgumentException $e)
+        {
+        }
+
+        return false;
+    }
 
 
     /**

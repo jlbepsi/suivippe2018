@@ -38,10 +38,10 @@ class StageController extends Controller
         $user = $this->getUser();
         // Obtention des stages
         $stages = $this->getManager()->loadStages($user->getUsername());
-        // Nombre de stages par année
-        $arrayStagesAnnees = $this->getNbStagesMax($user->getUsername());
+        // Nombre de stages
+        $nbStages = $this->getNbStages($user->getUsername());
 
-        return $this->render('stage/index.html.twig', array("arrayStages" => $stages, 'arrayStagesAnnees' => $arrayStagesAnnees));
+        return $this->render('stage/index.html.twig', array("arrayStages" => $stages, 'nbStages' => $nbStages));
     }
 
     /**
@@ -80,8 +80,8 @@ class StageController extends Controller
 
         // Typologies
         $typologies = $manager->loadTypologies();
-        // Nombre de stages par année
-        $arrayStagesAnnees = $this->getNbStagesMax($userLdap->getUsername(), $userLdap->getClasse());
+        // Nombre de stages
+        $nbStages = $this->getNbStages($user->getUsername());
 
         // Si l'utilisateur soumet le formulaire
         if ($request->getMethod() == 'POST')
@@ -123,13 +123,13 @@ class StageController extends Controller
                 $manager->saveStage($stage);
 
                 return $this->redirectToRoute('stage_edit', array('id' => $stage->getId(),
-                    'arrayStagesAnnees' => $arrayStagesAnnees,
+                    'nbStages' => $nbStages,
                     'typologies' => $typologies));
             }
         }
 
         return $this->render('stage/add.html.twig', array('form' => $model->createView(),
-                                'arrayStagesAnnees' => $arrayStagesAnnees,
+                                'nbStages' => $nbStages,
                                 'typologies' => $typologies));
     }
 
@@ -590,10 +590,13 @@ class StageController extends Controller
         return new WordResponse($templateProcessor, "attestation-stage-".$userNom . "-".$dateDuJour->format("Ymd").".docx");
     }
 
-    private function getNbStagesMax($login, $classe = null)
+    private function getNbStages($login)
     {
+        // Obtention des stages
+        $stages = $this->getManager()->loadStages($login);
+        return count($stages);
 
-        $arrayStagesAnnees = array('stage1' => true, 'stage2' => true);
+        /*$arrayStagesAnnees = array('stage1' => true, 'stage2' => true);
         $stage1 = 0;
         $stage2 = 0;
         // Obtention des stages
@@ -613,7 +616,7 @@ class StageController extends Controller
             // Un B1 ne peut pas créer de stage de 2ème année
             $arrayStagesAnnees['stage2'] = false;
         }
-        return $arrayStagesAnnees;
+        return $arrayStagesAnnees;*/
     }
     private function getListeStages($classe)
     {

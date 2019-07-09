@@ -35,8 +35,8 @@ class DefaultController extends Controller
         $user = $this->getUser();
 
         $serviceLdap = $this->get('security.user.provider.concrete.ldap_provider');
-        $serviceLdap->loadUserByUsername($user->getUsername());
-        if (! $userLdap = $serviceLdap->getUserLdap())
+        // Obtention de l'utilisateur Ldap
+        if (! $userLdap = $serviceLdap->loadUserLdapByLogin($user->getUsername()))
         {
             return $this->render("Exception/error404.html.twig");
         }
@@ -49,7 +49,7 @@ class DefaultController extends Controller
             {
                 $userLdap->setNumexamen($request->get('utilisateur_numexam'));
 
-                /** TODO Validation de l'utilisateur LDAP */
+                $serviceLdap->updateUserNumExam($userLdap->getLogin(), $userLdap->getNumexamen());
             }
             catch (Exception $exception)
             {

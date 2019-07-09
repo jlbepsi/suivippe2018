@@ -12,17 +12,18 @@
         <!-- /.col-lg-12 -->
     </div>
 
-    {%  if arrayStagesAnnees["stage1"] or arrayStagesAnnees["stage2"] %}
-        <p>
-            <a class="btn btn-primary btn-sm" href="{{  path("stage_add") }}">
-                <i class="fas fa-plus-circle"></i>&nbsp;Nouveau stage
-            </a>
-        </p>
-    {% else %}
+    <div id="btnAddStage" {%  if nbStages > 3 %} style="display: none" {% endif %}>
+        <a class="btn btn-primary btn-sm" href="{{  path("stage_add") }}">
+            <i class="fas fa-plus-circle"></i>&nbsp;Nouveau stage
+        </a>
+    </div>
+
+    {%  if nbStages > 3 %}
         <div id="maxStage" class="alert alert-danger alert-dismissible fade show col-md-12" role="alert">
-            Vous ne pouvez plus ajouter de stage (maximum de 2 stages par année)
+            Vous ne pouvez plus ajouter de stage (maximum de 4 stages)
         </div>
     {%  endif %}
+    <br />
 
     <div id="update-message"></div>
 
