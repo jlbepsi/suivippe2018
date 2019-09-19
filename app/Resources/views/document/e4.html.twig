@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Epreuve E4
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h3 class="page-header">Epreuve E4 - Situations</h3>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+
+
+    <br />
+    <h5>E4 - Préparation</h5>
+    <p>
+        <a href="{{  asset('files/e4_resume.pdf') }}" target="_blank" class="btn btn-outline-info"><i class="far fa-file-pdf" aria-hidden="true"></i>&nbsp; Description de l'épreuve E4</a> &nbsp;&nbsp;
+    </p>
+    <p>
+        <a href="{{  asset('files/e4_redac_situations_slam.pdf') }}" target="_blank" class="btn btn-outline-info"><i class="far fa-file-pdf" aria-hidden="true"></i>&nbsp;Rédaction des situations - SLAM</a> &nbsp;&nbsp;
+    </p>
+    <p>
+        <!-- <a href="{{  asset('files/e4_situations_sisr.pdf') }}" target="_blank" class="btn btn-outline-info"><i class="far fa-file-pdf" aria-hidden="true"></i>&nbsp;Rédaction des situations - SISR</a> &nbsp;&nbsp; -->
+        <button disabled class="btn btn-outline-info"><i class="far fa-file-pdf" aria-hidden="true"></i>&nbsp;Rédaction des situations - SISR</button>
+    </p>
+
+
+    <br />
+    <h5>E4 - Documents à rendre</h5>
+    <p>
+        <a href="{{  asset('files/e4_situation_SLAM.docx') }}" target="_blank" class="btn btn-outline-primary"><i class="far fa-file-word" aria-hidden="true"></i>&nbsp; Développeur - SLAM</a> &nbsp;&nbsp;
+    </p>
+    <p>
+        <a href="{{  asset('files/e4_situation_SISR.docx') }}" target="_blank" class="btn btn-outline-primary"><i class="far fa-file-word" aria-hidden="true"></i>&nbsp; Réseau - SISR</a> &nbsp;&nbsp;
+    </p>
+
+
+
+{% endblock %}

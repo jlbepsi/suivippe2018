@@ -91,6 +91,8 @@ class UtilisateurSituations
         $oss = array();
         $activites = array();
 
+        /** Vérifier les situations E4 : il doit y en avoir 2 pour les B2 */
+
         $analyseSituationActivite = $this->analyseSituationActivite;
 
         $nbE4 = 0;

@@ -1,0 +1,28 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+    Documents
+{% endblock %}
+
+{% block body %}
+    <div class="row">
+        <div class="col-lg-12">
+            <h3 class="page-header">Documents communs</h3>
+        </div>
+        <!-- /.col-lg-12 -->
+    </div>
+
+    <p>
+        <a href="{{  asset('files/b2-btssio_calendrier2020.pdf') }}" target="_blank" class="btn btn-outline-info"><i class="far fa-file-pdf" aria-hidden="true"></i>&nbsp;Calendrier EPSI / BTS SIO</a> &nbsp;&nbsp;
+    </p>
+
+    <br />
+    <h5>La Maison des Associations d'Occitanie</h5>
+    <p>
+        <a href="{{  asset('files/MAO_Organisation.pdf') }}" target="_blank" class="btn btn-outline-info"><i class="far fa-file-pdf" aria-hidden="true"></i>&nbsp;Description de la MAO</a> &nbsp;&nbsp;
+    </p>
+    <p>
+        <a href="{{  asset('files/MAO_Architecture.pdf') }}" target="_blank" class="btn btn-outline-info"><i class="far fa-file-image" aria-hidden="true"></i>&nbsp; Architecture réseau de la MAO</a> &nbsp;&nbsp;
+    </p>
+
+{% endblock %}

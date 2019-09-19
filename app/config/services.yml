@@ -44,7 +44,7 @@ services:
         public: true
     Symfony\Component\Ldap\Adapter\ExtLdap\Adapter:
         arguments:
-            -   host: localhost
+            -   host: 192.168.100.7
                 port: 389
                 #encryption: tls
                 options:

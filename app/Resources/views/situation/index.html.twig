@@ -20,7 +20,6 @@
         <div class="form-inline">
             {{ form_row(form.libelle) }}&nbsp;
             {{ form_row(form.descriptif) }}&nbsp;
-            {{ form_row(form.date) }}&nbsp;
 
             <div class="form-group">
                 <div class="col-md-offset-2 col-md-10">
@@ -86,8 +85,6 @@
                 <th width="80">OS ou Langage</th>
                 <th width="120">Service ou Framework</th>
             {%  endif %}
-            <th width="120">Date début</th>
-            <th width="120">Date fin</th>
             <th width="240"></th>
         </tr>
 
@@ -133,8 +130,6 @@
             <td>{{  situation.codeframework.libelle }}</td>
             {% endif %}
 
-            <td style="width:150px">{{  situation.datedebut | date("d/m/Y") }}</td>
-            <td style="width:150px">{{  situation.datefin | date("d/m/Y") }}</td>
             <td>
                 <a class="btn btn-primary btn-sm" href="{{  path('situation_edit', {'id': situation.reference}) }}">
                     <i class="fa fa-pencil-alt" aria-hidden="true"></i>&nbsp;Modifier</a>
