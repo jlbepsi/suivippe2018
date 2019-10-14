@@ -21,7 +21,7 @@ security:
         ldap_provider:
             ldap:
                 service: Symfony\Component\Ldap\Ldap
-                base_dn: 'ou=Pedago,ou=Utilisateurs,dc=montpellier,dc=lan'
+                base_dn: 'ou=Utilisateurs,dc=montpellier,dc=lan'
                 search_dn: "cn=admin,dc=montpellier,dc=lan"
                 search_password: 'citK19c3'
                 default_roles: ROLE_USER
@@ -43,7 +43,7 @@ security:
                 check_path: login
                 success_handler: redirect.after.login
                 service: Symfony\Component\Ldap\Ldap
-                dn_string: 'ou=Pedago,ou=Utilisateurs,dc=montpellier,dc=lan'
+                dn_string: 'ou=Utilisateurs,dc=montpellier,dc=lan'
                 query_string: '(uid={username})'
                 #dn_string: 'uid={username},ou=Pedago,ou=Utilisateurs,dc=montpellier,dc=lan'
                 #dn_string: 'MONTPELLIER\{username}'

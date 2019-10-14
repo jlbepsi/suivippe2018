@@ -172,7 +172,7 @@
         <thead>
         <tr>
             <th width='100'>Date</th>
-            <th width='220'>Professeur</th>
+            <th width='220'>Professeur (login)</th>
             <th>Commentaire</th>
             <th width='240'></th>
         </tr>
@@ -181,10 +181,10 @@
         {%  for commentaire in commentaires %}
             <tr id="{{ commentaire.numero }}">
                 <td id='date'>{{ commentaire.datecommentaire | date("d/m/Y") }}</td>
-                <td>{{ commentaire.loginprofesseur.nomlong }}</td>
+                <td>{{ commentaire.loginprofesseur }}</td>
                 <td id='commentaire'>{{ commentaire.commentaire }}</td>
                 <td>
-                    {% if loginProf == commentaire.loginprofesseur.username %}
+                    {% if loginProf == commentaire.loginprofesseur %}
                         <button id="btnModifyCommentaire" name="btnModifyCommentaire" type="button" class="btn btn-sm btn-primary" aria-label="Modifier le commentaire">
                             <i class="fa fa-edit" aria-hidden="true"></i>&nbsp;Modifier
                         </button>

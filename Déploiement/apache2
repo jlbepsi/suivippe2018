@@ -1,5 +1,12 @@
-Créer le fichier videotheque.conf dans /etc/apache2/sites-available/
-Remplacer le répertoire du document home par le bon répertoire
+
+# Pour LDAP
+sudo apt-get update
+sudo apt-get install php7.2-ldap
+sudo service apache2 restart
+
+
+# Créer le fichier videotheque.conf dans /etc/apache2/sites-available/
+# Remplacer le répertoire du document home par le bon répertoire
 
 <VirtualHost *:80>
     ServerName debug.suivippe.local
@@ -22,6 +29,6 @@ Remplacer le répertoire du document home par le bon répertoire
         CustomLog /var/log/apache2/suivippe_access.log combined
 </VirtualHost>
 
-Dans le terminal:
+# Dans le terminal:
 sudo a2ensite suivippe.conf
 sudo service apache2 reload

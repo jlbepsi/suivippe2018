@@ -290,7 +290,7 @@
                 <thead>
                 <tr>
                     <th width='100'>Date</th>
-                    <th width='220'>Professeur</th>
+                    <th width='220'>Professeur (login)</th>
                     <th>Commentaire</th>
                 </tr>
                 </thead>
@@ -298,7 +298,7 @@
                 {%  for commentaire in commentaires %}
                     <tr>
                         <td>{{ commentaire.datecommentaire | date("d/m/Y") }}</td>
-                        <td>{{ commentaire.loginprofesseur.nomlong }}</td>
+                        <td>{{ commentaire.loginprofesseur }}</td>
                         <td>{{ commentaire.commentaire }}</td>
                     </tr>
                 {% else %}
