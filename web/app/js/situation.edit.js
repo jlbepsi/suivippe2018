@@ -12,10 +12,17 @@ $(function () {
         // On remplie la liste avec les fw associés au langage
         for(var i=0;i<langageFramework.length;i++) {
             var obj = langageFramework[i];
-            if (obj.idlangage == idLangage) {
-                oSelectFW.append($("<option/>", {
-                    value: obj.id, text: obj.libelle
-                }));
+            if (obj.idlangage === idLangage) {
+                //
+                if (langageFrameworkId === obj.id) {
+                    oSelectFW.append($("<option/>", {
+                        value: obj.id, text: obj.libelle, selected: true
+                    }));
+                } else {
+                    oSelectFW.append($("<option/>", {
+                        value: obj.id, text: obj.libelle
+                    }));
+                }
             }
         }
     }

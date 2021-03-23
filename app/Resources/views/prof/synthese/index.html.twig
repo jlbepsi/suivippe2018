@@ -1,0 +1,39 @@
+{% extends 'base-prof.html.twig' %}
+
+{% block title %}
+    Tableau de synthèse (B2)
+{% endblock %}
+
+
+{% block body %}
+<div class="row">
+    <div class="col-lg-12">
+        <h3 class="page-header">Liste des tableau de synthèse (B2 uniquement)</h3>
+    </div>
+    <!-- /.col-lg-12 -->
+</div>
+
+    <br />
+
+<table class="table table-condensed table-bordered table-striped">
+    <thead>
+    <tr>
+        <th width="30%">Etudiant</th>
+        <th>Synthèse PDF</th>
+    </tr>
+
+    </thead>
+    <tbody>
+    {% for utilisateur in utilisateurs %}
+    <tr>
+        <td>{{  utilisateur.nomlong }} ({{  utilisateur.parcoursnomenclature }})</td>
+        <td><a class="btn btn-primary btn-sm"
+               href="{{  path('prof_synthese_tableau', {'login': utilisateur.login}) }}"
+               target="_blank"
+            >
+                <i class="fa fa-file-pdf" aria-hidden="true"></i></i>&nbsp;Voir le PDF</a></td>
+    </tr>
+    {%  endfor %}
+    </tbody>
+</table>
+{% endblock %}

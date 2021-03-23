@@ -258,7 +258,7 @@ class SynthesePDF extends \FPDF
         $b1="";
         $b2="";
         $ln=0;
-        if ($typ=="B") $this->SetGras($por); else $this->SetPasGras($por);
+        if ($typ=="B") $this->SetGras($por); else $this->SetGras($por, false);
         if (strstr($border,"L")) {$b1.="L";}
         if (strstr($border,"T")) {$b1.="T"; $b2.="T";}
         if (strstr($border,"B")) {$b1.="B"; $b2.="B";}

@@ -106,8 +106,10 @@ class LdapUserProvider implements UserProviderInterface
                 }
             } catch (InvalidArgumentException $e) {
             }
-
-            $users[] = $this->loadInternalUserLdap($username, $entry);
+            $userLdap = $this->loadInternalUserLdap($username, $entry);
+            if ($userLdap != null) {
+                $users[] = $userLdap;
+            }
         }
 
         return $users;

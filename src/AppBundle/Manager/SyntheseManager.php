@@ -8,9 +8,14 @@
 
 namespace AppBundle\Manager;
 
+use AppBundle\Controller\Prof\Utils\UtilisateursSituations;
+use AppBundle\Controller\Prof\Utils\UtilisateursSyntheses;
 use AppBundle\Entity\Situation;
+use AppBundle\Entity\UserLdap;
 use AppBundle\Form\SituationSearchCriteria;
+use AppBundle\Security\LdapUserProvider;
 use Doctrine\ORM\EntityManager;
+use Symfony\Component\HttpFoundation\Response;
 
 
 class SyntheseManager
@@ -90,4 +95,16 @@ class SyntheseManager
         $repository = $this->entityManager->getRepository('AppBundle:Processus');
         return $repository->findAll();
     }
+
+    /**
+     * @param LdapUserProvider $serviceLdap
+     * @param string $classe
+     * @return UserLdap[]
+     */
+    public function loadUtilisateursSyntheses($serviceLdap, $classe = null)
+    {
+        // Obtention des utilisateurs Ldap
+        return $serviceLdap->loadUsersByClasse($classe);
+    }
+
 }

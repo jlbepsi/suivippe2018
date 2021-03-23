@@ -49,3 +49,7 @@ Script de déploiement sur GitLab
 
     ### Fin du script
 
+
+
+"Pusher" les modifications sur GitLab
+git push gitlab master

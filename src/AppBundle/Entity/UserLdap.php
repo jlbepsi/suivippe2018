@@ -94,10 +94,17 @@ class UserLdap
         if ($entry != null) {
             $this->setClasse(strtoupper($entry->getAttribute('l')[0]));
             // Les profs ou l'administratif ont la classe INT_*
-            if (substr($this->classe, 0, 4) == "INT_") {
+            /*if (substr($this->classe, 0, 4) == "INT_") {
                 $this->bts = false;
             } else {
                 $this->bts = ($entry->getAttribute('businessCategory')[0] == 'BTS');
+            }*/
+            if ($this->classe == "B1" || $this->classe == "B2") {
+                $this->bts = ($entry->getAttribute('businessCategory')[0] == 'BTS');
+                $this->parcours = strtoupper($entry->getAttribute('description')[0]);
+                $this->setNumexamen($entry->getAttribute('carLicense')[0]);
+            } else {
+                $this->bts = false;
             }
             $roles = $entry->getAttribute('employeeType')[0];
             $this->roles = array_map('trim', explode(',', $roles));
@@ -106,9 +113,11 @@ class UserLdap
             $this->setMail($entry->getAttribute('mail')[0]);
             $this->setNom($entry->getAttribute('sn')[0]);
             $this->setPrenom($entry->getAttribute('givenName')[0]);
-            $this->setNumexamen($entry->getAttribute('carLicense')[0]);
-            $this->parcours = strtoupper($entry->getAttribute('description')[0]);
-            $this->setSexe($entry->getAttribute('title')[0]);
+            try {
+                $this->setSexe($entry->getAttribute('title')[0]);
+            } catch (\Exception $exception ) {
+                $this->setSexe(0);
+            }
         }
     }
 
